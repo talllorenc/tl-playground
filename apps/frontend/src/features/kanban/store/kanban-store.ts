@@ -7,12 +7,10 @@ export const useKanbanStore = defineStore("kanban", () => {
         {
             id: "todo",
             title: "To Do",
-            color: "blue",
         },
         {
             id: "done",
             title: "Done",
-            color: "green",
         },
     ]);
 

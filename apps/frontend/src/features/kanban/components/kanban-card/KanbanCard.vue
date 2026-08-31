@@ -21,7 +21,7 @@ defineProps<{
 <style scoped lang="scss">
 .kanban-card {
     padding: 16px;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
     background-color: green;
     cursor: grab;
 

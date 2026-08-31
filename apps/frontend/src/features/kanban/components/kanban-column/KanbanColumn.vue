@@ -38,7 +38,8 @@ const columnColor = computed(() => {
     min-width: 350px;
     background-color: red;
     padding: 24px 16px;
-    border-radius: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
 
     &__header {
         display: flex;
