@@ -1,0 +1,9 @@
+pre-commit:
+    parallel: true
+    commands:
+        lint:
+            run: pnpm lint
+        format:
+            run: pnpm fmt:check
+        type-check:
+            run: pnpm type-check
