@@ -4,7 +4,10 @@ interface NavItem {
     to: string;
 }
 
-const navItems: NavItem[] = [{ label: "Главная", to: "/" }];
+const navItems: NavItem[] = [
+    { label: "Главная", to: "/" },
+    { label: "Канбан", to: "/kanban" },
+];
 </script>
 
 <template>
