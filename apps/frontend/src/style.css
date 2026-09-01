@@ -8,6 +8,7 @@ body {
     color: var(--color-text-secondary);
     font-family: var(--font-sans);
     font-size: 16px;
+    font-weight: var(--font-w-sm);
 }
 
 h1,
@@ -16,4 +17,5 @@ h3,
 h4,
 h5 {
     color: var(--color-text);
+    font-weight: var(--font-w-md);
 }

@@ -42,13 +42,23 @@ export const useKanbanStore = defineStore("kanban", () => {
     });
 
     /*Kanban Column*/
-    function addColumn(column: KanbanColumn) {}
-    function deleteColumn(columnId: string) {}
-    function renameColumn(columnId: string, title: string) {}
+    // function addColumn(column: KanbanColumn) {}
+    // function deleteColumn(columnId: string) {}
+    // function renameColumn(columnId: string, title: string) {}
+
+    /*Kanban Card*/
+    function moveCard(cardId: string, columnId: string) {
+        const card = cards.value.find((card) => card.id === cardId);
+
+        if (!card) return;
+
+        card.columnId = columnId;
+    }
 
     return {
         columns,
         cards,
         cardsByColumn,
+        moveCard,
     };
 });

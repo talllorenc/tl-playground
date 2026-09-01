@@ -11,23 +11,41 @@ const props = defineProps<{
     cards: KanbanCard[];
 }>();
 
+const emit = defineEmits<{
+    "card-drag-start": [cardId: string];
+    "card-drag-end": [];
+    "column-drop": [columnId: string];
+}>();
+
 const columnColor = computed(() => {
     return kanbanColors[props.column.color ?? DEFAULT_KANBAN_COLOR];
 });
 </script>
 
 <template>
-    <div class="kanban-column" :style="{ backgroundColor: columnColor }">
+    <div
+        class="kanban-column"
+        @dragover.prevent
+        @drop="emit('column-drop', column.id)"
+        :style="{ backgroundColor: columnColor }"
+    >
         <div class="kanban-column__header">
-            <h2 class="kanban-column__title">
+            <span class="kanban-column__title">
                 {{ column.title }}
-            </h2>
+            </span>
 
             <span>{{ cards.length }}</span>
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCardComponent v-for="card in cards" :key="card.id" :card="card" />
+            <KanbanCardComponent
+                @card-drag-start="emit('card-drag-start', $event)"
+                @card-drag-end="emit('card-drag-end')"
+                @column-drop="emit('column-drop', column.id)"
+                v-for="card in cards"
+                :key="card.id"
+                :card="card"
+            />
         </div>
     </div>
 </template>
@@ -36,7 +54,6 @@ const columnColor = computed(() => {
 .kanban-column {
     width: 350px;
     min-width: 350px;
-    background-color: red;
     padding: 24px 16px;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
@@ -48,7 +65,7 @@ const columnColor = computed(() => {
     }
 
     &__title {
-        color: rgb(255, 255, 255);
+        color: var(--color-text);
     }
 
     &__cards {

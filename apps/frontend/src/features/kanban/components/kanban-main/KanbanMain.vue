@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useKanbanStore } from "../../store/kanban-store";
 import KanbanColumn from "../kanban-column/KanbanColumn.vue";
+import { useKanbanDragDrop } from "@/features/kanban/composables/useKanbanDragDrop.ts";
 
 const kanbanStore = useKanbanStore();
+const { onDragStart, onDragEnd, onDrop } = useKanbanDragDrop();
 </script>
 
 <template>
@@ -12,6 +14,9 @@ const kanbanStore = useKanbanStore();
             :key="column.id"
             :column="column"
             :cards="kanbanStore.cardsByColumn[column.id] ?? []"
+            @card-drag-start="onDragStart"
+            @card-drag-end="onDragEnd"
+            @column-drop="onDrop"
         />
     </div>
 </template>
