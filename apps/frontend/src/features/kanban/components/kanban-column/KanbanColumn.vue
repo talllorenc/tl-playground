@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
-
-import { kanbanColors, DEFAULT_KANBAN_COLOR } from "../../constants/kanban-colors";
 import type { KanbanCard, KanbanColumn } from "../../types/kanban.types";
-
 import KanbanCardComponent from "../kanban-card/KanbanCard.vue";
+import { computed } from "vue";
+import { kanbanColors, DEFAULT_KANBAN_COLOR } from "../../constants/kanban-colors";
 
 const props = defineProps<{
     column: KanbanColumn;
     cards: KanbanCard[];
-}>();
-
-const emit = defineEmits<{
-    "card-drag-start": [cardId: string];
-    "card-drag-end": [];
-    "column-drop": [columnId: string];
 }>();
 
 const columnColor = computed(() => {
@@ -23,12 +15,7 @@ const columnColor = computed(() => {
 </script>
 
 <template>
-    <div
-        class="kanban-column"
-        @dragover.prevent
-        @drop="emit('column-drop', column.id)"
-        :style="{ backgroundColor: columnColor }"
-    >
+    <div class="kanban-column" :style="{ backgroundColor: columnColor }">
         <div class="kanban-column__header">
             <span class="kanban-column__title">
                 {{ column.title }}
@@ -38,14 +25,7 @@ const columnColor = computed(() => {
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCardComponent
-                @card-drag-start="emit('card-drag-start', $event)"
-                @card-drag-end="emit('card-drag-end')"
-                @column-drop="emit('column-drop', column.id)"
-                v-for="card in cards"
-                :key="card.id"
-                :card="card"
-            />
+            <KanbanCardComponent v-for="card in cards" :key="card.id" :card="card" />
         </div>
     </div>
 </template>

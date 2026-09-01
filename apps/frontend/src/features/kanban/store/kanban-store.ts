@@ -47,12 +47,36 @@ export const useKanbanStore = defineStore("kanban", () => {
     // function renameColumn(columnId: string, title: string) {}
 
     /*Kanban Card*/
-    function moveCard(cardId: string, columnId: string) {
+    function moveCard(cardId: string, targetColumnId: string, targetIndex: number) {
         const card = cards.value.find((card) => card.id === cardId);
 
-        if (!card) return;
+        if (!card) {
+            return;
+        }
 
-        card.columnId = columnId;
+        const sourceColumnId = card.columnId;
+
+        const targetColumnCards = cards.value
+            .filter((c) => c.columnId === targetColumnId && c.id !== cardId)
+            .sort((a, b) => a.position - b.position);
+
+        const clampedIndex = Math.min(Math.max(targetIndex, 0), targetColumnCards.length);
+
+        targetColumnCards.splice(clampedIndex, 0, card);
+        targetColumnCards.forEach((c, i) => {
+            c.position = i;
+        });
+
+        card.columnId = targetColumnId;
+
+        if (sourceColumnId !== targetColumnId) {
+            cards.value
+                .filter((c) => c.columnId === sourceColumnId)
+                .sort((a, b) => a.position - b.position)
+                .forEach((c, i) => {
+                    c.position = i;
+                });
+        }
     }
 
     return {

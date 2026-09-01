@@ -4,20 +4,10 @@ import type { KanbanCard } from "../../types/kanban.types";
 defineProps<{
     card: KanbanCard;
 }>();
-
-const emit = defineEmits<{
-    "card-drag-start": [cardId: string];
-    "card-drag-end": [];
-}>();
 </script>
 
 <template>
-    <div
-        class="kanban-card"
-        draggable="true"
-        @dragstart="emit('card-drag-start', card.id)"
-        @dragend="emit('card-drag-end')"
-    >
+    <div class="kanban-card" draggable="true" :data-card-id="card.id">
         <span class="kanban-card__title">
             {{ card.title }}
         </span>
