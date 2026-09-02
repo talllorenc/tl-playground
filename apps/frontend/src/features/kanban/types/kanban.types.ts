@@ -1,14 +1,12 @@
 import type { KanbanColors } from "../constants/kanban-colors";
 
-export interface KanbanCard {
+export interface IKanbanCard {
     id: string;
     title: string;
-    description?: string;
     columnId: string;
-    position: number;
 }
 
-export interface KanbanColumn {
+export interface IKanbanColumn {
     id: string;
     title: string;
     color?: KanbanColors;

@@ -1,37 +1,64 @@
 <script setup lang="ts">
-import type { KanbanCard } from "../../types/kanban.types";
+import { ref, computed } from "vue";
+import { useDraggable } from "@dnd-kit/vue";
 
-defineProps<{
-    card: KanbanCard;
+type Card = {
+    id: string;
+    title: string;
+    columnId: string;
+};
+
+const props = defineProps<{
+    card: Card;
 }>();
+
+const element = ref<HTMLElement | null>(null);
+
+const { isDragging } = useDraggable({
+    id: computed(() => props.card.id),
+    element,
+});
 </script>
 
 <template>
-    <div class="kanban-card" draggable="true" :data-card-id="card.id">
+    <div
+        ref="element"
+        class="kanban-card"
+        :class="{
+            'kanban-card--dragging': isDragging,
+        }"
+    >
         <span class="kanban-card__title">
             {{ card.title }}
         </span>
-
-        <p v-if="card.description" class="kanban-card__description">
-            {{ card.description }}
-        </p>
     </div>
 </template>
 
 <style scoped lang="scss">
 .kanban-card {
     padding: 16px;
+
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background-color: var(--color-bg);
+
+    background: var(--color-bg);
+
     cursor: grab;
+
+    transition:
+        box-shadow 150ms ease,
+        opacity 150ms ease;
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    &--dragging {
+        opacity: 0.5;
+    }
 
     &__title {
         color: var(--color-text);
-    }
-
-    &__description {
-        margin: 8px 0 0;
-        font-size: 12px;
     }
 }
 </style>
