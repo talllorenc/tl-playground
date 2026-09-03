@@ -1,41 +1,24 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import KanbanCard from "../kanban-card/KanbanCard.vue";
+import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
 import { useDroppable } from "@dnd-kit/vue";
 
-import KanbanCard from "../kanban-card/KanbanCard.vue";
-
-type Column = {
-    id: string;
-    title: string;
-};
-
-type Card = {
-    id: string;
-    title: string;
-    columnId: string;
-};
-
 const props = defineProps<{
-    column: Column;
-    cards: Card[];
+    column: IKanbanColumn;
+    cards: IKanbanCard[];
 }>();
 
 const element = ref<HTMLElement | null>(null);
 
-const { isDropTarget } = useDroppable({
+useDroppable({
     id: computed(() => props.column.id),
     element,
 });
 </script>
 
 <template>
-    <div
-        ref="element"
-        class="kanban-column"
-        :class="{
-            'kanban-column--over': isDropTarget,
-        }"
-    >
+    <div ref="element" class="kanban-column">
         <div class="kanban-column__header">
             <h3 class="kanban-column__title">
                 {{ column.title }}
@@ -47,7 +30,7 @@ const { isDropTarget } = useDroppable({
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCard v-for="card in cards" :key="card.id" :card="card" />
+            <KanbanCard v-for="(card, index) in cards" :key="card.id" :index="index" :card="card" />
         </div>
     </div>
 </template>
@@ -62,27 +45,16 @@ const { isDropTarget } = useDroppable({
 
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-
-    transition:
-        border-color 150ms ease,
-        background-color 150ms ease;
-
-    &--over {
-        border-color: var(--color-primary);
-        background-color: var(--color-bg-secondary);
-    }
+    background-color: var(--color-bg-secondary);
 
     &__header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-
         gap: 16px;
     }
 
     &__title {
         margin: 0;
-
         color: var(--color-text);
     }
 
