@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { DragDropProvider } from "@dnd-kit/vue";
 
 import KanbanColumn from "../kanban-column/KanbanColumn.vue";
 
 import { useKanbanStore } from "@/features/kanban/store/kanban-store.ts";
-import { getKanbanCards, getKanbanColumns } from "@/features/kanban/api/kanban-api.ts";
+import {
+    getKanbanCards,
+    getKanbanColumns,
+    updateCardColumn,
+} from "@/features/kanban/api/kanban-api.ts";
 
 const kanbanStore = useKanbanStore();
+const queryClient = useQueryClient();
 
 const { isPending: isColumnsPending } = useQuery({
     queryKey: ["kanban", "columns"],
@@ -31,23 +36,74 @@ const { isPending: isCardsPending } = useQuery({
     },
 });
 
+interface PersistCardColumnVars {
+    cardId: string;
+    columnId: string;
+    previousColumnId: string;
+}
+
+const { mutate: persistCardColumn } = useMutation({
+    mutationFn: ({ cardId, columnId }: PersistCardColumnVars) => updateCardColumn(cardId, columnId),
+    onError: (error, { cardId, previousColumnId }: PersistCardColumnVars) => {
+        console.error("Failed to persist card column, rolling back", error);
+        kanbanStore.moveCard(cardId, previousColumnId);
+    },
+    onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["kanban", "cards"] });
+    },
+});
+
+let dragStartColumnId: string | null = null;
+
+const resolveColumnId = (target: any): string | null => {
+    if (!target) return null;
+
+    return String(target.group ?? target.id);
+};
+
+const handleDragStart = (event: any) => {
+    const card = kanbanStore.cards.find((card) => card.id === event.operation.source?.id);
+
+    dragStartColumnId = card?.columnId ?? null;
+};
+
 const handleDragOver = (event: any) => {
     const { source, target } = event.operation;
 
-    if (!target) return;
+    const columnId = resolveColumnId(target);
 
-    const column = kanbanStore.columns.find((column) => column.id === target.id);
+    if (!columnId) return;
 
-    if (!column) return;
+    kanbanStore.moveCard(source.id, columnId);
+};
 
-    kanbanStore.moveCard(source.id, column.id);
+const handleDragEnd = (event: any) => {
+    const { source, canceled } = event.operation;
+
+    if (canceled || !source) return;
+
+    const cardId = String(source.id);
+    const card = kanbanStore.cards.find((card) => card.id === cardId);
+
+    if (!card || !dragStartColumnId || card.columnId === dragStartColumnId) return;
+
+    persistCardColumn({
+        cardId,
+        columnId: card.columnId,
+        previousColumnId: dragStartColumnId,
+    });
 };
 </script>
 
 <template>
     <div v-if="isColumnsPending || isCardsPending">Loading...</div>
 
-    <DragDropProvider v-else @drag-over="handleDragOver">
+    <DragDropProvider
+        v-else
+        @drag-start="handleDragStart"
+        @drag-over="handleDragOver"
+        @drag-end="handleDragEnd"
+    >
         <div class="kanban">
             <KanbanColumn
                 v-for="column in kanbanStore.columns"

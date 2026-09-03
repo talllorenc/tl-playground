@@ -26,3 +26,15 @@ export async function getKanbanCards(): Promise<IKanbanCard[]> {
 
     return await sanity.fetch<IKanbanCard[]>(query);
 }
+
+export async function updateCardColumn(cardId: string, columnId: string) {
+    return sanity
+        .patch(cardId)
+        .set({
+            column: {
+                _type: "reference",
+                _ref: columnId,
+            },
+        })
+        .commit();
+}
