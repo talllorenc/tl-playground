@@ -3,47 +3,19 @@ import { ref, computed } from "vue";
 import type { IKanbanCard, IKanbanColumn } from "../types/kanban.types";
 
 export const useKanbanStore = defineStore("kanban", () => {
-    const columns = ref<IKanbanColumn[]>([
-        {
-            id: "todo",
-            title: "Todo",
-        },
-        {
-            id: "progress",
-            title: "In progress",
-        },
-        {
-            id: "done",
-            title: "Done",
-        },
-    ]);
-
-    const cards = ref<IKanbanCard[]>([
-        {
-            id: "card-1",
-            title: "Card 1",
-            description: "Card 1 Description",
-            columnId: "todo",
-        },
-        {
-            id: "card-2",
-            title: "Card 2",
-            description: "Card 2 Description",
-            columnId: "todo",
-        },
-        {
-            id: "card-3",
-            title: "Card 3",
-            description: "Card 3 Description",
-            columnId: "progress",
-        },
-    ]);
-
+    const columns = ref<IKanbanColumn[]>([]);
+    const cards = ref<IKanbanCard[]>([]);
     const selectedCardId = ref<string | null>(null);
 
     const selectedCard = computed(() => {
         return cards.value.find((card) => card.id === selectedCardId.value) ?? null;
     });
+
+    function getCards(columnId: string) {
+        return cards.value
+            .filter((card) => card.columnId === columnId)
+            .sort((a, b) => a.order - b.order);
+    }
 
     function selectCard(cardId: string) {
         selectedCardId.value = cardId;
@@ -53,8 +25,12 @@ export const useKanbanStore = defineStore("kanban", () => {
         selectedCardId.value = null;
     }
 
-    function getCards(columnId: string) {
-        return cards.value.filter((card) => card.columnId === columnId);
+    function setColumns(data: IKanbanColumn[]) {
+        columns.value = data;
+    }
+
+    function setCards(data: IKanbanCard[]) {
+        cards.value = data;
     }
 
     function moveCard(cardId: string, columnId: string) {
@@ -73,5 +49,7 @@ export const useKanbanStore = defineStore("kanban", () => {
         closeCard,
         moveCard,
         getCards,
+        setColumns,
+        setCards,
     };
 });
