@@ -1,40 +1,39 @@
-import { sanity } from "@/shared/api/sanity";
-import type { IKanbanCard, IKanbanColumn } from "../types/kanban.types";
+import { supabase } from "@/shared/api/supabase";
+import type { IKanbanCard, IKanbanCardPositionUpdate, IKanbanColumn } from "../types/kanban.types";
 
 export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
-    const query = `
-        *[_type == "kanbanColumn"] | order(order asc) {
-            "id": _id,
-            title,
-            order
-        }
-    `;
+    const { data, error } = await supabase.from("kanban_columns").select("*");
 
-    return await sanity.fetch<IKanbanColumn[]>(query);
+    if (error) {
+        throw error;
+    }
+
+    return data;
 }
 
 export async function getKanbanCards(): Promise<IKanbanCard[]> {
-    const query = `
-        *[_type == "kanbanCard"] | order(order asc) {
-            "id": _id,
-            title,
-            description,
-            "columnId": column._ref,
-            order
-        }
-    `;
+    const { data, error } = await supabase
+        .from("kanban_cards")
+        .select("*")
+        .order("order", { ascending: true });
 
-    return await sanity.fetch<IKanbanCard[]>(query);
+    if (error) {
+        throw error;
+    }
+
+    return data;
 }
 
-export async function updateCardColumn(cardId: string, columnId: string) {
-    return sanity
-        .patch(cardId)
-        .set({
-            column: {
-                _type: "reference",
-                _ref: columnId,
-            },
-        })
-        .commit();
+export async function updateCardPositions(updates: IKanbanCardPositionUpdate[]): Promise<void> {
+    const results = await Promise.all(
+        updates.map(({ id, columnId, order }) =>
+            supabase.from("kanban_cards").update({ columnId, order }).eq("id", id),
+        ),
+    );
+
+    const failed = results.find((result) => result.error);
+
+    if (failed?.error) {
+        throw failed.error;
+    }
 }

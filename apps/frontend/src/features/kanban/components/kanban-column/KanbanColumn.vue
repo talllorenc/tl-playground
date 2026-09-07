@@ -1,74 +1,58 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import KanbanCard from "../kanban-card/KanbanCard.vue";
-import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
-import { useDroppable } from "@dnd-kit/vue";
-
-const props = defineProps<{
-    column: IKanbanColumn;
-    cards: IKanbanCard[];
-}>();
-
-const element = ref<HTMLElement | null>(null);
-
-useDroppable({
-    id: computed(() => props.column.id),
-    element,
-});
+import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue";
 </script>
 
 <template>
     <div ref="element" class="kanban-column">
         <div class="kanban-column__header">
-            <h3 class="kanban-column__title">
-                {{ column.title }}
-            </h3>
+            <h3 class="kanban-column__title">Title</h3>
 
-            <span class="kanban-column__count">
-                {{ cards.length }}
-            </span>
+            <span class="kanban-column__count"> 4 </span>
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCard v-for="(card, index) in cards" :key="card.id" :index="index" :card="card" />
+            <KanbanCard />
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .kanban-column {
-    width: 350px;
-    min-width: 350px;
-    min-height: 300px;
-
+    width: 320px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
     padding: 16px;
-
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background-color: var(--color-bg-secondary);
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
 
     &__header {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 8px;
+        padding: 0 4px 12px;
     }
 
     &__title {
         margin: 0;
+        font-size: 15px;
         color: var(--color-text);
     }
 
     &__count {
-        color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     &__cards {
         display: flex;
         flex-direction: column;
         gap: 8px;
-
-        min-height: 220px;
-        margin-top: 16px;
     }
 }
 </style>
