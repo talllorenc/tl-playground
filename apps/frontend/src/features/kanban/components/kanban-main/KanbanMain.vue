@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import KanbanColumn from "@/features/kanban/components/kanban-column/KanbanColumn.vue";
+import { ref } from "vue";
+import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
+
+const dragCardRef = ref<IKanbanCard | null>(null);
+const sourceColumnRef = ref<IKanbanColumn | null>(null);
 </script>
 
 <template>

@@ -1,10 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import KanbanCardHeader from "@/features/kanban/components/kanban-card/KanbanCardHeader.vue";
+import KanbanCardContent from "@/features/kanban/components/kanban-card/KanbanCardContent.vue";
+</script>
 
 <template>
-    <div ref="element" class="kanban-card">
-        <span class="kanban-card__title"> Title </span>
-
-        <p class="kanban-card__description">Description</p>
+    <div ref="element" class="kanban-card kanban-card__animation">
+        <KanbanCardHeader />
+        <KanbanCardContent />
     </div>
 </template>
 
@@ -22,20 +24,20 @@
         box-shadow 0.15s ease,
         opacity 0.15s ease;
 
-    &__title {
-        font-weight: var(--font-w-md);
-        color: var(--color-text);
+    @keyframes showCard {
+        from {
+            transform: scale(0.9) translateY(-5px);
+            opacity: 0.4;
+        }
+
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
     }
 
-    &__description {
-        margin: 0;
-        font-size: 13px;
-        color: var(--color-text-muted);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
+    &__animation {
+        animation: showCard 0.3s ease-in-out;
     }
 }
 </style>
