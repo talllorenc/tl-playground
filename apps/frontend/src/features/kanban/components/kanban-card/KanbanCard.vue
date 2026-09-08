@@ -1,28 +1,40 @@
 <script setup lang="ts">
-import KanbanCardHeader from "@/features/kanban/components/kanban-card/KanbanCardHeader.vue";
-import KanbanCardContent from "@/features/kanban/components/kanban-card/KanbanCardContent.vue";
+import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
+import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
+
+const props = defineProps<{
+    card: IKanbanCard;
+}>();
 </script>
 
 <template>
-    <div ref="element" class="kanban-card kanban-card__animation">
-        <KanbanCardHeader />
-        <KanbanCardContent />
+    <div class="kanban-card kanban-card__animation">
+        <span>ORDER - {{ props.card.order }}</span>
+        <h4 class="kanban-card__title">{{ props.card.title }}</h4>
+        <DateBadge :date="props.card.created_at" />
     </div>
 </template>
 
 <style scoped lang="scss">
 .kanban-card {
-    padding: 12px 14px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-card);
+    padding: 16px;
     cursor: grab;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    transition:
-        box-shadow 0.15s ease,
-        opacity 0.15s ease;
+    gap: 8px;
+
+    &__animation {
+        animation: showCard 0.3s ease-in-out;
+    }
+
+    &__title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
 
     @keyframes showCard {
         from {
@@ -34,10 +46,6 @@ import KanbanCardContent from "@/features/kanban/components/kanban-card/KanbanCa
             transform: scale(1) translateY(0);
             opacity: 1;
         }
-    }
-
-    &__animation {
-        animation: showCard 0.3s ease-in-out;
     }
 }
 </style>

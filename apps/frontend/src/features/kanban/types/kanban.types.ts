@@ -1,13 +1,15 @@
 export interface IKanbanCard {
     id: number;
+    created_at: string;
     title: string;
-    description: string;
+    description: string | null;
     columnId: number;
     order: number;
 }
 
 export interface IKanbanColumn {
     id: number;
+    created_at: string;
     title: string;
 }
 

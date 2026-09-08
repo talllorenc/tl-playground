@@ -63,6 +63,16 @@ h6 {
     overflow-wrap: break-word;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-text);
+    font-weight: var(--font-w-md);
+}
+
 #app {
     isolation: isolate;
     height: 100%;

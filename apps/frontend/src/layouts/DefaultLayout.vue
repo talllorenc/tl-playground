@@ -1,21 +1,37 @@
 <script setup lang="ts">
-import Sidebar from "./components/Sidebar.vue";
+import Sidebar from "@/layouts/components/sidebar/Sidebar.vue";
+import Header from "@/layouts/components/header/Header.vue";
 </script>
 
 <template>
     <div class="layout">
-        <Sidebar class="layout__sidebar" />
+        <Header class="layout__header" />
 
-        <main class="layout__content">
-            <RouterView />
-        </main>
+        <div class="layout__body">
+            <Sidebar class="layout__sidebar" />
+
+            <main class="layout__content">
+                <RouterView />
+            </main>
+        </div>
     </div>
 </template>
 
 <style scoped>
 .layout {
     display: flex;
+    flex-direction: column;
     height: 100vh;
+}
+
+.layout__header {
+    flex: 0 0 var(--header-height);
+}
+
+.layout__body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
 }
 
 .layout__sidebar {

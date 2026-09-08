@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue";
+import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
+
+const props = defineProps<{
+    column: IKanbanColumn;
+    cards: IKanbanCard[];
+}>();
 </script>
 
 <template>
-    <div ref="element" class="kanban-column">
+    <div class="kanban-column">
         <div class="kanban-column__header">
-            <h3 class="kanban-column__title">Title</h3>
-
-            <span class="kanban-column__count"> 4 </span>
+            <h3 class="kanban-column__title">{{ props.column.title }}</h3>
+            <span class="kanban-column__count">{{ props.cards.length }}</span>
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCard />
+            <KanbanCard v-for="card in cards" :key="card.id" :card="card" />
         </div>
     </div>
 </template>
@@ -22,10 +27,6 @@ import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue"
     min-width: 320px;
     display: flex;
     flex-direction: column;
-    padding: 16px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg-secondary);
     transition:
         border-color 0.15s ease,
         background-color 0.15s ease;
@@ -34,7 +35,7 @@ import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue"
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 0 4px 12px;
+        border-bottom: 2px solid var(--color-border);
     }
 
     &__title {
@@ -52,7 +53,8 @@ import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue"
     &__cards {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 16px;
+        margin-top: 24px;
     }
 }
 </style>

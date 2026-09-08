@@ -1,4 +1,4 @@
-import { useQuery, type UseQueryOptions } from "@tanstack/vue-query";
+import { queryOptions, type UseQueryOptions } from "@tanstack/vue-query";
 import { getKanbanColumns } from "@/features/kanban/api/kanban-api";
 import QUERY_KEYS from "@/constants/query-keys.ts";
 
@@ -10,7 +10,7 @@ export function useKanbanColumnsQuery<TData = IUseKanbanColumnsQueryResponse, TE
         "queryKey" | "queryFn"
     >,
 ) {
-    return useQuery({
+    return queryOptions({
         ...options,
         queryKey: [QUERY_KEYS.kanban, "columns"],
         queryFn: getKanbanColumns,
