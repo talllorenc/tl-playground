@@ -36,7 +36,7 @@ import { sidebarLinks } from "@/layouts/components/sidebar/sidebar.links.ts";
         padding: 8px;
         border-radius: var(--radius-sm);
         font-size: 14px;
-        color: var(--color-text-secondary);
+        color: var(--color-text);
         transition:
             background-color var(--transition-fast),
             color var(--transition-fast);

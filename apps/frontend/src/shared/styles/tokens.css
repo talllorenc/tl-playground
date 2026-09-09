@@ -1,21 +1,24 @@
 :root {
     /* Base palette */
-    --color-black: #010101;
-    --color-zinc-50: #181818;
-    --color-zinc-200: #272727;
-    --color-zinc-500: #b8b8b8;
-    --color-zinc-600: #262626;
-    --color-zinc-950: #dad9d9;
+    --color-white: #ffffff;
+    --color-black: #090909;
+
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f6f6f6;
+    --color-gray-200: #ecebeb;
+    --color-gray-500: #71717b;
+    --color-gray-600: #262626;
+    --color-gray-950: #09090b;
 
     /* Semantic tokens */
-    --color-bg: var(--color-black);
-    --color-bg-secondary: var(--color-zinc-50);
-    --color-bg-card: var(--color-zinc-600);
+    --color-bg: var(--color-white);
+    --color-bg-secondary: var(--color-gray-100);
+    --color-bg-muted: var(--color-gray-50);
 
-    --color-border: var(--color-zinc-200);
+    --color-border: var(--color-gray-200);
 
-    --color-text: var(--color-zinc-950);
-    --color-text-secondary: var(--color-zinc-500);
+    --color-text: var(--color-gray-950);
+    --color-text-secondary: var(--color-gray-500);
 
     /* Layout */
     --sidebar-width: 264px;

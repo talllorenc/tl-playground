@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
+import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
 
 const props = defineProps<{
     card: IKanbanCard;
@@ -9,17 +10,24 @@ const props = defineProps<{
 
 <template>
     <div class="kanban-card kanban-card__animation">
-        <span>ORDER - {{ props.card.order }}</span>
+        <KanbanTagBadge :tag="props.card.tag" />
         <h4 class="kanban-card__title">{{ props.card.title }}</h4>
-        <DateBadge :date="props.card.created_at" />
+
+        <div class="kanban-card__content">
+            <span class="kanban-card__description">
+                {{ props.card.description }}
+            </span>
+            <DateBadge :date="props.card.created_at" />
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .kanban-card {
     border-radius: var(--radius-md);
-    background-color: var(--color-bg-card);
-    padding: 16px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 12px;
     cursor: grab;
     display: flex;
     flex-direction: column;
@@ -34,6 +42,23 @@ const props = defineProps<{
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
         overflow: hidden;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background-color: var(--color-bg-muted);
+        padding: 16px;
+        border-radius: var(--radius-md);
+    }
+
+    &__description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+        overflow: hidden;
+        color: var(--color-text-secondary);
     }
 
     @keyframes showCard {
