@@ -24,9 +24,13 @@ function handleDragEnd(event: DragEndEvent) {
     const columnId = target?.id;
     const cardId = source?.id;
 
-    if (!columnId || !cardId) {
-        return;
-    }
+    if (!columnId || !cardId) return;
+
+    const card = cards.value.find((card) => card.id === cardId);
+
+    if (!card) return;
+
+    if (card.columnId === columnId) return;
 
     cardUpdateColumnMutation.mutate({
         cardId: Number(cardId),

@@ -14,9 +14,3 @@ export interface IKanbanColumn {
     created_at: string;
     title: string;
 }
-
-export interface IKanbanCardPositionUpdate {
-    id: number;
-    columnId: number;
-    order: number;
-}
