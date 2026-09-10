@@ -12,11 +12,16 @@ const props = defineProps<{
 }>();
 
 const element = ref<HTMLElement | null>(null);
-const { isDragging } = useDraggable({ id: props.card.id, element });
+const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element });
 </script>
 
 <template>
-    <div ref="element" :data-dragging="isDragging" class="kanban-card kanban-card__animation">
+    <div
+        ref="element"
+        :data-dragging="isDragging"
+        :data-is-dragsource="isDragSource"
+        class="kanban-card kanban-card__animation"
+    >
         <div class="kanban-card__header">
             <KanbanTagBadge :tag="props.card.tag" />
             <button class="kanban-card__actions" type="button">
@@ -106,6 +111,10 @@ const { isDragging } = useDraggable({ id: props.card.id, element });
             transform: scale(1) translateY(0);
             opacity: 1;
         }
+    }
+
+    &[data-is-dragsource="true"] {
+        border-color: var(--color-accent);
     }
 }
 </style>

@@ -62,9 +62,17 @@ const { isDropTarget } = useDroppable({
     }
 
     &__count {
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: var(--color-accent);
+        color: var(--color-white);
+        border-radius: 50%;
+        font-size: var(--font-sm);
+        font-weight: var(--font-w-md);
+        line-height: 1;
     }
 
     &__cards {
