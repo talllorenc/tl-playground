@@ -70,6 +70,8 @@ h4,
 h5,
 h6 {
     font-weight: var(--font-w-md);
+    font-size: var(--font-xl);
+    color: var(--color-black);
 }
 
 #app {

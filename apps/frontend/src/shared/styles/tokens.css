@@ -1,19 +1,23 @@
 :root {
     /* Base palette */
     --color-white: #ffffff;
-    --color-black: #090909;
+    --color-black: #09090b;
+    --color-orange: #f9a633;
 
-    --color-gray-50: #fafafa;
-    --color-gray-100: #f6f6f6;
+    --color-gray-50: #eaeeee;
+    --color-gray-100: #f9f9f9;
     --color-gray-200: #ecebeb;
-    --color-gray-500: #71717b;
+    --color-gray-300: #f6f6f6;
+    --color-gray-500: #62606a;
     --color-gray-600: #262626;
-    --color-gray-950: #09090b;
+    --color-gray-950: #5c5a65;
 
     /* Semantic tokens */
-    --color-bg: var(--color-white);
-    --color-bg-secondary: var(--color-gray-100);
-    --color-bg-muted: var(--color-gray-50);
+    --color-bg: var(--color-gray-100);
+    --color-bg-secondary: var(--color-gray-50);
+    --color-bg-muted: var(--color-gray-300);
+    --color-bg-card: var(--color-white);
+    --color-accent: var(--color-orange);
 
     --color-border: var(--color-gray-200);
 
@@ -33,6 +37,12 @@
     --font-w-sm: 400;
     --font-w-md: 600;
     --font-w-lg: 800;
+
+    /* Font Size */
+    --font-sm: 14px;
+    --font-md: 16px;
+    --font-lg: 18px;
+    --font-xl: 24px;
 
     /* Transition */
     --transition-fast: 150ms ease;

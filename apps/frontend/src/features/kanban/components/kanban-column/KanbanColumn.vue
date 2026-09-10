@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue";
 import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
+import { ref } from "vue";
+import { useDroppable } from "@dnd-kit/vue";
 
 const props = defineProps<{
     column: IKanbanColumn;
     cards: IKanbanCard[];
 }>();
+
+const element = ref<HTMLElement | null>(null);
+const { isDropTarget } = useDroppable({
+    id: props.column.id,
+    element,
+});
 </script>
 
 <template>
-    <div class="kanban-column">
+    <div ref="element" :data-drop-target="isDropTarget" class="kanban-column">
         <div class="kanban-column__header">
             <h3 class="kanban-column__title">{{ props.column.title }}</h3>
             <span class="kanban-column__count">{{ props.cards.length }}</span>
@@ -23,25 +31,34 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 .kanban-column {
-    width: 320px;
-    min-width: 320px;
+    width: 350px;
+    min-width: 350px;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    border-radius: var(--radius-md);
     transition:
         border-color 0.15s ease,
         background-color 0.15s ease;
 
     &__header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+
         display: flex;
         align-items: center;
         gap: 8px;
-        border-bottom: 2px solid var(--color-border);
+
+        background-color: var(--color-bg-secondary);
+        border-radius: var(--radius-md);
+        padding: 12px;
     }
 
     &__title {
         margin: 0;
         font-size: 15px;
-        color: var(--color-text);
+        color: var(--color-black);
     }
 
     &__count {
@@ -55,6 +72,10 @@ const props = defineProps<{
         flex-direction: column;
         gap: 16px;
         margin-top: 24px;
+    }
+
+    &[data-drop-target="true"] {
+        background-color: var(--color-bg-secondary);
     }
 }
 </style>

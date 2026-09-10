@@ -24,7 +24,6 @@ import { sidebarLinks } from "@/layouts/components/sidebar/sidebar.links.ts";
     height: 100%;
     padding: 24px 16px;
     border-right: 1px solid var(--color-border);
-    background-color: var(--color-bg-secondary);
 
     &__nav {
         display: flex;

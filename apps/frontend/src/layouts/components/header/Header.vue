@@ -13,7 +13,6 @@
     height: 100%;
     padding: 0 24px;
     border-bottom: 1px solid var(--color-border);
-    background-color: var(--color-bg-secondary);
     color: var(--color-text);
 
     &__brand {

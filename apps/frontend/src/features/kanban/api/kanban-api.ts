@@ -23,3 +23,16 @@ export async function getKanbanCards(): Promise<IKanbanCard[]> {
 
     return data;
 }
+
+export async function updateCardColumn(cardId: number, columnId: number): Promise<void> {
+    const { error } = await supabase
+        .from("kanban_cards")
+        .update({
+            columnId,
+        })
+        .eq("id", cardId);
+
+    if (error) {
+        throw error;
+    }
+}

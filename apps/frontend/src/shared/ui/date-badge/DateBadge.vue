@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
     <div class="date-badge">
-        <IconCalendarWeek size="16" />
+        <IconCalendarWeek size="18" />
         <span>{{ formatDate(props.date) }}</span>
     </div>
 </template>

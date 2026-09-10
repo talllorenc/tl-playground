@@ -20,23 +20,27 @@ const props = defineProps<{
     width: fit-content;
     padding: 4px 8px;
     border-radius: var(--radius-sm);
-    font-size: 12px;
+    font-size: var(--font-sm);
     font-weight: 500;
 
     &--personal {
-        // стили personal
+        color: #6d28d9;
+        background-color: #f3e8ff;
     }
 
     &--work {
-        // стили work
+        color: #1d4ed8;
+        background-color: #dbeafe;
     }
 
     &--urgent {
-        // стили urgent
+        color: #b91c1c;
+        background-color: #fee2e2;
     }
 
     &--debt {
-        // стили important
+        color: #b45309;
+        background-color: #fef3c7;
     }
 }
 </style>
