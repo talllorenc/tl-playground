@@ -14,7 +14,10 @@ export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
 }
 
 export async function getKanbanCards(): Promise<IKanbanCard[]> {
-    const { data, error } = await supabase.from("kanban_cards").select("*");
+    const { data, error } = await supabase
+        .from("kanban_cards")
+        .select("*")
+        .order("position", { ascending: true });
 
     if (error) {
         sentryCaptureApiError(error, "get-kanban-cards");

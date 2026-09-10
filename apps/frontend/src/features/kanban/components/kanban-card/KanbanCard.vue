@@ -8,6 +8,7 @@ import { ref } from "vue";
 
 const props = defineProps<{
     card: IKanbanCard;
+    index: number;
 }>();
 
 const element = ref<HTMLElement | null>(null);

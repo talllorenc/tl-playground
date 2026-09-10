@@ -7,6 +7,7 @@ export interface IKanbanCard {
     description: string | null;
     columnId: number;
     tag: KanbanCardTag;
+    position: number;
 }
 
 export interface IKanbanColumn {

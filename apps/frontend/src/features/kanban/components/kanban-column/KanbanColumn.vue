@@ -24,7 +24,7 @@ const { isDropTarget } = useDroppable({
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCard v-for="card in cards" :key="card.id" :card="card" />
+            <KanbanCard v-for="(card, index) in cards" :key="card.id" :card="card" :index="index" />
         </div>
     </div>
 </template>
