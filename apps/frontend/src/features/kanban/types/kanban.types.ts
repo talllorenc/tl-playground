@@ -15,3 +15,5 @@ export interface IKanbanColumn {
     created_at: string;
     title: string;
 }
+
+export type CreateKanbanCardDto = Omit<IKanbanCard, "id" | "created_at">;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IconChevronsRight } from "@tabler/icons-vue";
+import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 
 const props = defineProps<{
     cardId: number | null;
@@ -15,8 +15,12 @@ const emit = defineEmits<{
         <Transition name="drawer">
             <aside v-if="props.cardId" class="card-detail-drawer">
                 <div class="card-detail-drawer__header">
-                    <button class="card-detail-drawer__close" type="button" @click="emit('close')">
-                        <IconChevronsRight size="24" />
+                    <button class="card-detail-drawer__action" type="button" @click="emit('close')">
+                        <IconChevronsRight size="18" />
+                    </button>
+
+                    <button class="card-detail-drawer__action" type="button">
+                        <IconLink size="18" />
                     </button>
                 </div>
 
@@ -50,10 +54,10 @@ const emit = defineEmits<{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
     }
 
-    &__close {
+    &__action {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -69,6 +73,12 @@ const emit = defineEmits<{
             background-color: var(--color-bg-muted);
             color: var(--color-black);
         }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
     }
 }
 

@@ -1,5 +1,5 @@
 import { supabase } from "@/shared/api/supabase";
-import type { IKanbanCard, IKanbanColumn } from "../types/kanban.types";
+import type { CreateKanbanCardDto, IKanbanCard, IKanbanColumn } from "../types/kanban.types";
 import { sentryCaptureApiError } from "@/utils/sentry-capture-api-error.ts";
 
 export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
@@ -38,4 +38,23 @@ export async function updateCardColumn(cardId: number, columnId: number): Promis
     if (error) {
         throw error;
     }
+}
+
+export async function createKanbanCard(columnId: number): Promise<IKanbanCard> {
+    const newCard: CreateKanbanCardDto = {
+        title: "New Kanban Card",
+        description: "New Kanban Card Description",
+        columnId,
+        tag: "work",
+        position: 0,
+    };
+
+    const { data, error } = await supabase.from("kanban_cards").insert(newCard).select().single();
+
+    if (error) {
+        sentryCaptureApiError(error, "create-kanban-card");
+        throw error;
+    }
+
+    return data;
 }

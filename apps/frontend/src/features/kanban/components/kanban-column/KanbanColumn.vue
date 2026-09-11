@@ -3,6 +3,7 @@ import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue"
 import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
 import { ref } from "vue";
 import { useDroppable } from "@dnd-kit/vue";
+import KanbanCardCreateBtn from "@/features/kanban/components/kanban-column/KanbanCardCreateBtn.vue";
 
 const props = defineProps<{
     column: IKanbanColumn;
@@ -21,6 +22,7 @@ useDroppable({
         <div class="kanban-column__header">
             <h3 class="kanban-column__title">{{ props.column.title }}</h3>
             <span class="kanban-column__count">{{ props.cards.length }}</span>
+            <KanbanCardCreateBtn />
         </div>
 
         <div class="kanban-column__cards">
