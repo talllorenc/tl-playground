@@ -4,7 +4,8 @@ import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
 import { useDraggable } from "@dnd-kit/vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useKanbanCardDetail } from "@/features/kanban/utils/kanban.utils.ts";
 
 const props = defineProps<{
     card: IKanbanCard;
@@ -13,6 +14,15 @@ const props = defineProps<{
 
 const element = ref<HTMLElement | null>(null);
 const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element });
+
+const { openCard, selectedCardId } = useKanbanCardDetail();
+const isCardOpen = computed(() => selectedCardId.value === props.card.id);
+
+function handleCardClick() {
+    if (!isDragging.value) {
+        openCard(props.card.id);
+    }
+}
 </script>
 
 <template>
@@ -20,15 +30,17 @@ const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element }
         ref="element"
         :data-dragging="isDragging"
         :data-is-dragsource="isDragSource"
+        :class="{ 'kanban-card--open': isCardOpen }"
         class="kanban-card kanban-card__animation"
+        @click="handleCardClick"
     >
         <div class="kanban-card__header">
             <KanbanTagBadge :tag="props.card.tag" />
-            <button class="kanban-card__actions" type="button">
+            <button class="kanban-card__actions" type="button" @click.stop>
                 <IconDotsVertical size="18" />
             </button>
         </div>
-        <p class="kanban-card__title">{{ props.card.title }}</p>
+        <p class="kanban-card__title" @click="openCard(props.card.id)">{{ props.card.title }}</p>
 
         <div v-if="props.card.description" class="kanban-card__content">
             <span class="kanban-card__description">
@@ -74,7 +86,7 @@ const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element }
 
         &:hover {
             background-color: var(--color-bg-muted);
-            color: var(--color-text-primary);
+            color: var(--color-black);
         }
     }
 
@@ -99,6 +111,10 @@ const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element }
         -webkit-line-clamp: 4;
         overflow: hidden;
         color: var(--color-text-secondary);
+    }
+
+    &--open {
+        border-color: var(--color-accent);
     }
 
     @keyframes showCard {

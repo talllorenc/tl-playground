@@ -23,6 +23,7 @@ import { sidebarLinks } from "@/layouts/components/sidebar/sidebar.links.ts";
     flex-direction: column;
     height: 100%;
     padding: 24px 16px;
+    background-color: var(--color-white);
     border-right: 1px solid var(--color-border);
 
     &__nav {

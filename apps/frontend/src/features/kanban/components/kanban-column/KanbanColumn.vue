@@ -10,14 +10,14 @@ const props = defineProps<{
 }>();
 
 const element = ref<HTMLElement | null>(null);
-const { isDropTarget } = useDroppable({
+useDroppable({
     id: props.column.id,
     element,
 });
 </script>
 
 <template>
-    <div ref="element" :data-drop-target="isDropTarget" class="kanban-column">
+    <div ref="element" class="kanban-column">
         <div class="kanban-column__header">
             <h3 class="kanban-column__title">{{ props.column.title }}</h3>
             <span class="kanban-column__count">{{ props.cards.length }}</span>
@@ -80,10 +80,6 @@ const { isDropTarget } = useDroppable({
         flex-direction: column;
         gap: 16px;
         margin-top: 24px;
-    }
-
-    &[data-drop-target="true"] {
-        background-color: var(--color-bg-secondary);
     }
 }
 </style>

@@ -4,9 +4,10 @@ import { computed } from "vue";
 import { useKanbanColumnsQuery } from "@/features/kanban/hooks/useKanbanColumnsQuery";
 import { useKanbanCardsQuery } from "@/features/kanban/hooks/useKanbanCardsQuery";
 import { useQuery } from "@tanstack/vue-query";
-import PageHeader from "@/shared/ui/page-header/PageHeader.vue";
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/vue";
 import { useKanbanCardColumnUpdate } from "@/features/kanban/hooks/useKanbanCardColumnUpdate.ts";
+import { useKanbanCardDetail } from "@/features/kanban/utils/kanban.utils.ts";
+import KanbanCardDetail from "@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue";
 
 const columnsQuery = useQuery(useKanbanColumnsQuery());
 const cardsQuery = useQuery(useKanbanCardsQuery());
@@ -17,6 +18,8 @@ const cards = computed(() => cardsQuery.data.value ?? []);
 
 const isLoading = computed(() => columnsQuery.isLoading.value || cardsQuery.isLoading.value);
 const isError = computed(() => columnsQuery.error.value || cardsQuery.error.value);
+
+const { selectedCardId, closeCard } = useKanbanCardDetail();
 
 function handleDragEnd(event: DragEndEvent) {
     const { source, target } = event.operation;
@@ -40,12 +43,6 @@ function handleDragEnd(event: DragEndEvent) {
 </script>
 
 <template>
-    <PageHeader title="Канбан доска">
-        <template #breadcrumbs>
-            <span>Брэдкрамбс</span>
-        </template>
-    </PageHeader>
-
     <div v-if="isLoading" class="kanban-state">Загрузка...</div>
 
     <div v-else-if="isError" class="kanban-state">Не удалось загрузить канбан</div>
@@ -62,6 +59,8 @@ function handleDragEnd(event: DragEndEvent) {
             </div>
         </div>
     </DragDropProvider>
+
+    <KanbanCardDetail :card-id="selectedCardId" @close="closeCard" />
 </template>
 
 <style scoped lang="scss">
