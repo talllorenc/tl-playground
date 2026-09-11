@@ -22,7 +22,7 @@ useDroppable({
         <div class="kanban-column__header">
             <h3 class="kanban-column__title">{{ props.column.title }}</h3>
             <span class="kanban-column__count">{{ props.cards.length }}</span>
-            <KanbanCardCreateBtn />
+            <KanbanCardCreateBtn :columnId="props.column.id" />
         </div>
 
         <div class="kanban-column__cards">

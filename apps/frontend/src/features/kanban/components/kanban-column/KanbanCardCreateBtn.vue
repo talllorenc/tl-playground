@@ -1,9 +1,22 @@
 <script setup lang="ts">
 import { IconPlus } from "@tabler/icons-vue";
+import { useKanbanCardCreate } from "../../hooks/useKanbanCardCreate";
+
+const props = defineProps<{
+    columnId: number;
+}>();
+
+const createCardMutation = useKanbanCardCreate();
+
+function handleCreateCard() {
+    createCardMutation.mutate({
+        columnId: props.columnId,
+    });
+}
 </script>
 
 <template>
-    <button class="plus" type="button">
+    <button class="plus" type="button" @click="handleCreateCard">
         <IconPlus size="18" />
     </button>
 </template>
