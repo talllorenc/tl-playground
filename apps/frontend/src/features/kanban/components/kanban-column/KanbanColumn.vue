@@ -3,7 +3,8 @@ import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue"
 import type { IKanbanCard, IKanbanColumn } from "@/features/kanban/types/kanban.types.ts";
 import { ref } from "vue";
 import { useDroppable } from "@dnd-kit/vue";
-import KanbanCardCreateBtn from "@/features/kanban/components/kanban-column/KanbanCardCreateBtn.vue";
+import { IconPlus, IconX } from "@tabler/icons-vue";
+import KanbanCreateCardForm from "../kanban-create-card-form/KanbanCreateCardForm.vue";
 
 const props = defineProps<{
     column: IKanbanColumn;
@@ -11,21 +12,40 @@ const props = defineProps<{
 }>();
 
 const element = ref<HTMLElement | null>(null);
+const isCreatingCard = ref(false);
+
 useDroppable({
     id: props.column.id,
     element,
 });
+
+function handleToggleCardForm() {
+    isCreatingCard.value = !isCreatingCard.value;
+}
 </script>
 
 <template>
     <div ref="element" class="kanban-column">
         <div class="kanban-column__header">
-            <h3 class="kanban-column__title">{{ props.column.title }}</h3>
-            <span class="kanban-column__count">{{ props.cards.length }}</span>
-            <KanbanCardCreateBtn :columnId="props.column.id" />
+            <div class="kanban-column__info">
+                <h3 class="kanban-column__title">{{ props.column.title }}</h3>
+                <span class="kanban-column__count">{{ props.cards.length }}</span>
+            </div>
+            <div class="kanban-column__actions">
+                <button
+                    class="kanban-column__createBtn"
+                    :class="{ 'kanban-column__createBtn--active': isCreatingCard }"
+                    type="button"
+                    @click="handleToggleCardForm"
+                >
+                    <IconX v-if="isCreatingCard" size="18" />
+                    <IconPlus v-else size="18" />
+                </button>
+            </div>
         </div>
 
         <div class="kanban-column__cards">
+            <KanbanCreateCardForm v-if="isCreatingCard" />
             <KanbanCard v-for="(card, index) in cards" :key="card.id" :card="card" :index="index" />
         </div>
     </div>
@@ -50,11 +70,24 @@ useDroppable({
 
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 8px;
 
         background-color: var(--color-bg-secondary);
         border-radius: var(--radius-md);
         padding: 12px;
+    }
+
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     &__title {
@@ -82,6 +115,24 @@ useDroppable({
         flex-direction: column;
         gap: 16px;
         margin-top: 24px;
+    }
+
+    &__createBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-sm);
+        color: var(--color-text);
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: 0;
+
+        &:hover {
+            background-color: var(--color-bg-muted);
+            color: var(--color-black);
+        }
     }
 }
 </style>
