@@ -45,7 +45,11 @@ function handleToggleCardForm() {
         </div>
 
         <div class="kanban-column__cards">
-            <KanbanCreateCardForm v-if="isCreatingCard" />
+            <KanbanCreateCardForm
+                v-if="isCreatingCard"
+                :columnId="props.column.id"
+                @card-created="isCreatingCard = false"
+            />
             <KanbanCard v-for="(card, index) in cards" :key="card.id" :card="card" :index="index" />
         </div>
     </div>

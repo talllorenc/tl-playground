@@ -6,7 +6,8 @@ export function useKanbanCardCreate() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ columnId }: { columnId: number }) => createKanbanCard(columnId),
+        mutationFn: ({ title, columnId }: { title: string; columnId: number }) =>
+            createKanbanCard(title, columnId),
         onError: (error) => {
             console.log(error);
         },

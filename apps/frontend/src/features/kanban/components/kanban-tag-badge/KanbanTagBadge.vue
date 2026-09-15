@@ -3,12 +3,12 @@ import type { KanbanCardTag } from "@/features/kanban/types/kanban.types.ts";
 import { TAG_CONFIG } from "@/features/kanban/components/kanban-tag-badge/kanban-tags-config.ts";
 
 const props = defineProps<{
-    tag: KanbanCardTag;
+    tag?: KanbanCardTag;
 }>();
 </script>
 
 <template>
-    <span class="kanban-tag" :class="TAG_CONFIG[props.tag].class">
+    <span v-if="props.tag" class="kanban-tag" :class="TAG_CONFIG[props.tag].class">
         {{ TAG_CONFIG[props.tag].label }}
     </span>
 </template>
