@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
+import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
 
 const props = defineProps<{
     cardId: number | null;
@@ -27,6 +28,7 @@ const emit = defineEmits<{
                 <div class="card-detail-drawer__body">
                     <h2>Карточка #{{ props.cardId }}</h2>
                     <p>Содержимое карточки...</p>
+                    <TextEditor />
                 </div>
             </aside>
         </Transition>
@@ -38,7 +40,7 @@ const emit = defineEmits<{
     position: fixed;
     top: var(--header-height);
     right: 0;
-    z-index: 1000;
+    z-index: var(--z-modal);
     width: 100%;
     max-width: 550px;
     height: 100vh;

@@ -55,10 +55,11 @@ const onSubmit = handleSubmit((values) => {
             v-model="title"
             v-bind="titleAttrs"
             :error="errors.title"
+            :autofocus="true"
             placeholder="Проектирование интерфейса"
         />
 
-        <Button type="submit" :loading="isPending"> Создать </Button>
+        <Button type="submit" :loading="isPending" :disabled="errors.title">Создать</Button>
     </form>
 </template>
 

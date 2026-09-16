@@ -6,17 +6,37 @@ import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/Kanban
 import { useDraggable } from "@dnd-kit/vue";
 import { computed, ref } from "vue";
 import { useKanbanCardDetail } from "@/features/kanban/utils/kanban.utils.ts";
+import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
+import { getKanbanCardActions } from "@/features/kanban/components/kanban-card/kanban-card-action.ts";
+import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete.ts";
 
 const props = defineProps<{
     card: IKanbanCard;
     index: number;
 }>();
 
+const { mutate, isPending } = useKanbanCardDelete();
+
 const element = ref<HTMLElement | null>(null);
 const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element });
 
 const { openCard, selectedCardId } = useKanbanCardDetail();
 const isCardOpen = computed(() => selectedCardId.value === props.card.id);
+const actions = computed(() =>
+    getKanbanCardActions(props.card.id, {
+        onDelete: handleDelete,
+        isDeletePending: isPending.value,
+        onDuplicate: handleDuplicate,
+    }),
+);
+
+function handleDelete(cardId: number) {
+    mutate({ cardId });
+}
+
+function handleDuplicate(cardId: number) {
+    console.log("duplicate", cardId);
+}
 
 function handleCardClick() {
     if (!isDragging.value) {
@@ -36,9 +56,13 @@ function handleCardClick() {
     >
         <div class="kanban-card__header">
             <KanbanTagBadge :tag="props.card.tag" />
-            <button class="kanban-card__actions" type="button" @click.stop>
-                <IconDotsVertical size="18" />
-            </button>
+            <ActionsMenu :items="actions">
+                <template #trigger>
+                    <button class="kanban-card__actions" type="button">
+                        <IconDotsVertical :size="18" />
+                    </button>
+                </template>
+            </ActionsMenu>
         </div>
         <p class="kanban-card__title" @click="openCard(props.card.id)">{{ props.card.title }}</p>
 
@@ -83,6 +107,7 @@ function handleCardClick() {
         border-radius: var(--radius-sm);
         color: var(--color-text);
         cursor: pointer;
+        rotate: 90deg;
 
         &:hover {
             background-color: var(--color-bg-muted);

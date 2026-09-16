@@ -55,3 +55,12 @@ export async function createKanbanCard(title: string, columnId: number): Promise
 
     return data;
 }
+
+export async function deleteKanbanCard(cardId: number): Promise<void> {
+    const { error } = await supabase.from("kanban_cards").delete().eq("id", cardId);
+
+    if (error) {
+        sentryCaptureApiError(error, "delete-kanban-card");
+        throw error;
+    }
+}

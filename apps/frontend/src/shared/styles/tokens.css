@@ -52,7 +52,12 @@
     --transition-normal: 250ms ease;
     --transition-slow: 350ms ease;
 
-    /* Header */
+    /* Z-index */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-tooltip: 300;
+    --z-modal: 400;
 
     /* Typography */
     --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;

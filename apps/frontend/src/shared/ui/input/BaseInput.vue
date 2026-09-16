@@ -1,8 +1,18 @@
 <script setup lang="ts">
-const props = defineProps<{
-    modelValue: string;
-    error?: string;
-}>();
+import { onMounted, ref } from "vue";
+
+const input = ref<HTMLInputElement | null>(null);
+
+const props = withDefaults(
+    defineProps<{
+        modelValue: string;
+        error?: string;
+        autofocus?: boolean;
+    }>(),
+    {
+        autofocus: false,
+    },
+);
 
 const emit = defineEmits<{
     "update:modelValue": [value: string];
@@ -13,11 +23,18 @@ function handleInput(event: Event) {
 
     emit("update:modelValue", target.value);
 }
+
+onMounted(() => {
+    if (props.autofocus) {
+        input.value?.focus();
+    }
+});
 </script>
 
 <template>
     <div class="input">
         <input
+            ref="input"
             class="input__field"
             :class="{ 'input__field--error': props.error }"
             v-bind="$attrs"
