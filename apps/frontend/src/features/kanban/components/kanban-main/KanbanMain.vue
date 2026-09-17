@@ -60,7 +60,7 @@ function handleDragEnd(event: DragEndEvent) {
         </div>
     </DragDropProvider>
 
-    <KanbanCardDetail :card-id="selectedCardId" @close="closeCard" />
+    <KanbanCardDetail v-if="selectedCardId !== null" :card-id="selectedCardId" @close="closeCard" />
 </template>
 
 <style scoped lang="scss">

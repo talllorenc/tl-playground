@@ -27,6 +27,21 @@ export async function getKanbanCards(): Promise<IKanbanCard[]> {
     return data;
 }
 
+export async function getKanbanCardById(cardId: number): Promise<IKanbanCard> {
+    const { data, error } = await supabase
+        .from("kanban_cards")
+        .select("*")
+        .eq("id", cardId)
+        .single();
+
+    if (error) {
+        sentryCaptureApiError(error, "get-kanban-card-by-id");
+        throw error;
+    }
+
+    return data;
+}
+
 export async function updateCardColumn(cardId: number, columnId: number): Promise<void> {
     const { error } = await supabase
         .from("kanban_cards")

@@ -16,7 +16,6 @@ const props = defineProps<{
 }>();
 
 const { mutate, isPending } = useKanbanCardDelete();
-
 const element = ref<HTMLElement | null>(null);
 const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element });
 
@@ -26,16 +25,11 @@ const actions = computed(() =>
     getKanbanCardActions(props.card.id, {
         onDelete: handleDelete,
         isDeletePending: isPending.value,
-        onDuplicate: handleDuplicate,
     }),
 );
 
 function handleDelete(cardId: number) {
     mutate({ cardId });
-}
-
-function handleDuplicate(cardId: number) {
-    console.log("duplicate", cardId);
 }
 
 function handleCardClick() {
@@ -65,7 +59,6 @@ function handleCardClick() {
             </ActionsMenu>
         </div>
         <p class="kanban-card__title" @click="openCard(props.card.id)">{{ props.card.title }}</p>
-
         <div v-if="props.card.description" class="kanban-card__content">
             <span class="kanban-card__description">
                 {{ props.card.description }}
@@ -86,6 +79,10 @@ function handleCardClick() {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    &:hover {
+        border-color: var(--color-accent);
+    }
 
     &__header {
         display: flex;

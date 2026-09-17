@@ -1,20 +1,32 @@
 <script setup lang="ts">
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
+import { useKanbanSingleCardQuery } from "@/features/kanban/hooks/useKanbanSingleCardQuery.ts";
+import { computed, toRef } from "vue";
 
 const props = defineProps<{
-    cardId: number | null;
+    cardId: number;
 }>();
 
 const emit = defineEmits<{
     (e: "close"): void;
 }>();
+
+const cardId = toRef(props, "cardId");
+const singleCardQuery = useKanbanSingleCardQuery(cardId);
+
+const card = computed(() => singleCardQuery.data.value ?? null);
+const isLoading = computed(() => singleCardQuery.isLoading.value);
+const isError = computed(() => singleCardQuery.error.value);
 </script>
 
 <template>
     <Teleport to="body">
         <Transition name="drawer">
             <aside v-if="props.cardId" class="card-detail-drawer">
+                <div v-if="isLoading">Загрузка...</div>
+
+                <div v-else-if="isError">Не удалось загрузить карточку</div>
                 <div class="card-detail-drawer__header">
                     <button class="card-detail-drawer__action" type="button" @click="emit('close')">
                         <IconChevronsRight size="18" />
@@ -25,8 +37,8 @@ const emit = defineEmits<{
                     </button>
                 </div>
 
-                <div class="card-detail-drawer__body">
-                    <h2>Карточка #{{ props.cardId }}</h2>
+                <div v-if="card" class="card-detail-drawer__body">
+                    <h2>Карточка #{{ card.id }}</h2>
                     <p>Содержимое карточки...</p>
                     <TextEditor />
                 </div>
@@ -40,7 +52,7 @@ const emit = defineEmits<{
     position: fixed;
     top: var(--header-height);
     right: 0;
-    z-index: var(--z-modal);
+    z-index: var(--z-tooltip);
     width: 100%;
     max-width: 550px;
     height: 100vh;

@@ -101,6 +101,11 @@ useClickOutside(actionsMenu, () => {
         &:hover:not(:disabled) {
             background-color: var(--color-bg-secondary);
         }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
     }
     &__action-icon {
         flex-shrink: 0;
