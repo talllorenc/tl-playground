@@ -77,8 +77,9 @@ function handleToggleCardForm() {
         justify-content: space-between;
         gap: 8px;
 
-        background-color: var(--color-bg-secondary);
+        background-color: var(--color-white);
         border-radius: var(--radius-md);
+        border-bottom: 1px solid var(--color-border);
         padding: 12px;
     }
 

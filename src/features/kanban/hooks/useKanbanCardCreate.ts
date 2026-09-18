@@ -2,6 +2,7 @@ import QUERY_KEYS from "@/constants/query-keys.ts";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { createKanbanCard } from "@/features/kanban/api/kanban-api.ts";
 import { useModalStore } from "@/stores/modal-store.ts";
+import { useToastStore } from "@/stores/toast-store.ts";
 
 export function useKanbanCardCreate() {
     const queryClient = useQueryClient();
@@ -18,6 +19,12 @@ export function useKanbanCardCreate() {
         onSuccess: async () => {
             await queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.kanban, "cards"],
+            });
+
+            useToastStore().openToast({
+                title: "Создано",
+                message: `Карточка успешно создана`,
+                variant: "success",
             });
         },
     });

@@ -78,12 +78,12 @@ onMounted(() => {
         }
 
         &--error {
-            border-color: var(--color-border-error);
+            border-color: var(--color-error);
         }
     }
 
     &__error {
-        color: var(--color-text-error);
+        color: var(--color-error);
         font-size: var(--font-xs);
     }
 }

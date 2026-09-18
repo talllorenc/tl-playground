@@ -4,6 +4,7 @@
     --color-black: #09090b;
     --color-orange: #f9a633;
     --color-red: #ff0000;
+    --color-green: #59e832;
 
     --color-gray-50: #eaeeee;
     --color-gray-100: #f9f9f9;
@@ -21,11 +22,12 @@
     --color-accent: var(--color-orange);
 
     --color-border: var(--color-gray-200);
-    --color-border-error: var(--color-red);
 
     --color-text: var(--color-gray-950);
     --color-text-secondary: var(--color-gray-500);
-    --color-text-error: var(--color-red);
+
+    --color-error: var(--color-red);
+    --color-success: var(--color-green);
 
     /* Layout */
     --sidebar-width: 264px;
@@ -58,6 +60,7 @@
     --z-sticky: 200;
     --z-tooltip: 300;
     --z-modal: 400;
+    --z-toast: 500;
 
     /* Typography */
     --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
