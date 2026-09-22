@@ -60,7 +60,15 @@ function handleDragEnd(event: DragEndEvent) {
         </div>
     </DragDropProvider>
 
-    <KanbanCardDetail v-if="selectedCardId !== null" :card-id="selectedCardId" @close="closeCard" />
+    <Teleport to="body">
+        <Transition name="drawer">
+            <KanbanCardDetail
+                v-if="selectedCardId !== null"
+                :card-id="selectedCardId"
+                @close="closeCard"
+            />
+        </Transition>
+    </Teleport>
 </template>
 
 <style scoped lang="scss">
@@ -78,5 +86,15 @@ function handleDragEnd(event: DragEndEvent) {
     padding: 48px 24px;
     text-align: center;
     color: var(--color-text-muted);
+}
+
+.drawer-enter-active,
+.drawer-leave-active {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-enter-from,
+.drawer-leave-to {
+    transform: translateX(100%);
 }
 </style>

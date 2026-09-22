@@ -59,11 +59,6 @@ function handleCardClick() {
             </ActionsMenu>
         </div>
         <p class="kanban-card__title" @click="openCard(props.card.id)">{{ props.card.title }}</p>
-        <div v-if="props.card.description" class="kanban-card__content">
-            <span class="kanban-card__description">
-                {{ props.card.description }}
-            </span>
-        </div>
 
         <DateBadge :date="props.card.created_at" />
     </div>
@@ -119,20 +114,6 @@ function handleCardClick() {
         overflow: hidden;
         color: var(--color-black);
         font-weight: var(--font-w-md);
-    }
-
-    &__content {
-        background-color: var(--color-bg-muted);
-        padding: 16px;
-        border-radius: var(--radius-md);
-    }
-
-    &__description {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 4;
-        overflow: hidden;
-        color: var(--color-text-secondary);
     }
 
     &--open {

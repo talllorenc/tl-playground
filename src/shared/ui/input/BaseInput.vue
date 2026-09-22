@@ -59,7 +59,7 @@ onMounted(() => {
         padding: 8px 12px;
         border: 1px solid var(--color-border);
         background-color: transparent;
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         font-family: inherit;
         color: var(--color-black);
         outline: none;

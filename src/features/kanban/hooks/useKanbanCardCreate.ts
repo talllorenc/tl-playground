@@ -1,7 +1,6 @@
 import QUERY_KEYS from "@/constants/query-keys.ts";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { createKanbanCard } from "@/features/kanban/api/kanban-api.ts";
-import { useModalStore } from "@/stores/modal-store.ts";
 import { useToastStore } from "@/stores/toast-store.ts";
 
 export function useKanbanCardCreate() {
@@ -11,9 +10,10 @@ export function useKanbanCardCreate() {
         mutationFn: ({ title, columnId }: { title: string; columnId: number }) =>
             createKanbanCard(title, columnId),
         onError: () => {
-            useModalStore().openModal({
-                title: "Не удалось создать карточку",
-                body: "Попробуйте ещё раз.",
+            useToastStore().openToast({
+                title: "Ошибка",
+                message: `Произошла ошибка при создании карточки`,
+                variant: "error",
             });
         },
         onSuccess: async () => {

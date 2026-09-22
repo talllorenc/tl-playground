@@ -41,7 +41,7 @@ const props = withDefaults(
     justify-content: center;
     gap: 8px;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-weight: var(--font-w-md);
 

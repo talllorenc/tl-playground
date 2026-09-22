@@ -2,7 +2,16 @@
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
 import { useKanbanSingleCardQuery } from "@/features/kanban/hooks/useKanbanSingleCardQuery.ts";
-import { computed, toRef } from "vue";
+import { computed, toRef, watch } from "vue";
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import { z } from "zod";
+import BaseInput from "@/shared/ui/input/BaseInput.vue";
+import Button from "@/shared/ui/button/Button.vue";
+import { useKanbanCardUpdate } from "@/features/kanban/hooks/useKanbanCardUpdate.ts";
+import type { KanbanCardTag } from "@/features/kanban/types/kanban.types.ts";
+import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
+import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 
 const props = defineProps<{
     cardId: number;
@@ -18,36 +27,91 @@ const singleCardQuery = useKanbanSingleCardQuery(cardId);
 const card = computed(() => singleCardQuery.data.value ?? null);
 const isLoading = computed(() => singleCardQuery.isLoading.value);
 const isError = computed(() => singleCardQuery.error.value);
+const isSuccess = computed(() => singleCardQuery.isSuccess.value);
+
+const { mutate, isPending } = useKanbanCardUpdate();
+
+const validationSchema = z.object({
+    title: z
+        .string()
+        .nonempty("Заполните поле")
+        .min(6, "Минимум 6 символов")
+        .max(40, "Максимум 40 символов"),
+
+    description: z.string(),
+    tag: z.string(),
+});
+
+const { errors, defineField, handleSubmit, resetForm } = useForm<{
+    title: string;
+    description: string;
+    tag: KanbanCardTag;
+}>({
+    validationSchema: toTypedSchema(validationSchema),
+    initialValues: {
+        title: "",
+        description: "",
+        tag: "personal",
+    },
+});
+
+const [title, titleAttrs] = defineField("title");
+const [description, descriptionAttrs] = defineField("description");
+const [tag, tagAttrs] = defineField("tag");
+
+watch(
+    isSuccess,
+    (success) => {
+        if (success && card.value) {
+            resetForm({
+                values: {
+                    title: card.value.title ?? "",
+                    description: card.value.description ?? "",
+                },
+            });
+        }
+    },
+    { immediate: true },
+);
+
+const onSubmit = handleSubmit((values) => {
+    mutate({
+        cardId: cardId.value,
+        dto: values,
+    });
+});
 </script>
 
 <template>
-    <Teleport to="body">
-        <Transition name="drawer">
-            <aside class="card-detail-drawer">
-                <div class="card-detail-drawer__header">
-                    <button class="card-detail-drawer__action" type="button" @click="emit('close')">
-                        <IconChevronsRight size="18" />
-                    </button>
+    <aside class="card-detail-drawer">
+        <div class="card-detail-drawer__header">
+            <button class="card-detail-drawer__action" type="button" @click="emit('close')">
+                <IconChevronsRight size="18" />
+            </button>
 
-                    <button class="card-detail-drawer__action" type="button">
-                        <IconLink size="18" />
-                    </button>
-                </div>
+            <button class="card-detail-drawer__action" type="button">
+                <IconLink size="18" />
+            </button>
+        </div>
 
-                <div v-if="isLoading" class="card-detail-drawer__state">Загрузка...</div>
+        <div v-if="isLoading" class="card-detail-drawer__state">Загрузка...</div>
 
-                <div v-else-if="isError" class="card-detail-drawer__state">
-                    Не удалось загрузить карточку
-                </div>
+        <div v-else-if="isError" class="card-detail-drawer__state">
+            Не удалось загрузить карточку
+        </div>
 
-                <div v-else-if="card" class="card-detail-drawer__body">
-                    <h2>Карточка #{{ card.id }}</h2>
-                    <p>Содержимое карточки...</p>
-                    <TextEditor />
-                </div>
-            </aside>
-        </Transition>
-    </Teleport>
+        <form v-else-if="card" @submit="onSubmit" class="card-detail-drawer__body">
+            <div>
+                <KanbanTagBadge :tag="card.tag" />
+                <DateBadge :date="card.created_at" />
+            </div>
+            <BaseInput id="title" v-model="title" v-bind="titleAttrs" :error="errors.title" />
+
+            <TextEditor v-model="description" v-bind="descriptionAttrs" />
+
+            <Button type="submit">Сохранить</Button>
+        </form>
+    </aside>
 </template>
 
 <style scoped lang="scss">
@@ -56,8 +120,8 @@ const isError = computed(() => singleCardQuery.error.value);
     top: var(--header-height);
     right: 0;
     z-index: var(--z-tooltip);
-    width: 100%;
-    max-width: 550px;
+    width: calc(100vw - var(--sidebar-width));
+    max-width: 600px;
     height: 100vh;
     background-color: var(--color-white);
     border-left: 1px solid var(--color-border);
@@ -103,15 +167,5 @@ const isError = computed(() => singleCardQuery.error.value);
         text-align: center;
         color: var(--color-text-muted);
     }
-}
-
-.drawer-enter-active,
-.drawer-leave-active {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.drawer-enter-from,
-.drawer-leave-to {
-    transform: translateX(100%);
 }
 </style>

@@ -4,9 +4,17 @@ import StarterKit from "@tiptap/starter-kit";
 import { onBeforeUnmount } from "vue";
 import { IconBold, IconItalic } from "@tabler/icons-vue";
 
+const model = defineModel<string>({
+    default: "",
+});
+
 const editor = useEditor({
-    content: "",
+    content: model.value,
     extensions: [StarterKit],
+
+    onUpdate: ({ editor }) => {
+        model.value = editor.getHTML();
+    },
 });
 
 onBeforeUnmount(() => {
@@ -55,7 +63,7 @@ onBeforeUnmount(() => {
         align-items: center;
         gap: 4px;
         background-color: var(--color-white);
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         border: 1px solid var(--color-border);
         padding: 8px;
         width: fit-content;
@@ -85,7 +93,7 @@ onBeforeUnmount(() => {
 
     &__content {
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         background-color: var(--color-white);
     }
 

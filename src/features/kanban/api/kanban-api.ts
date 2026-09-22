@@ -1,5 +1,10 @@
 import { supabase } from "@/shared/api/supabase";
-import type { ICreateKanbanCardDto, IKanbanCard, IKanbanColumn } from "../types/kanban.types";
+import type {
+    ICreateKanbanCardDto,
+    IKanbanCard,
+    IKanbanCardUpdateDto,
+    IKanbanColumn,
+} from "../types/kanban.types";
 import { sentryCaptureApiError } from "@/utils/sentry-capture-api-error.ts";
 
 export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
@@ -79,4 +84,23 @@ export async function deleteKanbanCard(cardId: number): Promise<void> {
         sentryCaptureApiError(error, "delete-kanban-card");
         throw error;
     }
+}
+
+export async function updateKanbanCard(
+    cardId: number,
+    dto: IKanbanCardUpdateDto,
+): Promise<IKanbanCard> {
+    const { data, error } = await supabase
+        .from("kanban_cards")
+        .update(dto)
+        .eq("id", cardId)
+        .select()
+        .single();
+
+    if (error) {
+        sentryCaptureApiError(error, "update-kanban-card");
+        throw error;
+    }
+
+    return data;
 }

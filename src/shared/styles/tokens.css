@@ -2,9 +2,9 @@
     /* Base palette */
     --color-white: #ffffff;
     --color-black: #09090b;
-    --color-orange: #f9a633;
+    --color-orange: #6366f1;
     --color-red: #ff0000;
-    --color-green: #59e832;
+    --color-blue: #06b6d4;
 
     --color-gray-50: #eaeeee;
     --color-gray-100: #f9f9f9;
@@ -27,7 +27,7 @@
     --color-text-secondary: var(--color-gray-500);
 
     --color-error: var(--color-red);
-    --color-success: var(--color-green);
+    --color-success: var(--color-blue);
 
     /* Layout */
     --sidebar-width: 264px;

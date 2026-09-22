@@ -80,7 +80,7 @@ useClickOutside(actionsMenu, () => {
         width: fit-content;
         background-color: var(--color-bg-muted);
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         display: flex;
         flex-direction: column;
         gap: 8px;

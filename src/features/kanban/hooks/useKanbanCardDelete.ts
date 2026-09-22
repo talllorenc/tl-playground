@@ -1,7 +1,6 @@
 import QUERY_KEYS from "@/constants/query-keys.ts";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { deleteKanbanCard } from "@/features/kanban/api/kanban-api.ts";
-import { useModalStore } from "@/stores/modal-store.ts";
 import { useToastStore } from "@/stores/toast-store.ts";
 
 export function useKanbanCardDelete() {
@@ -10,9 +9,10 @@ export function useKanbanCardDelete() {
     return useMutation({
         mutationFn: ({ cardId }: { cardId: number }) => deleteKanbanCard(cardId),
         onError: () => {
-            useModalStore().openModal({
-                title: "Не удалось удалить карточку",
-                body: "Попробуйте ещё раз.",
+            useToastStore().openToast({
+                title: "Ошибка",
+                message: `Произошла ошибка при удалении карточки`,
+                variant: "error",
             });
         },
         onSuccess: async () => {

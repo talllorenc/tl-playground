@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { updateCardColumn } from "@/features/kanban/api/kanban-api";
 import QUERY_KEYS from "@/constants/query-keys.ts";
 import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
-import { useModalStore } from "@/stores/modal-store.ts";
+import { useToastStore } from "@/stores/toast-store.ts";
 
 interface IUpdateCardColumnVariables {
     cardId: number;
@@ -40,9 +40,10 @@ export function useKanbanCardColumnUpdate() {
                 queryClient.setQueryData([QUERY_KEYS.kanban, "cards"], context.previousCards);
             }
 
-            useModalStore().openModal({
-                title: "Не удалось перенести карточку",
-                body: "Попробуйте ещё раз.",
+            useToastStore().openToast({
+                title: "Ошибка",
+                message: `Произошла ошибка при перемещении карточки`,
+                variant: "error",
             });
         },
 

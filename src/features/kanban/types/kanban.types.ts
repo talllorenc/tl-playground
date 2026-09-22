@@ -20,3 +20,9 @@ export interface ICreateKanbanCardDto {
     title: string;
     columnId: number;
 }
+
+export interface IKanbanCardUpdateDto {
+    title: string;
+    description?: string;
+    tag?: KanbanCardTag;
+}
