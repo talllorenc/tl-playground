@@ -100,16 +100,21 @@ const onSubmit = handleSubmit((values) => {
             Не удалось загрузить карточку
         </div>
 
-        <form v-else-if="card" @submit="onSubmit" class="card-detail-drawer__body">
-            <div>
-                <KanbanTagBadge :tag="card.tag" />
-                <DateBadge :date="card.created_at" />
+        <form v-else-if="card" @submit="onSubmit" class="card-detail-drawer__form">
+            <div class="card-detail-drawer__body">
+                <div>
+                    <KanbanTagBadge :tag="card.tag" />
+                    <DateBadge :date="card.created_at" />
+                </div>
+
+                <BaseInput id="title" v-model="title" v-bind="titleAttrs" :error="errors.title" />
+
+                <TextEditor v-model="description" v-bind="descriptionAttrs" />
             </div>
-            <BaseInput id="title" v-model="title" v-bind="titleAttrs" :error="errors.title" />
 
-            <TextEditor v-model="description" v-bind="descriptionAttrs" />
-
-            <Button type="submit">Сохранить</Button>
+            <div class="card-detail-drawer__footer">
+                <Button type="submit" :loading="isPending"> Сохранить </Button>
+            </div>
         </form>
     </aside>
 </template>
@@ -122,13 +127,12 @@ const onSubmit = handleSubmit((values) => {
     z-index: var(--z-tooltip);
     width: calc(100vw - var(--sidebar-width));
     max-width: 600px;
-    height: 100vh;
+    height: calc(100vh - var(--header-height));
     background-color: var(--color-white);
     border-left: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
     padding: 12px;
-    overflow-y: auto;
     pointer-events: auto;
 
     &__header {
@@ -156,10 +160,28 @@ const onSubmit = handleSubmit((values) => {
         }
     }
 
+    &__form {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+
     &__body {
         display: flex;
         flex-direction: column;
         gap: 16px;
+
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-bottom: 12px;
+    }
+
+    &__footer {
+        flex-shrink: 0;
+        padding-top: 12px;
+        border-top: 1px solid var(--color-border);
     }
 
     &__state {

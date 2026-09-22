@@ -13,7 +13,9 @@ const editor = useEditor({
     extensions: [StarterKit],
 
     onUpdate: ({ editor }) => {
-        model.value = editor.getHTML();
+        const html = editor.getHTML();
+
+        model.value = html === "<p></p>" ? "" : html;
     },
 });
 
