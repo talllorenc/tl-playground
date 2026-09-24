@@ -1,0 +1,31 @@
+import QUERY_KEYS from "@/constants/query-keys.ts";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { createKanbanCard } from "@/features/kanban/api/kanban-api.ts";
+import { useToastStore } from "@/stores/toast-store.ts";
+
+export function useKanbanCardCreate() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ title, columnId }: { title: string; columnId: number }) =>
+            createKanbanCard(title, columnId),
+        onError: () => {
+            useToastStore().openToast({
+                title: "Ошибка",
+                message: `Произошла ошибка при создании карточки`,
+                variant: "error",
+            });
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.kanban, "cards"],
+            });
+
+            useToastStore().openToast({
+                title: "Создано",
+                message: `Карточка успешно создана`,
+                variant: "success",
+            });
+        },
+    });
+}

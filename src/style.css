@@ -1,0 +1,14 @@
+@import "./shared/styles/tokens.css";
+@import "./shared/styles/fonts.css";
+@import "./shared/styles/reset.css";
+
+html,
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--font-md);
+    font-weight: var(--font-w-sm);
+    height: 100%;
+    overflow: hidden;
+}
