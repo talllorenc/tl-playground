@@ -36,7 +36,7 @@ const validationSchema = z.object({
         .string()
         .nonempty("Заполните поле")
         .min(6, "Минимум 6 символов")
-        .max(40, "Максимум 40 символов"),
+        .max(100, "Максимум 100 символов"),
 
     description: z.string(),
     tag: z.string(),
@@ -102,7 +102,7 @@ const onSubmit = handleSubmit((values) => {
 
         <form v-else-if="card" @submit="onSubmit" class="card-detail-drawer__form">
             <div class="card-detail-drawer__body">
-                <div>
+                <div class="card-detail-drawer__header">
                     <KanbanTagBadge :tag="card.tag" />
                     <DateBadge :date="card.created_at" />
                 </div>
@@ -167,11 +167,16 @@ const onSubmit = handleSubmit((values) => {
         min-height: 0;
     }
 
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+    }
+
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 16px;
-
+        gap: var(--space-4);
         flex: 1;
         min-height: 0;
         overflow-y: auto;

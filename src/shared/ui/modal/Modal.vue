@@ -47,7 +47,7 @@ const modal = useModalStore();
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--space-2);
         width: 320px;
         background-color: var(--color-white);
         border: 1px solid var(--color-border);

@@ -83,7 +83,7 @@ useClickOutside(actionsMenu, () => {
         border-radius: var(--radius-sm);
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--space-2);
         padding: 8px;
         flex-shrink: 0;
     }
@@ -93,7 +93,7 @@ useClickOutside(actionsMenu, () => {
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-2);
         justify-content: start;
         padding: 4px 8px;
         border-radius: var(--radius-sm);

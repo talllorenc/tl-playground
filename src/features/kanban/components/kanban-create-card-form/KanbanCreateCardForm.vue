@@ -23,7 +23,7 @@ const { errors, defineField, handleSubmit } = useForm<{ title: string }>({
                 .string()
                 .nonempty("Заполните поле")
                 .min(6, "Минимум 6 символов")
-                .max(40, "Максимум 40 символов"),
+                .max(100, "Максимум 100 символов"),
         }),
     ),
     initialValues: {
@@ -67,7 +67,7 @@ const onSubmit = handleSubmit((values) => {
 .kanban-form-card {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
     background-color: var(--color-white);
     padding: 12px;
     border-radius: var(--radius-md);

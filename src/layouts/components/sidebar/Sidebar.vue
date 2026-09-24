@@ -29,7 +29,7 @@ import { sidebarLinks } from "@/layouts/components/sidebar/sidebar.links.ts";
     &__nav {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--space-2);
     }
 
     &__link {

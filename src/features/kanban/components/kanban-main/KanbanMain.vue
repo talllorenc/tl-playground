@@ -78,7 +78,7 @@ function handleDragEnd(event: DragEndEvent) {
     &__body {
         display: flex;
         align-items: flex-start;
-        gap: 24px;
+        gap: var(--space-6);
     }
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Component, computed } from "vue";
+import { type Component } from "vue";
 import { type ToastActionVariant, useToastStore } from "@/stores/toast-store.ts";
 import { IconCircleCheck, IconCircleX, IconX } from "@tabler/icons-vue";
 
@@ -66,7 +66,7 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
 
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
 }
 
 .toast {
@@ -87,8 +87,8 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         grid-template-columns: auto minmax(0, 1fr) auto;
         grid-template-rows: auto auto;
         align-items: center;
-        column-gap: 8px;
-        row-gap: 4px;
+        column-gap: var(--space-2);
+        row-gap: var(--space-1);
 
         max-width: 400px;
         padding: 16px;

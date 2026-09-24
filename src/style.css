@@ -9,4 +9,6 @@ body {
     font-family: var(--font-sans);
     font-size: var(--font-md);
     font-weight: var(--font-w-sm);
+    height: 100%;
+    overflow: hidden;
 }

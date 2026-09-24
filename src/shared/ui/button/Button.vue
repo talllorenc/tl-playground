@@ -39,7 +39,7 @@ const props = withDefaults(
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--space-2);
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;

@@ -58,7 +58,7 @@ function handleCardClick() {
                 </template>
             </ActionsMenu>
         </div>
-        <p class="kanban-card__title" @click="openCard(props.card.id)">{{ props.card.title }}</p>
+        <span class="kanban-card__title">{{ props.card.title }}</span>
 
         <DateBadge :date="props.card.created_at" />
     </div>
@@ -73,7 +73,7 @@ function handleCardClick() {
     cursor: grab;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-2);
 
     &:hover {
         border-color: var(--color-accent);

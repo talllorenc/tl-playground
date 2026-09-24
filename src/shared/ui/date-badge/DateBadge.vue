@@ -18,6 +18,6 @@ const props = defineProps<{
 .date-badge {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-1);
 }
 </style>

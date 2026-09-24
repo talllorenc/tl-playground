@@ -14,7 +14,7 @@ export function useKanbanCardDetail() {
     });
 
     const openCard = (id: number) => {
-        router.push({
+        void router.push({
             query: {
                 ...route.query,
                 c: id,
@@ -26,7 +26,7 @@ export function useKanbanCardDetail() {
         const query = { ...route.query };
         delete query.c;
 
-        router.push({ query });
+        void router.push({ query });
     };
 
     return {

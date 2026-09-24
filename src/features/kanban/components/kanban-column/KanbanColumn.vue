@@ -75,7 +75,7 @@ function handleToggleCardForm() {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
+        gap: var(--space-2);
 
         background-color: var(--color-white);
         border-radius: var(--radius-md);
@@ -86,13 +86,13 @@ function handleToggleCardForm() {
     &__info {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-2);
     }
 
     &__actions {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-2);
     }
 
     &__title {
@@ -118,7 +118,7 @@ function handleToggleCardForm() {
     &__cards {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: var(--space-4);
         margin-top: 24px;
     }
 
