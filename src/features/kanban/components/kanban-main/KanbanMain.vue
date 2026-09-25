@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import KanbanColumn from "@/features/kanban/components/kanban-column/KanbanColumn.vue";
 import { computed } from "vue";
-import { useQuery } from "@tanstack/vue-query";
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/vue";
-import { kanbanQueries } from "@/features/kanban/api/kanban-queries.ts";
+import { useKanbanColumns } from "@/features/kanban/hooks/useKanbanColumns.ts";
+import { useKanbanCards } from "@/features/kanban/hooks/useKanbanCards.ts";
 import { useKanbanCardColumnUpdate } from "@/features/kanban/hooks/useKanbanCardColumnUpdate.ts";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
 import KanbanCardDetail from "@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue";
@@ -12,8 +12,8 @@ import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import Button from "@/shared/ui/button/Button.vue";
 
-const columnsQuery = useQuery(kanbanQueries.columns());
-const cardsQuery = useQuery(kanbanQueries.cards());
+const columnsQuery = useKanbanColumns();
+const cardsQuery = useKanbanCards();
 const { mutate: moveCard } = useKanbanCardColumnUpdate();
 
 const columns = computed(() => columnsQuery.data.value ?? []);

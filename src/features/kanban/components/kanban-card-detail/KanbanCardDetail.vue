@@ -2,12 +2,11 @@
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
 import { onBeforeUnmount, onMounted, toRef, watch } from "vue";
-import { useQuery } from "@tanstack/vue-query";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
 import Button from "@/shared/ui/button/Button.vue";
-import { kanbanQueries } from "@/features/kanban/api/kanban-queries.ts";
+import { useKanbanCard } from "@/features/kanban/hooks/useKanbanCard.ts";
 import { useKanbanCardUpdate } from "@/features/kanban/hooks/useKanbanCardUpdate.ts";
 import {
     updateCardSchema,
@@ -29,7 +28,7 @@ const emit = defineEmits<{
 
 const cardId = toRef(props, "cardId");
 
-const { data: card, isLoading, isError, refetch } = useQuery(kanbanQueries.card(cardId));
+const { data: card, isLoading, isError, refetch } = useKanbanCard(cardId);
 
 const { mutate, isPending } = useKanbanCardUpdate();
 
