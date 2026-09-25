@@ -22,7 +22,7 @@ export function useKanbanCardDelete() {
 
             useToastStore().openToast({
                 title: "Удалено",
-                message: `Карточка успешно удалена`,
+                message: `Карточка удалена`,
                 variant: "success",
             });
         },

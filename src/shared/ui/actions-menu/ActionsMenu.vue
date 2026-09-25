@@ -57,6 +57,12 @@ useClickOutside(actionsMenu, () => {
                     :size="18"
                     class="actions-menu__action-icon"
                 />
+
+                <span
+                    v-else-if="item.indicator"
+                    class="actions-menu__action-indicator"
+                    :style="{ backgroundColor: item.indicator }"
+                />
                 <span>{{ item.label }}</span>
             </button>
         </div>
@@ -113,6 +119,14 @@ useClickOutside(actionsMenu, () => {
         &--loading {
             animation: spin 0.7s linear infinite;
         }
+    }
+
+    &__action-indicator {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1px solid var(--color-border);
     }
 
     &__action span {

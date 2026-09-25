@@ -29,7 +29,7 @@ export function useKanbanCardUpdate() {
             ]);
 
             useToastStore().openToast({
-                title: "Успех",
+                title: "Обновлено",
                 message: `Карточка обновлена`,
                 variant: "success",
             });

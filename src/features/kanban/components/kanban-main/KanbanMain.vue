@@ -8,6 +8,8 @@ import { DragDropProvider, type DragEndEvent } from "@dnd-kit/vue";
 import { useKanbanCardColumnUpdate } from "@/features/kanban/hooks/useKanbanCardColumnUpdate.ts";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
 import KanbanCardDetail from "@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue";
+import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
+import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 
 const columnsQuery = useQuery(useKanbanColumnsQuery());
 const cardsQuery = useQuery(useKanbanCardsQuery());
@@ -43,7 +45,13 @@ function handleDragEnd(event: DragEndEvent) {
 </script>
 
 <template>
-    <div v-if="isLoading" class="kanban-state">Загрузка...</div>
+    <div v-if="isLoading">
+        <Skeleton variant="horizontal">
+            <SkeletonItem height="500px" width="300px" />
+            <SkeletonItem height="500px" width="300px" />
+            <SkeletonItem height="500px" width="300px" />
+        </Skeleton>
+    </div>
 
     <div v-else-if="isError" class="kanban-state">Не удалось загрузить канбан</div>
 

@@ -9,9 +9,11 @@ import { z } from "zod";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
 import Button from "@/shared/ui/button/Button.vue";
 import { useKanbanCardUpdate } from "@/features/kanban/hooks/useKanbanCardUpdate.ts";
-import type { KanbanCardTag } from "@/features/kanban/types/kanban.types.ts";
+import type { IKanbanCard, KanbanCardTag } from "@/features/kanban/types/kanban.types.ts";
 import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
+import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
+import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 
 const props = defineProps<{
     cardId: number;
@@ -42,7 +44,7 @@ const validationSchema = z.object({
     tag: z.string(),
 });
 
-const { errors, defineField, handleSubmit, resetForm } = useForm<{
+const { errors, defineField, handleSubmit, resetForm, meta } = useForm<{
     title: string;
     description: string;
     tag: KanbanCardTag;
@@ -67,6 +69,7 @@ watch(
                 values: {
                     title: card.value.title ?? "",
                     description: card.value.description ?? "",
+                    tag: card.value.tag,
                 },
             });
         }
@@ -75,10 +78,23 @@ watch(
 );
 
 const onSubmit = handleSubmit((values) => {
-    mutate({
-        cardId: cardId.value,
-        dto: values,
-    });
+    mutate(
+        {
+            cardId: cardId.value,
+            dto: values,
+        },
+        {
+            onSuccess: (updatedCard: IKanbanCard) => {
+                resetForm({
+                    values: {
+                        title: updatedCard.title,
+                        description: updatedCard.description ?? "",
+                        tag: updatedCard.tag,
+                    },
+                });
+            },
+        },
+    );
 });
 </script>
 
@@ -94,15 +110,19 @@ const onSubmit = handleSubmit((values) => {
             </button>
         </div>
 
-        <div v-if="isLoading" class="card-detail-drawer__state">Загрузка...</div>
-
-        <div v-else-if="isError" class="card-detail-drawer__state">
-            Не удалось загрузить карточку
+        <div v-if="isLoading">
+            <Skeleton>
+                <SkeletonItem height="24px" />
+                <SkeletonItem height="40px" />
+                <SkeletonItem height="120px" />
+            </Skeleton>
         </div>
+
+        <div v-else-if="isError">Не удалось загрузить карточку</div>
 
         <form v-else-if="card" @submit="onSubmit" class="card-detail-drawer__form">
             <div class="card-detail-drawer__body">
-                <div class="card-detail-drawer__header">
+                <div class="card-detail-drawer__meta">
                     <KanbanTagBadge :tag="card.tag" />
                     <DateBadge :date="card.created_at" />
                 </div>
@@ -113,7 +133,9 @@ const onSubmit = handleSubmit((values) => {
             </div>
 
             <div class="card-detail-drawer__footer">
-                <Button type="submit" :loading="isPending"> Сохранить </Button>
+                <Button type="submit" :loading="isPending" :disabled="!meta.dirty">
+                    Сохранить
+                </Button>
             </div>
         </form>
     </aside>
@@ -125,8 +147,8 @@ const onSubmit = handleSubmit((values) => {
     top: var(--header-height);
     right: 0;
     z-index: var(--z-tooltip);
-    width: calc(100vw - var(--sidebar-width));
-    max-width: 600px;
+    width: calc((100vw - var(--sidebar-width)) * 0.5);
+    max-width: 800px;
     height: calc(100vh - var(--header-height));
     background-color: var(--color-white);
     border-left: 1px solid var(--color-border);
@@ -140,6 +162,12 @@ const onSubmit = handleSubmit((values) => {
         align-items: center;
         justify-content: space-between;
         margin-bottom: 16px;
+    }
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
     }
 
     &__action {
@@ -187,12 +215,6 @@ const onSubmit = handleSubmit((values) => {
         flex-shrink: 0;
         padding-top: 12px;
         border-top: 1px solid var(--color-border);
-    }
-
-    &__state {
-        padding: 48px 24px;
-        text-align: center;
-        color: var(--color-text-muted);
     }
 }
 </style>

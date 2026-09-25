@@ -23,7 +23,7 @@ export function useKanbanCardCreate() {
 
             useToastStore().openToast({
                 title: "Создано",
-                message: `Карточка успешно создана`,
+                message: `Карточка создана`,
                 variant: "success",
             });
         },

@@ -4,11 +4,15 @@ import type {
     IKanbanCard,
     IKanbanCardUpdateDto,
     IKanbanColumn,
+    KanbanColumnColor,
 } from "../types/kanban.types";
 import { sentryCaptureApiError } from "@/utils/sentry-capture-api-error.ts";
 
 export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
-    const { data, error } = await supabase.from("kanban_columns").select("*");
+    const { data, error } = await supabase
+        .from("kanban_columns")
+        .select("*")
+        .order("position", { ascending: true });
 
     if (error) {
         sentryCaptureApiError(error, "get-kanban-columns");
@@ -59,6 +63,27 @@ export async function updateCardColumn(cardId: number, columnId: number): Promis
         sentryCaptureApiError(error, "update-kanban-card-column");
         throw error;
     }
+}
+
+export async function updateKanbanColumnColor(
+    columnId: number,
+    color: KanbanColumnColor,
+): Promise<IKanbanColumn> {
+    const { data, error } = await supabase
+        .from("kanban_columns")
+        .update({
+            color,
+        })
+        .eq("id", columnId)
+        .select()
+        .single();
+
+    if (error) {
+        sentryCaptureApiError(error, "update-kanban-column-color");
+        throw error;
+    }
+
+    return data;
 }
 
 export async function createKanbanCard(title: string, columnId: number): Promise<IKanbanCard> {
