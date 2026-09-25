@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
-import { onBeforeUnmount } from "vue";
+import { onBeforeUnmount, watch } from "vue";
 import {
     IconBlockquote,
     IconBold,
@@ -25,6 +25,16 @@ const editor = useEditor({
 
         model.value = html === "<p></p>" ? "" : html;
     },
+});
+
+watch(model, (value) => {
+    if (!editor.value) return;
+
+    const current = editor.value.getHTML();
+
+    if (value !== (current === "<p></p>" ? "" : current)) {
+        editor.value.commands.setContent(value, { emitUpdate: false });
+    }
 });
 
 onBeforeUnmount(() => {

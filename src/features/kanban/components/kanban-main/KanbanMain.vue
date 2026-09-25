@@ -1,46 +1,62 @@
 <script setup lang="ts">
 import KanbanColumn from "@/features/kanban/components/kanban-column/KanbanColumn.vue";
 import { computed } from "vue";
-import { useKanbanColumnsQuery } from "@/features/kanban/hooks/useKanbanColumnsQuery";
-import { useKanbanCardsQuery } from "@/features/kanban/hooks/useKanbanCardsQuery";
 import { useQuery } from "@tanstack/vue-query";
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/vue";
+import { kanbanQueries } from "@/features/kanban/api/kanban-queries.ts";
 import { useKanbanCardColumnUpdate } from "@/features/kanban/hooks/useKanbanCardColumnUpdate.ts";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
 import KanbanCardDetail from "@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue";
+import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
+import Button from "@/shared/ui/button/Button.vue";
 
-const columnsQuery = useQuery(useKanbanColumnsQuery());
-const cardsQuery = useQuery(useKanbanCardsQuery());
-const cardUpdateColumnMutation = useKanbanCardColumnUpdate();
+const columnsQuery = useQuery(kanbanQueries.columns());
+const cardsQuery = useQuery(kanbanQueries.cards());
+const { mutate: moveCard } = useKanbanCardColumnUpdate();
 
 const columns = computed(() => columnsQuery.data.value ?? []);
 const cards = computed(() => cardsQuery.data.value ?? []);
 
+const cardsByColumn = computed(() => {
+    const map = new Map<number, IKanbanCard[]>();
+
+    for (const card of cards.value) {
+        const columnCards = map.get(card.columnId);
+
+        if (columnCards) {
+            columnCards.push(card);
+        } else {
+            map.set(card.columnId, [card]);
+        }
+    }
+
+    return map;
+});
+
 const isLoading = computed(() => columnsQuery.isLoading.value || cardsQuery.isLoading.value);
-const isError = computed(() => columnsQuery.error.value || cardsQuery.error.value);
+const isError = computed(() => columnsQuery.isError.value || cardsQuery.isError.value);
 
 const { selectedCardId, closeCard } = useKanbanCardDetail();
+
+function handleRetry() {
+    if (columnsQuery.isError.value) void columnsQuery.refetch();
+    if (cardsQuery.isError.value) void cardsQuery.refetch();
+}
 
 function handleDragEnd(event: DragEndEvent) {
     const { source, target } = event.operation;
 
-    const columnId = target?.id;
-    const cardId = source?.id;
+    if (!source || !target) return;
 
-    if (!columnId || !cardId) return;
-
+    const cardId = Number(source.id);
+    const columnId = Number(target.id);
     const card = cards.value.find((card) => card.id === cardId);
 
-    if (!card) return;
+    if (!card || card.columnId === columnId) return;
 
-    if (card.columnId === columnId) return;
-
-    cardUpdateColumnMutation.mutate({
-        cardId: Number(cardId),
-        columnId: Number(columnId),
-    });
+    moveCard({ cardId, columnId });
 }
 </script>
 
@@ -53,7 +69,10 @@ function handleDragEnd(event: DragEndEvent) {
         </Skeleton>
     </div>
 
-    <div v-else-if="isError" class="kanban-state">Не удалось загрузить канбан</div>
+    <div v-else-if="isError" class="kanban-state">
+        <span>Не удалось загрузить канбан</span>
+        <Button variant="secondary" @click="handleRetry">Повторить</Button>
+    </div>
 
     <DragDropProvider v-else @dragEnd="handleDragEnd">
         <div class="kanban">
@@ -62,7 +81,7 @@ function handleDragEnd(event: DragEndEvent) {
                     v-for="column in columns"
                     :key="column.id"
                     :column="column"
-                    :cards="cards.filter((card) => card.columnId === column.id)"
+                    :cards="cardsByColumn.get(column.id) ?? []"
                 />
             </div>
         </div>
@@ -91,8 +110,11 @@ function handleDragEnd(event: DragEndEvent) {
 }
 
 .kanban-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
     padding: 48px 24px;
-    text-align: center;
     color: var(--color-text-muted);
 }
 

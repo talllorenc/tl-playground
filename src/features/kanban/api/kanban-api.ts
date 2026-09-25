@@ -6,126 +6,83 @@ import type {
     IKanbanColumn,
     KanbanColumnColor,
 } from "../types/kanban.types";
-import { sentryCaptureApiError } from "@/utils/sentry-capture-api-error.ts";
 
 export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("kanban_columns")
         .select("*")
-        .order("position", { ascending: true });
-
-    if (error) {
-        sentryCaptureApiError(error, "get-kanban-columns");
-        throw error;
-    }
+        .order("position", { ascending: true })
+        .throwOnError();
 
     return data;
 }
 
 export async function getKanbanCards(): Promise<IKanbanCard[]> {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("kanban_cards")
         .select("*")
-        .order("position", { ascending: true });
-
-    if (error) {
-        sentryCaptureApiError(error, "get-kanban-cards");
-        throw error;
-    }
+        .order("position", { ascending: true })
+        .throwOnError();
 
     return data;
 }
 
 export async function getKanbanCardById(cardId: number): Promise<IKanbanCard> {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("kanban_cards")
         .select("*")
         .eq("id", cardId)
-        .single();
-
-    if (error) {
-        sentryCaptureApiError(error, "get-kanban-card-by-id");
-        throw error;
-    }
+        .single()
+        .throwOnError();
 
     return data;
 }
 
 export async function updateCardColumn(cardId: number, columnId: number): Promise<void> {
-    const { error } = await supabase
-        .from("kanban_cards")
-        .update({
-            columnId,
-        })
-        .eq("id", cardId);
-
-    if (error) {
-        sentryCaptureApiError(error, "update-kanban-card-column");
-        throw error;
-    }
+    await supabase.from("kanban_cards").update({ columnId }).eq("id", cardId).throwOnError();
 }
 
 export async function updateKanbanColumnColor(
     columnId: number,
-    color: KanbanColumnColor,
+    color: KanbanColumnColor | null,
 ): Promise<IKanbanColumn> {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("kanban_columns")
-        .update({
-            color,
-        })
+        .update({ color })
         .eq("id", columnId)
         .select()
-        .single();
-
-    if (error) {
-        sentryCaptureApiError(error, "update-kanban-column-color");
-        throw error;
-    }
+        .single()
+        .throwOnError();
 
     return data;
 }
 
-export async function createKanbanCard(title: string, columnId: number): Promise<IKanbanCard> {
-    const newCard: ICreateKanbanCardDto = {
-        title,
-        columnId,
-    };
-
-    const { data, error } = await supabase.from("kanban_cards").insert(newCard).select().single();
-
-    if (error) {
-        sentryCaptureApiError(error, "create-kanban-card");
-        throw error;
-    }
+export async function createKanbanCard(dto: ICreateKanbanCardDto): Promise<IKanbanCard> {
+    const { data } = await supabase
+        .from("kanban_cards")
+        .insert(dto)
+        .select()
+        .single()
+        .throwOnError();
 
     return data;
 }
 
 export async function deleteKanbanCard(cardId: number): Promise<void> {
-    const { error } = await supabase.from("kanban_cards").delete().eq("id", cardId);
-
-    if (error) {
-        sentryCaptureApiError(error, "delete-kanban-card");
-        throw error;
-    }
+    await supabase.from("kanban_cards").delete().eq("id", cardId).throwOnError();
 }
 
 export async function updateKanbanCard(
     cardId: number,
     dto: IKanbanCardUpdateDto,
 ): Promise<IKanbanCard> {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("kanban_cards")
         .update(dto)
         .eq("id", cardId)
         .select()
-        .single();
-
-    if (error) {
-        sentryCaptureApiError(error, "update-kanban-card");
-        throw error;
-    }
+        .single()
+        .throwOnError();
 
     return data;
 }

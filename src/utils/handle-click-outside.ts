@@ -16,10 +16,10 @@ export function useClickOutside(elementRef: Ref<HTMLElement | null>, callback: (
     };
 
     onMounted(() => {
-        document.addEventListener("click", listener);
+        document.addEventListener("click", listener, true);
     });
 
     onBeforeUnmount(() => {
-        document.removeEventListener("click", listener);
+        document.removeEventListener("click", listener, true);
     });
 }

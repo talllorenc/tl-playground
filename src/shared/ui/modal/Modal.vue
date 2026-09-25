@@ -13,7 +13,7 @@ const modal = useModalStore();
                     {{ modal.options?.title }}
                 </div>
 
-                <div class="modal__content">
+                <div v-if="modal.options?.body" class="modal__content">
                     {{ modal.options?.body }}
                 </div>
 
@@ -55,10 +55,19 @@ const modal = useModalStore();
         padding: 16px;
     }
     &__header {
+        font-weight: var(--font-w-md);
+        color: var(--color-black);
     }
+
     &__content {
+        color: var(--color-text-muted);
     }
+
     &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-2);
+        margin-top: var(--space-2);
     }
 }
 </style>

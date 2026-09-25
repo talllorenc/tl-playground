@@ -19,6 +19,11 @@ function closeMenu() {
     isOpen.value = false;
 }
 
+function handleItemClick(item: IActionsMenuItem) {
+    item.onClick?.();
+    closeMenu();
+}
+
 useClickOutside(actionsMenu, () => {
     closeMenu();
 });
@@ -43,7 +48,7 @@ useClickOutside(actionsMenu, () => {
                 type="button"
                 :disabled="item.disabled || item.loading"
                 role="menuitem"
-                @click="item.onClick"
+                @click="handleItemClick(item)"
             >
                 <IconLoader2
                     v-if="item.loading"

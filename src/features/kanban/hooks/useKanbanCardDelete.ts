@@ -1,30 +1,31 @@
-import QUERY_KEYS from "@/constants/query-keys.ts";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { deleteKanbanCard } from "@/features/kanban/api/kanban-api.ts";
-import { useToastStore } from "@/stores/toast-store.ts";
+import { kanbanKeys, kanbanMutationKeys } from "@/features/kanban/api/kanban-query-keys.ts";
+import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
+import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
 
 export function useKanbanCardDelete() {
     const queryClient = useQueryClient();
+    const { selectedCardId, closeCard } = useKanbanCardDetail();
 
     return useMutation({
-        mutationFn: ({ cardId }: { cardId: number }) => deleteKanbanCard(cardId),
-        onError: () => {
-            useToastStore().openToast({
-                title: "Ошибка",
-                message: `Произошла ошибка при удалении карточки`,
-                variant: "error",
-            });
+        mutationKey: kanbanMutationKeys.deleteCard(),
+        mutationFn: deleteKanbanCard,
+        meta: {
+            errorMessage: "Произошла ошибка при удалении карточки",
+            successToast: { title: "Удалено", message: "Карточка удалена" },
         },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.kanban, "cards"],
-            });
+        onSuccess: (_, cardId) => {
+            if (selectedCardId.value === cardId) {
+                closeCard();
+            }
 
-            useToastStore().openToast({
-                title: "Удалено",
-                message: `Карточка удалена`,
-                variant: "success",
-            });
+            queryClient.removeQueries({ queryKey: kanbanKeys.card(cardId) });
+            queryClient.setQueryData<IKanbanCard[]>(kanbanKeys.cards(), (cards) =>
+                cards?.filter((card) => card.id !== cardId),
+            );
+
+            return queryClient.invalidateQueries({ queryKey: kanbanKeys.cards() });
         },
     });
 }

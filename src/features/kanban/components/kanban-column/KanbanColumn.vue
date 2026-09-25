@@ -12,7 +12,7 @@ import KanbanCreateCardForm from "../kanban-create-card-form/KanbanCreateCardFor
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { getKanbanColumnActions } from "@/features/kanban/components/kanban-column/kanban-column-action.ts";
 import KanbanColorBadge from "@/features/kanban/components/kanban-color-badge/KanbanColorBadge.vue";
-import { COLOR_VALUES } from "@/features/kanban/components/kanban-color-badge/kanban-colors-config.ts";
+import { COLOR_CONFIG } from "@/features/kanban/config/kanban-colors-config.ts";
 import { useKanbanColumnColorUpdate } from "@/features/kanban/hooks/useKanbanColumnColorUpdate.ts";
 
 const props = defineProps<{
@@ -22,13 +22,8 @@ const props = defineProps<{
 
 const element = ref<HTMLElement | null>(null);
 const isCreatingCard = ref(false);
-const { mutate, isPending } = useKanbanColumnColorUpdate();
-const actions = computed(() =>
-    getKanbanColumnActions(props.column.id, {
-        onUpdate: handleUpdate,
-        isUpdatePending: isPending.value,
-    }),
-);
+const { mutate } = useKanbanColumnColorUpdate();
+const actions = getKanbanColumnActions(handleColorSelect);
 
 useDroppable({
     id: props.column.id,
@@ -42,11 +37,13 @@ function handleToggleCardForm() {
 const columnBackgroundColor = computed(() => {
     const color = props.column.color;
 
-    return color ? COLOR_VALUES[color] : "transparent";
+    return color ? COLOR_CONFIG[color].background : "transparent";
 });
 
-function handleUpdate(columnId: number, color: KanbanColumnColor) {
-    mutate({ columnId, color });
+function handleColorSelect(color: KanbanColumnColor | null) {
+    if (color === props.column.color) return;
+
+    mutate({ columnId: props.column.id, color });
 }
 </script>
 
@@ -81,7 +78,7 @@ function handleUpdate(columnId: number, color: KanbanColumnColor) {
                 :columnId="props.column.id"
                 @card-created="isCreatingCard = false"
             />
-            <KanbanCard v-for="(card, index) in cards" :key="card.id" :card="card" :index="index" />
+            <KanbanCard v-for="card in props.cards" :key="card.id" :card="card" />
         </div>
     </div>
 </template>
@@ -93,11 +90,8 @@ function handleUpdate(columnId: number, color: KanbanColumnColor) {
     display: flex;
     flex-direction: column;
     border-radius: var(--radius-md);
-    background-color: var(--color-kanban-column-blue);
     padding: 8px;
-    transition:
-        border-color 0.15s ease,
-        background-color 0.15s ease;
+    transition: background-color 0.15s ease;
 
     &__header {
         position: sticky;

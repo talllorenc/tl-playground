@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { KanbanColumnColor } from "@/features/kanban/types/kanban.types.ts";
-import { COLOR_VALUES } from "@/features/kanban/components/kanban-color-badge/kanban-colors-config.ts";
+import { COLOR_CONFIG } from "@/features/kanban/config/kanban-colors-config.ts";
 
 const props = defineProps<{
-    color: KanbanColumnColor;
+    color: KanbanColumnColor | null;
 }>();
 </script>
 
@@ -11,7 +11,7 @@ const props = defineProps<{
     <span
         class="kanban-color"
         :style="{
-            backgroundColor: props.color ? COLOR_VALUES[props.color] : undefined,
+            backgroundColor: props.color ? COLOR_CONFIG[props.color].background : undefined,
         }"
     />
 </template>

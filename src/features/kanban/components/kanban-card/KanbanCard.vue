@@ -12,7 +12,6 @@ import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete
 
 const props = defineProps<{
     card: IKanbanCard;
-    index: number;
 }>();
 
 const { mutate, isPending } = useKanbanCardDelete();
@@ -22,14 +21,14 @@ const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element }
 const { openCard, selectedCardId } = useKanbanCardDetail();
 const isCardOpen = computed(() => selectedCardId.value === props.card.id);
 const actions = computed(() =>
-    getKanbanCardActions(props.card.id, {
+    getKanbanCardActions({
         onDelete: handleDelete,
         isDeletePending: isPending.value,
     }),
 );
 
-function handleDelete(cardId: number) {
-    mutate({ cardId });
+function handleDelete() {
+    mutate(props.card.id);
 }
 
 function handleCardClick() {
@@ -44,7 +43,7 @@ function handleCardClick() {
         ref="element"
         :data-dragging="isDragging"
         :data-is-dragsource="isDragSource"
-        :class="{ 'kanban-card--open': isCardOpen }"
+        :class="{ 'kanban-card--open': isCardOpen, 'kanban-card--pending': isPending }"
         class="kanban-card kanban-card__animation"
         @click="handleCardClick"
     >
@@ -118,6 +117,11 @@ function handleCardClick() {
 
     &--open {
         border-color: var(--color-accent);
+    }
+
+    &--pending {
+        opacity: 0.5;
+        pointer-events: none;
     }
 
     @keyframes showCard {

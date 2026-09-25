@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { KanbanCardTag } from "@/features/kanban/types/kanban.types.ts";
-import { TAG_CONFIG } from "@/features/kanban/components/kanban-tag-badge/kanban-tags-config.ts";
+import { TAG_CONFIG } from "@/features/kanban/config/kanban-tags-config.ts";
 
 const props = defineProps<{
     tag?: KanbanCardTag | null;
