@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { z } from "zod";
 import { useKanbanCardCreate } from "@/features/kanban/hooks/useKanbanCardCreate.ts";
+import {
+    createCardSchema,
+    type CreateCardFormValues,
+} from "@/features/kanban/schemas/kanban-card-schema.ts";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
 import Button from "@/shared/ui/button/Button.vue";
 
@@ -16,16 +19,8 @@ const emit = defineEmits<{
 
 const { mutate, isPending } = useKanbanCardCreate();
 
-const { errors, defineField, handleSubmit } = useForm<{ title: string }>({
-    validationSchema: toTypedSchema(
-        z.object({
-            title: z
-                .string()
-                .nonempty("Заполните поле")
-                .min(6, "Минимум 6 символов")
-                .max(100, "Максимум 100 символов"),
-        }),
-    ),
+const { errors, defineField, handleSubmit } = useForm<CreateCardFormValues>({
+    validationSchema: toTypedSchema(createCardSchema),
     initialValues: {
         title: "",
     },
@@ -49,9 +44,8 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-    <form class="kanban-form-card" @submit.prevent="onSubmit">
+    <form class="kanban-form-card" @submit="onSubmit">
         <BaseInput
-            id="title"
             v-model="title"
             v-bind="titleAttrs"
             :error="errors.title"

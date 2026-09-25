@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
-import { useKanbanSingleCardQuery } from "@/features/kanban/hooks/useKanbanSingleCardQuery.ts";
-import { computed, toRef, watch } from "vue";
+import { onBeforeUnmount, onMounted, toRef, watch } from "vue";
+import { useQuery } from "@tanstack/vue-query";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { z } from "zod";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
 import Button from "@/shared/ui/button/Button.vue";
+import { kanbanQueries } from "@/features/kanban/api/kanban-queries.ts";
 import { useKanbanCardUpdate } from "@/features/kanban/hooks/useKanbanCardUpdate.ts";
-import type { KanbanCardTag } from "@/features/kanban/types/kanban.types.ts";
+import {
+    updateCardSchema,
+    type UpdateCardFormValues,
+} from "@/features/kanban/schemas/kanban-card-schema.ts";
+import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
 import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
+import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
+import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 
 const props = defineProps<{
     cardId: number;
@@ -22,54 +28,33 @@ const emit = defineEmits<{
 }>();
 
 const cardId = toRef(props, "cardId");
-const singleCardQuery = useKanbanSingleCardQuery(cardId);
 
-const card = computed(() => singleCardQuery.data.value ?? null);
-const isLoading = computed(() => singleCardQuery.isLoading.value);
-const isError = computed(() => singleCardQuery.error.value);
-const isSuccess = computed(() => singleCardQuery.isSuccess.value);
+const { data: card, isLoading, isError, refetch } = useQuery(kanbanQueries.card(cardId));
 
 const { mutate, isPending } = useKanbanCardUpdate();
 
-const validationSchema = z.object({
-    title: z
-        .string()
-        .nonempty("Заполните поле")
-        .min(6, "Минимум 6 символов")
-        .max(100, "Максимум 100 символов"),
-
-    description: z.string(),
-    tag: z.string(),
-});
-
-const { errors, defineField, handleSubmit, resetForm } = useForm<{
-    title: string;
-    description: string;
-    tag: KanbanCardTag;
-}>({
-    validationSchema: toTypedSchema(validationSchema),
-    initialValues: {
-        title: "",
-        description: "",
-        tag: "personal",
-    },
+const { errors, defineField, handleSubmit, resetForm, meta } = useForm<UpdateCardFormValues>({
+    validationSchema: toTypedSchema(updateCardSchema),
 });
 
 const [title, titleAttrs] = defineField("title");
 const [description, descriptionAttrs] = defineField("description");
-const [tag, tagAttrs] = defineField("tag");
 
+function resetFormFromCard(card: IKanbanCard) {
+    resetForm({
+        values: {
+            title: card.title,
+            description: card.description ?? "",
+            tag: card.tag,
+        },
+    });
+}
+
+// Заполняем форму данными карточки при открытии и после сохранения
 watch(
-    isSuccess,
-    (success) => {
-        if (success && card.value) {
-            resetForm({
-                values: {
-                    title: card.value.title ?? "",
-                    description: card.value.description ?? "",
-                },
-            });
-        }
+    card,
+    (card) => {
+        if (card) resetFormFromCard(card);
     },
     { immediate: true },
 );
@@ -77,43 +62,73 @@ watch(
 const onSubmit = handleSubmit((values) => {
     mutate({
         cardId: cardId.value,
-        dto: values,
+        dto: {
+            ...values,
+            description: values.description || null,
+        },
     });
 });
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+        emit("close");
+    }
+}
+
+onMounted(() => document.addEventListener("keydown", handleKeydown));
+onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
 </script>
 
 <template>
     <aside class="card-detail-drawer">
         <div class="card-detail-drawer__header">
-            <button class="card-detail-drawer__action" type="button" @click="emit('close')">
+            <button
+                class="card-detail-drawer__action"
+                type="button"
+                aria-label="Закрыть"
+                @click="emit('close')"
+            >
                 <IconChevronsRight size="18" />
             </button>
 
-            <button class="card-detail-drawer__action" type="button">
+            <button
+                class="card-detail-drawer__action"
+                type="button"
+                aria-label="Скопировать ссылку"
+            >
                 <IconLink size="18" />
             </button>
         </div>
 
-        <div v-if="isLoading" class="card-detail-drawer__state">Загрузка...</div>
+        <div v-if="isLoading">
+            <Skeleton>
+                <SkeletonItem height="24px" />
+                <SkeletonItem height="40px" />
+                <SkeletonItem height="120px" />
+            </Skeleton>
+        </div>
 
         <div v-else-if="isError" class="card-detail-drawer__state">
-            Не удалось загрузить карточку
+            <span>Не удалось загрузить карточку</span>
+            <Button variant="secondary" @click="refetch()">Повторить</Button>
         </div>
 
         <form v-else-if="card" @submit="onSubmit" class="card-detail-drawer__form">
             <div class="card-detail-drawer__body">
-                <div class="card-detail-drawer__header">
+                <div class="card-detail-drawer__meta">
                     <KanbanTagBadge :tag="card.tag" />
                     <DateBadge :date="card.created_at" />
                 </div>
 
-                <BaseInput id="title" v-model="title" v-bind="titleAttrs" :error="errors.title" />
+                <BaseInput v-model="title" v-bind="titleAttrs" :error="errors.title" />
 
                 <TextEditor v-model="description" v-bind="descriptionAttrs" />
             </div>
 
             <div class="card-detail-drawer__footer">
-                <Button type="submit" :loading="isPending"> Сохранить </Button>
+                <Button type="submit" :loading="isPending" :disabled="!meta.dirty">
+                    Сохранить
+                </Button>
             </div>
         </form>
     </aside>
@@ -124,9 +139,9 @@ const onSubmit = handleSubmit((values) => {
     position: fixed;
     top: var(--header-height);
     right: 0;
-    z-index: var(--z-tooltip);
-    width: calc(100vw - var(--sidebar-width));
-    max-width: 600px;
+    z-index: var(--z-drawer);
+    width: calc((100vw - var(--sidebar-width)) * 0.5);
+    max-width: 800px;
     height: calc(100vh - var(--header-height));
     background-color: var(--color-white);
     border-left: 1px solid var(--color-border);
@@ -140,6 +155,20 @@ const onSubmit = handleSubmit((values) => {
         align-items: center;
         justify-content: space-between;
         margin-bottom: 16px;
+    }
+
+    &__state {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+        color: var(--color-text-muted);
+    }
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
     }
 
     &__action {
@@ -167,12 +196,6 @@ const onSubmit = handleSubmit((values) => {
         min-height: 0;
     }
 
-    &__header {
-        display: flex;
-        align-items: center;
-        gap: var(--space-4);
-    }
-
     &__body {
         display: flex;
         flex-direction: column;
@@ -187,12 +210,6 @@ const onSubmit = handleSubmit((values) => {
         flex-shrink: 0;
         padding-top: 12px;
         border-top: 1px solid var(--color-border);
-    }
-
-    &__state {
-        padding: 48px 24px;
-        text-align: center;
-        color: var(--color-text-muted);
     }
 }
 </style>

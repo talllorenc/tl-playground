@@ -19,6 +19,11 @@ function closeMenu() {
     isOpen.value = false;
 }
 
+function handleItemClick(item: IActionsMenuItem) {
+    item.onClick?.();
+    closeMenu();
+}
+
 useClickOutside(actionsMenu, () => {
     closeMenu();
 });
@@ -43,7 +48,7 @@ useClickOutside(actionsMenu, () => {
                 type="button"
                 :disabled="item.disabled || item.loading"
                 role="menuitem"
-                @click="item.onClick"
+                @click="handleItemClick(item)"
             >
                 <IconLoader2
                     v-if="item.loading"
@@ -56,6 +61,12 @@ useClickOutside(actionsMenu, () => {
                     v-else-if="item.icon"
                     :size="18"
                     class="actions-menu__action-icon"
+                />
+
+                <span
+                    v-else-if="item.indicator"
+                    class="actions-menu__action-indicator"
+                    :style="{ backgroundColor: item.indicator }"
                 />
                 <span>{{ item.label }}</span>
             </button>
@@ -113,6 +124,14 @@ useClickOutside(actionsMenu, () => {
         &--loading {
             animation: spin 0.7s linear infinite;
         }
+    }
+
+    &__action-indicator {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1px solid var(--color-border);
     }
 
     &__action span {

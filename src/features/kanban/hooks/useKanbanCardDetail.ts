@@ -10,11 +10,11 @@ export function useKanbanCardDetail() {
         if (typeof cardParam !== "string") return null;
 
         const id = Number(cardParam);
-        return Number.isInteger(id) ? id : null;
+        return Number.isInteger(id) && id > 0 ? id : null;
     });
 
     const openCard = (id: number) => {
-        void router.push({
+        void router.replace({
             query: {
                 ...route.query,
                 c: id,
@@ -26,7 +26,7 @@ export function useKanbanCardDetail() {
         const query = { ...route.query };
         delete query.c;
 
-        void router.push({ query });
+        void router.replace({ query });
     };
 
     return {

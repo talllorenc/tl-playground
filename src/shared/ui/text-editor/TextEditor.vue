@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
-import { onBeforeUnmount } from "vue";
-import { IconBold, IconItalic, IconList, IconListNumbers } from "@tabler/icons-vue";
+import { onBeforeUnmount, watch } from "vue";
+import {
+    IconBlockquote,
+    IconBold,
+    IconCode,
+    IconCodeDots,
+    IconItalic,
+    IconList,
+    IconListNumbers,
+} from "@tabler/icons-vue";
 
 const model = defineModel<string>({
     default: "",
@@ -17,6 +25,16 @@ const editor = useEditor({
 
         model.value = html === "<p></p>" ? "" : html;
     },
+});
+
+watch(model, (value) => {
+    if (!editor.value) return;
+
+    const current = editor.value.getHTML();
+
+    if (value !== (current === "<p></p>" ? "" : current)) {
+        editor.value.commands.setContent(value, { emitUpdate: false });
+    }
 });
 
 onBeforeUnmount(() => {
@@ -67,6 +85,38 @@ onBeforeUnmount(() => {
                 @click="editor.chain().focus().toggleOrderedList().run()"
             >
                 <IconListNumbers :size="18" />
+            </button>
+            <button
+                type="button"
+                class="rich-editor__toolbar-button"
+                :class="{ 'is-active': editor.isActive('blockquote') }"
+                aria-label="Цитата"
+                title="Цитата"
+                @click="editor.chain().focus().toggleBlockquote().run()"
+            >
+                <IconBlockquote :size="18" />
+            </button>
+
+            <button
+                type="button"
+                class="rich-editor__toolbar-button"
+                :class="{ 'is-active': editor.isActive('code') }"
+                aria-label="Код"
+                title="Код"
+                @click="editor.chain().focus().toggleCode().run()"
+            >
+                <IconCode :size="18" />
+            </button>
+
+            <button
+                type="button"
+                class="rich-editor__toolbar-button"
+                :class="{ 'is-active': editor.isActive('codeBlock') }"
+                aria-label="Блок кода"
+                title="Блок кода"
+                @click="editor.chain().focus().toggleCodeBlock().run()"
+            >
+                <IconCodeDots :size="18" />
             </button>
         </div>
 
@@ -141,6 +191,32 @@ onBeforeUnmount(() => {
 
         ol {
             list-style: decimal;
+        }
+
+        blockquote {
+            padding-left: var(--space-2);
+            border-left: 3px solid var(--color-accent);
+            color: var(--color-black);
+        }
+
+        code {
+            white-space: nowrap;
+            padding: 2px 4px;
+            border-radius: var(--radius-sm);
+            background-color: var(--color-bg-secondary);
+            font-family: monospace;
+        }
+
+        pre {
+            padding: 12px;
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            background-color: var(--color-bg-secondary);
+
+            code {
+                padding: 0;
+                background: transparent;
+            }
         }
     }
 
