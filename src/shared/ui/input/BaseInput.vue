@@ -58,14 +58,14 @@ onMounted(() => {
         width: 100%;
         padding: 8px 12px;
         border: 1px solid var(--color-border);
-        background-color: transparent;
+        background-color: var(--color-bg-input);
         border-radius: var(--radius-sm);
         font-family: inherit;
-        color: var(--color-black);
+        color: var(--color-text);
         outline: none;
 
         &::placeholder {
-            color: var(--color-text-secondary);
+            color: var(--color-text);
         }
 
         &:focus {

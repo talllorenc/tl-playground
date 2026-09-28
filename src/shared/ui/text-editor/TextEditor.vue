@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import { TaskList, TaskItem } from "@tiptap/extension-list";
 import { onBeforeUnmount, watch } from "vue";
 import {
     IconBlockquote,
@@ -10,6 +12,8 @@ import {
     IconItalic,
     IconList,
     IconListNumbers,
+    IconLink,
+    IconCheckbox,
 } from "@tabler/icons-vue";
 
 const model = defineModel<string>({
@@ -18,7 +22,18 @@ const model = defineModel<string>({
 
 const editor = useEditor({
     content: model.value,
-    extensions: [StarterKit],
+    extensions: [
+        StarterKit,
+        Link.configure({
+            openOnClick: false,
+            markdownLinks: true,
+            defaultProtocol: "https",
+        }),
+        TaskList,
+        TaskItem.configure({
+            nested: true,
+        }),
+    ],
 
     onUpdate: ({ editor }) => {
         const html = editor.getHTML();
@@ -36,6 +51,21 @@ watch(model, (value) => {
         editor.value.commands.setContent(value, { emitUpdate: false });
     }
 });
+
+function handleToggleLink() {
+    if (!editor.value) return;
+
+    if (editor.value.isActive("link")) {
+        editor.value.chain().focus().unsetLink().run();
+        return;
+    }
+
+    const href = window.prompt("Введите URL");
+
+    if (!href) return;
+
+    editor.value.chain().focus().setLink({ href }).run();
+}
 
 onBeforeUnmount(() => {
     editor.value?.destroy();
@@ -68,6 +98,16 @@ onBeforeUnmount(() => {
             <button
                 type="button"
                 class="rich-editor__toolbar-button"
+                :class="{ 'is-active': editor.isActive('link') }"
+                aria-label="Ссылка"
+                title="Ссылка"
+                @click="handleToggleLink"
+            >
+                <IconLink :size="18" />
+            </button>
+            <button
+                type="button"
+                class="rich-editor__toolbar-button"
                 :class="{ 'is-active': editor.isActive('bulletList') }"
                 aria-label="Маркированный список"
                 title="Маркированный список"
@@ -85,6 +125,16 @@ onBeforeUnmount(() => {
                 @click="editor.chain().focus().toggleOrderedList().run()"
             >
                 <IconListNumbers :size="18" />
+            </button>
+            <button
+                type="button"
+                class="rich-editor__toolbar-button"
+                :class="{ 'is-active': editor?.isActive('taskList') }"
+                aria-label="Чек-лист"
+                title="Чек-лист"
+                @click="editor?.chain().focus().toggleTaskList().run()"
+            >
+                <IconCheckbox :size="18" />
             </button>
             <button
                 type="button"
@@ -134,7 +184,7 @@ onBeforeUnmount(() => {
         display: flex;
         align-items: center;
         gap: var(--space-1);
-        background-color: var(--color-white);
+        background-color: var(--color-bg-input);
         border-top-right-radius: var(--radius-sm);
         border-top-left-radius: var(--radius-sm);
         border-left: 1px solid var(--color-border);
@@ -157,8 +207,7 @@ onBeforeUnmount(() => {
         cursor: pointer;
 
         &:hover {
-            background-color: var(--color-bg-muted);
-            color: var(--color-black);
+            background-color: var(--color-bg-secondary);
         }
 
         &.is-active {
@@ -171,8 +220,7 @@ onBeforeUnmount(() => {
         border-bottom-left-radius: var(--radius-sm);
         border-bottom-right-radius: var(--radius-sm);
         border-top-right-radius: var(--radius-sm);
-
-        background-color: var(--color-white);
+        background-color: var(--color-bg-input);
     }
 
     :deep(.tiptap) {
@@ -193,17 +241,67 @@ onBeforeUnmount(() => {
             list-style: decimal;
         }
 
+        ul[data-type="taskList"] {
+            padding-left: 0;
+            list-style: none;
+
+            li {
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+
+                > label {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex: 0 0 18px;
+                    width: 18px;
+                    height: 18px;
+                    margin-top: 3px;
+                    cursor: pointer;
+
+                    input {
+                        display: block;
+                        width: 18px;
+                        height: 18px;
+                        margin: 0;
+                        cursor: pointer;
+                        accent-color: var(--color-accent);
+                    }
+                }
+
+                > div {
+                    flex: 1;
+                    min-width: 0;
+                }
+
+                p {
+                    margin: 0;
+                }
+
+                &[data-checked="true"] {
+                    > div > p {
+                        color: var(--color-text-secondary);
+                    }
+                }
+            }
+        }
+
         blockquote {
             padding-left: var(--space-2);
             border-left: 3px solid var(--color-accent);
-            color: var(--color-black);
+        }
+
+        a {
+            border-bottom: 1px solid var(--color-accent);
+            color: var(--color-accent);
         }
 
         code {
             white-space: nowrap;
-            padding: 2px 4px;
+            padding: 2px 8px;
             border-radius: var(--radius-sm);
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-muted);
             font-family: monospace;
         }
 
@@ -211,7 +309,7 @@ onBeforeUnmount(() => {
             padding: 12px;
             overflow-x: auto;
             border-radius: var(--radius-sm);
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-muted);
 
             code {
                 padding: 0;

@@ -66,7 +66,7 @@ function handleCardClick() {
 <style scoped lang="scss">
 .kanban-card {
     border-radius: var(--radius-md);
-    background-color: var(--color-bg-card);
+    background-color: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     padding: 12px;
     cursor: grab;
@@ -102,7 +102,6 @@ function handleCardClick() {
 
         &:hover {
             background-color: var(--color-bg-muted);
-            color: var(--color-black);
         }
     }
 
@@ -111,7 +110,7 @@ function handleCardClick() {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        color: var(--color-black);
+        color: var(--color-white);
         font-weight: var(--font-w-md);
     }
 
