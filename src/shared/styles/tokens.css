@@ -4,20 +4,21 @@
     --color-black: #09090b;
     --color-velvet: #6366f1;
     --color-red: #ff0000;
-    --color-blue: #06b6d4;
-    --color-gray-50: #eaeeee;
-    --color-gray-100: #f9f9f9;
-    --color-gray-200: #ecebeb;
-    --color-gray-300: #f6f6f6;
-    --color-gray-500: #62606a;
+    --color-green: #59e832;
+    --color-gray-50: #000000;
+    --color-gray-100: #0f1113;
+    --color-gray-200: #ffffff19;
+    --color-gray-250: #2b3236;
+    --color-gray-300: #181c1f;
+    --color-gray-500: #8ba2ad;
     --color-gray-600: #262626;
-    --color-gray-950: #5c5a65;
+    --color-gray-950: #b7cad4;
 
     /* Semantic tokens */
     --color-bg: var(--color-gray-100);
     --color-bg-secondary: var(--color-gray-50);
     --color-bg-muted: var(--color-gray-300);
-    --color-bg-card: var(--color-white);
+    --color-bg-input: var(--color-gray-250);
     --color-accent: var(--color-velvet);
 
     --color-border: var(--color-gray-200);
@@ -26,7 +27,7 @@
     --color-text-secondary: var(--color-gray-500);
 
     --color-error: var(--color-red);
-    --color-success: var(--color-blue);
+    --color-success: var(--color-green);
 
     /* Layout */
     --sidebar-width: 264px;

@@ -142,7 +142,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
     width: calc((100vw - var(--sidebar-width)) * 0.5);
     max-width: 800px;
     height: calc(100vh - var(--header-height));
-    background-color: var(--color-white);
+    background-color: var(--color-bg-muted);
     border-left: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
@@ -184,7 +184,6 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
 
         &:hover {
             background-color: var(--color-bg-muted);
-            color: var(--color-black);
         }
     }
 
