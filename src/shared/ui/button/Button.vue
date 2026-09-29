@@ -53,7 +53,7 @@ const props = withDefaults(
     &--sm {
         min-height: 32px;
         padding: 6px 12px;
-        font-size: var(--font-xs);
+        font-size: var(--font-sm);
     }
 
     &--md {
