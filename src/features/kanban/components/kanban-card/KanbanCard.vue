@@ -66,7 +66,7 @@ function handleCardClick() {
 <style scoped lang="scss">
 .kanban-card {
     border-radius: var(--radius-md);
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-muted);
     border: 1px solid var(--color-border);
     padding: 12px;
     cursor: grab;
@@ -101,7 +101,7 @@ function handleCardClick() {
         rotate: 90deg;
 
         &:hover {
-            background-color: var(--color-bg-muted);
+            background-color: var(--color-bg-secondary);
         }
     }
 
