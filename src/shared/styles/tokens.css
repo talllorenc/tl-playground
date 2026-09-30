@@ -41,14 +41,20 @@
     /* Font Weight */
     --font-w-sm: 400;
     --font-w-md: 600;
-    --font-w-lg: 800;
+    --font-w-lg: 700;
+    --font-w-xl: 800;
 
     /* Font Size */
     --font-xs: 12px;
     --font-sm: 14px;
-    --font-md: 16px;
-    --font-lg: 18px;
+    --font-md: 17px;
+    --font-lg: 20px;
     --font-xl: 24px;
+
+    /* Headings */
+    --font-h1: 28px;
+    --font-h2: 22px;
+    --font-h3: 20px;
 
     /* Transition */
     --transition-fast: 150ms ease;

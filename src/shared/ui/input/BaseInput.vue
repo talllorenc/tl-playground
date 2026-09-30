@@ -84,7 +84,7 @@ onMounted(() => {
 
     &__error {
         color: var(--color-error);
-        font-size: var(--font-xs);
+        font-size: var(--font-sm);
     }
 }
 </style>

@@ -349,6 +349,7 @@ const characterPercentage = computed(() => {
         a {
             border-bottom: 1px solid var(--color-accent);
             color: var(--color-accent);
+            cursor: pointer;
         }
 
         code {
