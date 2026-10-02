@@ -1,6 +1,10 @@
-import { onBeforeUnmount, onMounted, type Ref } from "vue";
+import { onBeforeUnmount, toValue, watch, type MaybeRefOrGetter, type Ref } from "vue";
 
-export function useClickOutside(elementRef: Ref<HTMLElement | null>, callback: () => void) {
+export function useClickOutside(
+    elementRef: Ref<HTMLElement | null>,
+    callback: () => void,
+    enabled: MaybeRefOrGetter<boolean> = true,
+) {
     const listener = (event: MouseEvent) => {
         const element = elementRef.value;
 
@@ -15,11 +19,19 @@ export function useClickOutside(elementRef: Ref<HTMLElement | null>, callback: (
         callback();
     };
 
-    onMounted(() => {
-        document.addEventListener("click", listener, true);
-    });
+    const stop = () => document.removeEventListener("click", listener, true);
 
-    onBeforeUnmount(() => {
-        document.removeEventListener("click", listener, true);
-    });
+    watch(
+        () => toValue(enabled),
+        (isEnabled) => {
+            if (isEnabled) {
+                document.addEventListener("click", listener, true);
+            } else {
+                stop();
+            }
+        },
+        { immediate: true },
+    );
+
+    onBeforeUnmount(stop);
 }

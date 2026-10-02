@@ -24,9 +24,7 @@ function handleItemClick(item: IActionsMenuItem) {
     closeMenu();
 }
 
-useClickOutside(actionsMenu, () => {
-    closeMenu();
-});
+useClickOutside(actionsMenu, closeMenu, isOpen);
 </script>
 
 <template>

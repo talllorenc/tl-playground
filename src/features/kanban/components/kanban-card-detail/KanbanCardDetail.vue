@@ -17,6 +17,8 @@ import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/Kanban
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
+import { useModalStore } from "@/stores/modal-store.ts";
+import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
 
 const props = defineProps<{
     cardId: number;
@@ -32,6 +34,8 @@ const { data: card, isLoading, isError, refetch } = useKanbanCard(cardId);
 
 const { mutate, isPending } = useKanbanCardUpdate();
 
+const modal = useModalStore();
+
 const { errors, defineField, handleSubmit, resetForm, meta } = useForm<UpdateCardFormValues>({
     validationSchema: toTypedSchema(updateCardSchema),
 });
@@ -39,7 +43,11 @@ const { errors, defineField, handleSubmit, resetForm, meta } = useForm<UpdateCar
 const [title, titleAttrs] = defineField("title");
 const [description, descriptionAttrs] = defineField("description");
 
+let formCardId: number | null = null;
+
 function resetFormFromCard(card: IKanbanCard) {
+    formCardId = card.id;
+
     resetForm({
         values: {
             title: card.title,
@@ -49,28 +57,61 @@ function resetFormFromCard(card: IKanbanCard) {
     });
 }
 
-// Заполняем форму данными карточки при открытии и после сохранения
 watch(
     card,
     (card) => {
-        if (card) resetFormFromCard(card);
+        if (card && (card.id !== formCardId || !meta.value.dirty)) {
+            resetFormFromCard(card);
+        }
     },
     { immediate: true },
 );
 
 const onSubmit = handleSubmit((values) => {
-    mutate({
-        cardId: cardId.value,
-        dto: {
-            ...values,
-            description: values.description || null,
+    mutate(
+        {
+            cardId: cardId.value,
+            dto: {
+                ...values,
+                description: values.description || null,
+            },
         },
-    });
+        {
+            onSuccess: (updatedCard) => resetFormFromCard(updatedCard),
+        },
+    );
 });
 
-function handleKeydown(event: KeyboardEvent) {
-    if (event.key === "Escape") {
+function requestClose() {
+    if (!meta.value.dirty) {
         emit("close");
+        return;
+    }
+
+    modal.openModal({
+        title: "Несохранённые изменения",
+        body: "Закрыть карточку без сохранения?",
+        actions: [
+            { label: "Остаться", variant: "secondary", onClick: modal.closeModal },
+            {
+                label: "Закрыть",
+                variant: "danger",
+                onClick: () => {
+                    modal.closeModal();
+                    emit("close");
+                },
+            },
+        ],
+    });
+}
+
+function copyLink() {
+    void copyToClipboard(window.location.href, "Ссылка на карточку скопирована");
+}
+
+function handleKeydown(event: KeyboardEvent) {
+    if (event.key === "Escape" && !modal.isModalOpen) {
+        requestClose();
     }
 }
 
@@ -85,7 +126,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
                 class="card-detail-drawer__action"
                 type="button"
                 aria-label="Закрыть"
-                @click="emit('close')"
+                @click="requestClose"
             >
                 <IconChevronsRight size="18" />
             </button>
@@ -94,6 +135,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
                 class="card-detail-drawer__action"
                 type="button"
                 aria-label="Скопировать ссылку"
+                @click="copyLink"
             >
                 <IconLink size="18" />
             </button>
@@ -161,7 +203,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
         flex-direction: column;
         align-items: flex-start;
         gap: var(--space-4);
-        color: var(--color-text-muted);
+        color: var(--color-text-secondary);
     }
 
     &__meta {
@@ -183,7 +225,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
         border: 0;
 
         &:hover {
-            background-color: var(--color-bg-muted);
+            background-color: var(--color-bg-secondary);
         }
     }
 
