@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { IconLoader2 } from "@tabler/icons-vue";
+import type { Component } from "vue";
 
 type ButtonVariant = "primary" | "secondary" | "danger";
 type ButtonSize = "sm" | "md";
@@ -10,12 +11,14 @@ const props = withDefaults(
         size?: ButtonSize;
         loading?: boolean;
         disabled?: boolean;
+        icon?: Component;
     }>(),
     {
         variant: "primary",
         size: "sm",
         loading: false,
         disabled: false,
+        icon: undefined,
     },
 );
 </script>
@@ -28,9 +31,9 @@ const props = withDefaults(
         :disabled="props.loading || props.disabled"
     >
         <IconLoader2 v-if="props.loading" size="18" class="button__iconLoader" />
-        <span>
-            <slot />
-        </span>
+
+        <component :is="props.icon" v-else-if="props.icon" size="18" class="button__icon" />
+        <slot />
     </button>
 </template>
 
@@ -39,7 +42,8 @@ const props = withDefaults(
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
+    flex-direction: row;
+    gap: var(--space-1);
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
