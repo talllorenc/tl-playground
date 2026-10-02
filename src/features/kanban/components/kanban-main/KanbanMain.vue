@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import KanbanColumn from "@/features/kanban/components/kanban-column/KanbanColumn.vue";
-import { computed } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/vue";
 import { useKanbanColumns } from "@/features/kanban/hooks/useKanbanColumns.ts";
 import { useKanbanCards } from "@/features/kanban/hooks/useKanbanCards.ts";
 import { useKanbanCardColumnUpdate } from "@/features/kanban/hooks/useKanbanCardColumnUpdate.ts";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
-import KanbanCardDetail from "@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue";
-import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
+import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import Button from "@/shared/ui/button/Button.vue";
+import KanbanHeader from "@/features/kanban/components/kanban-header/KanbanHeader.vue";
+
+const KanbanCardDetail = defineAsyncComponent(
+    () => import("@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue"),
+);
+
+const EMPTY_CARDS: IKanbanCardPreview[] = [];
 
 const columnsQuery = useKanbanColumns();
 const cardsQuery = useKanbanCards();
@@ -20,7 +26,7 @@ const columns = computed(() => columnsQuery.data.value ?? []);
 const cards = computed(() => cardsQuery.data.value ?? []);
 
 const cardsByColumn = computed(() => {
-    const map = new Map<number, IKanbanCard[]>();
+    const map = new Map<number, IKanbanCardPreview[]>();
 
     for (const card of cards.value) {
         const columnCards = map.get(card.columnId);
@@ -48,7 +54,7 @@ function handleRetry() {
 function handleDragEnd(event: DragEndEvent) {
     const { source, target } = event.operation;
 
-    if (!source || !target) return;
+    if (event.canceled || !source || !target) return;
 
     const cardId = Number(source.id);
     const columnId = Number(target.id);
@@ -73,19 +79,22 @@ function handleDragEnd(event: DragEndEvent) {
         <span>Не удалось загрузить канбан</span>
         <Button variant="secondary" @click="handleRetry">Повторить</Button>
     </div>
+    <template v-else>
+        <KanbanHeader />
 
-    <DragDropProvider v-else @dragEnd="handleDragEnd">
-        <div class="kanban">
-            <div class="kanban__body">
-                <KanbanColumn
-                    v-for="column in columns"
-                    :key="column.id"
-                    :column="column"
-                    :cards="cardsByColumn.get(column.id) ?? []"
-                />
+        <DragDropProvider @dragEnd="handleDragEnd">
+            <div class="kanban">
+                <div class="kanban__body">
+                    <KanbanColumn
+                        v-for="column in columns"
+                        :key="column.id"
+                        :column="column"
+                        :cards="cardsByColumn.get(column.id) ?? EMPTY_CARDS"
+                    />
+                </div>
             </div>
-        </div>
-    </DragDropProvider>
+        </DragDropProvider>
+    </template>
 
     <Teleport to="body">
         <Transition name="drawer">
@@ -101,6 +110,7 @@ function handleDragEnd(event: DragEndEvent) {
 <style scoped lang="scss">
 .kanban {
     width: 100%;
+    margin-top: var(--space-8);
 
     &__body {
         display: flex;
@@ -115,7 +125,7 @@ function handleDragEnd(event: DragEndEvent) {
     align-items: center;
     gap: var(--space-4);
     padding: 48px 24px;
-    color: var(--color-text-muted);
+    color: var(--color-text-secondary);
 }
 
 .drawer-enter-active,

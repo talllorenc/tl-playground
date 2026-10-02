@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { deleteKanbanCard } from "@/features/kanban/api/kanban-api.ts";
 import { kanbanKeys, kanbanMutationKeys } from "@/features/kanban/api/kanban-query-keys.ts";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
-import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
+import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 
 export function useKanbanCardDelete() {
     const queryClient = useQueryClient();
@@ -21,11 +21,9 @@ export function useKanbanCardDelete() {
             }
 
             queryClient.removeQueries({ queryKey: kanbanKeys.card(cardId) });
-            queryClient.setQueryData<IKanbanCard[]>(kanbanKeys.cards(), (cards) =>
+            queryClient.setQueryData<IKanbanCardPreview[]>(kanbanKeys.cards(), (cards) =>
                 cards?.filter((card) => card.id !== cardId),
             );
-
-            return queryClient.invalidateQueries({ queryKey: kanbanKeys.cards() });
         },
     });
 }

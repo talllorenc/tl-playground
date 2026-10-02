@@ -49,18 +49,18 @@ const modal = useModalStore();
         flex-direction: column;
         gap: var(--space-2);
         width: 320px;
-        background-color: var(--color-white);
+        background-color: var(--color-bg-muted);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
         padding: 16px;
     }
     &__header {
         font-weight: var(--font-w-md);
-        color: var(--color-black);
+        color: var(--color-white);
     }
 
     &__content {
-        color: var(--color-text-muted);
+        color: var(--color-text-secondary);
     }
 
     &__actions {

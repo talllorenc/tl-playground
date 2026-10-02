@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import Sidebar from "@/layouts/components/sidebar/Sidebar.vue";
 import Header from "@/layouts/components/header/Header.vue";
+import PageHeader from "@/shared/ui/page-header/PageHeader.vue";
+import Breadcrumbs from "@/shared/ui/breadcrumbs/Breadcrumbs.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 </script>
 
 <template>
@@ -11,6 +16,12 @@ import Header from "@/layouts/components/header/Header.vue";
             <Sidebar class="layout__sidebar" />
 
             <main class="layout__content">
+                <PageHeader v-if="route.meta.title" :title="route.meta.title">
+                    <template #breadcrumbs>
+                        <Breadcrumbs />
+                    </template>
+                </PageHeader>
+
                 <RouterView />
             </main>
         </div>

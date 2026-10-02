@@ -13,6 +13,7 @@ import json from "highlight.js/lib/languages/json";
 import xml from "highlight.js/lib/languages/xml";
 import css from "highlight.js/lib/languages/css";
 import scss from "highlight.js/lib/languages/scss";
+import csharp from "highlight.js/lib/languages/csharp";
 
 const lowlight = createLowlight();
 lowlight.register("javascript", javascript);
@@ -21,6 +22,7 @@ lowlight.register("json", json);
 lowlight.register("html", xml);
 lowlight.register("css", css);
 lowlight.register("scss", scss);
+lowlight.register("c#", csharp);
 
 export const CHARACTER_LIMIT = 5000;
 

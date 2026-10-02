@@ -135,7 +135,7 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         border: 0;
         border-radius: var(--radius-sm);
         background: transparent;
-        color: var(--color-text-muted);
+        color: var(--color-text-secondary);
         cursor: pointer;
 
         &:hover {

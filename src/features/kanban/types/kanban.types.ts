@@ -14,6 +14,8 @@ export interface IKanbanCard {
     position: number;
 }
 
+export type IKanbanCardPreview = Omit<IKanbanCard, "description">;
+
 export interface IKanbanColumn {
     id: number;
     created_at: string;

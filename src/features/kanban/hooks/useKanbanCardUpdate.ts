@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { updateKanbanCard } from "@/features/kanban/api/kanban-api.ts";
 import { kanbanKeys, kanbanMutationKeys } from "@/features/kanban/api/kanban-query-keys.ts";
-import type { IKanbanCardUpdateDto } from "@/features/kanban/types/kanban.types.ts";
+import type {
+    IKanbanCardPreview,
+    IKanbanCardUpdateDto,
+} from "@/features/kanban/types/kanban.types.ts";
 
 export function useKanbanCardUpdate() {
     const queryClient = useQueryClient();
@@ -15,9 +18,12 @@ export function useKanbanCardUpdate() {
             successToast: { title: "Обновлено", message: "Карточка обновлена" },
         },
         onSuccess: (updatedCard) => {
-            queryClient.setQueryData(kanbanKeys.card(updatedCard.id), updatedCard);
+            const { description: _description, ...preview } = updatedCard;
 
-            return queryClient.invalidateQueries({ queryKey: kanbanKeys.cards() });
+            queryClient.setQueryData(kanbanKeys.card(updatedCard.id), updatedCard);
+            queryClient.setQueryData<IKanbanCardPreview[]>(kanbanKeys.cards(), (cards) =>
+                cards?.map((card) => (card.id === updatedCard.id ? preview : card)),
+            );
         },
     });
 }

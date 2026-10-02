@@ -5,23 +5,22 @@ const props = defineProps<{
 </script>
 
 <template>
-    <header class="page-header">
-        <div class="page-header__breadcrumbs">
-            <slot name="breadcrumbs" />
-        </div>
+    <div class="page-header">
+        <slot name="breadcrumbs" />
 
         <h1>
             {{ props.title }}
         </h1>
-    </header>
+    </div>
 </template>
 
 <style scoped lang="scss">
 .page-header {
-    margin-bottom: 56px;
-
-    &__breadcrumbs {
-        margin-bottom: 8px;
-    }
+    position: sticky;
+    left: 0;
+    margin-bottom: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
 }
 </style>
