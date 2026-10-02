@@ -2,10 +2,13 @@ import { supabase } from "@/shared/api/supabase";
 import type {
     ICreateKanbanCardDto,
     IKanbanCard,
+    IKanbanCardPreview,
     IKanbanCardUpdateDto,
     IKanbanColumn,
     KanbanColumnColor,
 } from "../types/kanban.types";
+
+const CARD_PREVIEW_FIELDS = "id, created_at, title, columnId, tag, position";
 
 export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
     const { data } = await supabase
@@ -17,10 +20,10 @@ export async function getKanbanColumns(): Promise<IKanbanColumn[]> {
     return data;
 }
 
-export async function getKanbanCards(): Promise<IKanbanCard[]> {
+export async function getKanbanCards(): Promise<IKanbanCardPreview[]> {
     const { data } = await supabase
         .from("kanban_cards")
-        .select("*")
+        .select(CARD_PREVIEW_FIELDS)
         .order("position", { ascending: true })
         .throwOnError();
 
@@ -57,11 +60,11 @@ export async function updateKanbanColumnColor(
     return data;
 }
 
-export async function createKanbanCard(dto: ICreateKanbanCardDto): Promise<IKanbanCard> {
+export async function createKanbanCard(dto: ICreateKanbanCardDto): Promise<IKanbanCardPreview> {
     const { data } = await supabase
         .from("kanban_cards")
         .insert(dto)
-        .select()
+        .select(CARD_PREVIEW_FIELDS)
         .single()
         .throwOnError();
 

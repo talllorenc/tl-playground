@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IconDotsVertical } from "@tabler/icons-vue";
-import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
+import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
 import { useDraggable } from "@dnd-kit/vue";
@@ -11,7 +11,7 @@ import { getKanbanCardActions } from "@/features/kanban/components/kanban-card/k
 import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete.ts";
 
 const props = defineProps<{
-    card: IKanbanCard;
+    card: IKanbanCardPreview;
 }>();
 
 const { mutate, isPending } = useKanbanCardDelete();

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import KanbanCard from "@/features/kanban/components/kanban-card/KanbanCard.vue";
 import type {
-    IKanbanCard,
+    IKanbanCardPreview,
     IKanbanColumn,
     KanbanColumnColor,
 } from "@/features/kanban/types/kanban.types.ts";
@@ -17,7 +17,7 @@ import { useKanbanColumnColorUpdate } from "@/features/kanban/hooks/useKanbanCol
 
 const props = defineProps<{
     column: IKanbanColumn;
-    cards: IKanbanCard[];
+    cards: IKanbanCardPreview[];
 }>();
 
 const element = ref<HTMLElement | null>(null);

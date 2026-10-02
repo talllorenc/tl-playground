@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { sidebarLinks } from "@/layouts/components/sidebar/sidebar.links.ts";
+import { pageRoutes } from "@/router/routes.ts";
+
+const sidebarLinks = pageRoutes
+    .filter((route) => route.name && route.meta?.breadcrumb)
+    .map((route) => ({
+        label: route.meta!.breadcrumb!,
+        to: { name: route.name! },
+    }));
 </script>
 
 <template>
@@ -7,7 +14,7 @@ import { sidebarLinks } from "@/layouts/components/sidebar/sidebar.links.ts";
         <nav class="sidebar__nav">
             <RouterLink
                 v-for="item in sidebarLinks"
-                :key="item.to"
+                :key="item.label"
                 :to="item.to"
                 class="sidebar__link"
             >

@@ -73,7 +73,7 @@ const props = withDefaults(
 
     &--secondary {
         background-color: var(--color-bg-muted);
-        color: var(--color-black);
+        color: var(--color-text);
 
         &:hover:not(:disabled) {
             background-color: var(--color-bg-secondary);
