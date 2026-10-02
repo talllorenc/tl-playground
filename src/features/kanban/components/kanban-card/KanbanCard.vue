@@ -112,6 +112,7 @@ function handleCardClick() {
         overflow: hidden;
         color: var(--color-white);
         font-weight: var(--font-w-md);
+        font-size: var(--font-sm);
     }
 
     &--open {

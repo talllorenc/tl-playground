@@ -123,7 +123,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
 
     &__title {
         margin: 0;
-        font-size: 15px;
+        font-size: var(--font-sm);
         color: var(--color-white);
     }
 
@@ -144,7 +144,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
     &__cards {
         display: flex;
         flex-direction: column;
-        gap: var(--space-4);
+        gap: var(--space-2);
         margin-top: 24px;
     }
 

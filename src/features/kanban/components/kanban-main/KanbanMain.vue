@@ -10,6 +10,7 @@ import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import Button from "@/shared/ui/button/Button.vue";
+import KanbanHeader from "@/features/kanban/components/kanban-header/KanbanHeader.vue";
 
 const KanbanCardDetail = defineAsyncComponent(
     () => import("@/features/kanban/components/kanban-card-detail/KanbanCardDetail.vue"),
@@ -78,19 +79,22 @@ function handleDragEnd(event: DragEndEvent) {
         <span>Не удалось загрузить канбан</span>
         <Button variant="secondary" @click="handleRetry">Повторить</Button>
     </div>
+    <template v-else>
+        <KanbanHeader />
 
-    <DragDropProvider v-else @dragEnd="handleDragEnd">
-        <div class="kanban">
-            <div class="kanban__body">
-                <KanbanColumn
-                    v-for="column in columns"
-                    :key="column.id"
-                    :column="column"
-                    :cards="cardsByColumn.get(column.id) ?? EMPTY_CARDS"
-                />
+        <DragDropProvider @dragEnd="handleDragEnd">
+            <div class="kanban">
+                <div class="kanban__body">
+                    <KanbanColumn
+                        v-for="column in columns"
+                        :key="column.id"
+                        :column="column"
+                        :cards="cardsByColumn.get(column.id) ?? EMPTY_CARDS"
+                    />
+                </div>
             </div>
-        </div>
-    </DragDropProvider>
+        </DragDropProvider>
+    </template>
 
     <Teleport to="body">
         <Transition name="drawer">
@@ -106,6 +110,7 @@ function handleDragEnd(event: DragEndEvent) {
 <style scoped lang="scss">
 .kanban {
     width: 100%;
+    margin-top: var(--space-8);
 
     &__body {
         display: flex;
