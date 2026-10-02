@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
-import { computed, onBeforeUnmount, watch } from "vue";
+import { computed, watch } from "vue";
 import {
     IconBlockquote,
     IconBold,
@@ -24,24 +24,24 @@ const model = defineModel<string>({
     default: "",
 });
 
+let lastEmittedHtml = model.value;
+
 const editor = useEditor({
     content: model.value,
 
     extensions: textEditorExtensions,
 
     onUpdate: ({ editor }) => {
-        model.value = normalizeEditorHtml(editor.getHTML());
+        lastEmittedHtml = normalizeEditorHtml(editor.getHTML());
+        model.value = lastEmittedHtml;
     },
 });
 
 watch(model, (value) => {
-    if (!editor.value) return;
+    if (!editor.value || value === lastEmittedHtml) return;
 
-    const current = editor.value.getHTML();
-
-    if (value !== (current === "<p></p>" ? "" : current)) {
-        editor.value.commands.setContent(value, { emitUpdate: false });
-    }
+    lastEmittedHtml = value;
+    editor.value.commands.setContent(value, { emitUpdate: false });
 });
 
 function handleToggleLink() {
@@ -50,15 +50,11 @@ function handleToggleLink() {
     toggleLink(editor.value);
 }
 
-onBeforeUnmount(() => {
-    editor.value?.destroy();
-});
+const characterCount = computed(() => editor.value?.storage.characterCount.characters() ?? 0);
 
-const characterPercentage = computed(() => {
-    if (!editor.value) return 0;
-
-    return Math.round((100 / CHARACTER_LIMIT) * editor.value.storage.characterCount.characters());
-});
+const characterPercentage = computed(() =>
+    Math.round((100 / CHARACTER_LIMIT) * characterCount.value),
+);
 </script>
 
 <template>
@@ -183,8 +179,7 @@ const characterPercentage = computed(() => {
             <div
                 :class="{
                     'character-count': true,
-                    'character-count--warning':
-                        editor.storage.characterCount.characters() >= CHARACTER_LIMIT,
+                    'character-count--warning': characterCount >= CHARACTER_LIMIT,
                 }"
             >
                 <svg height="20" width="20" viewBox="0 0 20 20">
@@ -205,7 +200,7 @@ const characterPercentage = computed(() => {
                 </svg>
 
                 <span>
-                    {{ editor.storage.characterCount.characters() }}
+                    {{ characterCount }}
                     /
                     {{ CHARACTER_LIMIT }}</span
                 >

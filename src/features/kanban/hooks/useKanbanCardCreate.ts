@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { createKanbanCard } from "@/features/kanban/api/kanban-api.ts";
 import { kanbanKeys, kanbanMutationKeys } from "@/features/kanban/api/kanban-query-keys.ts";
+import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 
 export function useKanbanCardCreate() {
     const queryClient = useQueryClient();
@@ -12,6 +13,10 @@ export function useKanbanCardCreate() {
             errorMessage: "Произошла ошибка при создании карточки",
             successToast: { title: "Создано", message: "Карточка создана" },
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: kanbanKeys.cards() }),
+        onSuccess: (createdCard) => {
+            queryClient.setQueryData<IKanbanCardPreview[]>(kanbanKeys.cards(), (cards) =>
+                cards ? [...cards, createdCard].sort((a, b) => a.position - b.position) : cards,
+            );
+        },
     });
 }

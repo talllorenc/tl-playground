@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { updateCardColumn } from "@/features/kanban/api/kanban-api";
 import { kanbanKeys, kanbanMutationKeys } from "@/features/kanban/api/kanban-query-keys.ts";
-import type { IKanbanCard } from "@/features/kanban/types/kanban.types.ts";
+import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 
 interface IUpdateCardColumnVariables {
     cardId: number;
@@ -23,7 +23,7 @@ export function useKanbanCardColumnUpdate() {
             await queryClient.cancelQueries({ queryKey: kanbanKeys.cards() });
 
             const previousColumnId = queryClient
-                .getQueryData<IKanbanCard[]>(kanbanKeys.cards())
+                .getQueryData<IKanbanCardPreview[]>(kanbanKeys.cards())
                 ?.find((card) => card.id === cardId)?.columnId;
 
             setCardColumn(cardId, columnId);
@@ -31,14 +31,12 @@ export function useKanbanCardColumnUpdate() {
             return { previousColumnId };
         },
 
-        // Откатываем только эту карточку, чтобы не затереть параллельные перемещения
         onError: (_error, { cardId }, context) => {
             if (context?.previousColumnId !== undefined) {
                 setCardColumn(cardId, context.previousColumnId);
             }
         },
 
-        // Рефетчим только после последнего перемещения, иначе ответ затрёт оптимистичный кэш
         onSettled: () => {
             if (queryClient.isMutating({ mutationKey: kanbanMutationKeys.moveCard() }) === 1) {
                 return queryClient.invalidateQueries({ queryKey: kanbanKeys.cards() });
@@ -47,7 +45,7 @@ export function useKanbanCardColumnUpdate() {
     });
 
     function setCardColumn(cardId: number, columnId: number) {
-        queryClient.setQueryData<IKanbanCard[]>(kanbanKeys.cards(), (cards) =>
+        queryClient.setQueryData<IKanbanCardPreview[]>(kanbanKeys.cards(), (cards) =>
             cards?.map((card) => (card.id === cardId ? { ...card, columnId } : card)),
         );
     }
