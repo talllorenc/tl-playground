@@ -447,9 +447,5 @@ const characterPercentage = computed(() =>
             color: var(--color-red);
         }
     }
-
-    &__content:focus-within {
-        border-color: var(--color-accent);
-    }
 }
 </style>

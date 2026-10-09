@@ -6,10 +6,9 @@ import { IconPlus, IconAdjustmentsHorizontal, IconArrowsSort } from "@tabler/ico
 <template>
     <div class="kanban-header">
         <div class="kanban-header__body">
-            <Button :icon="IconPlus"> Колонка </Button>
-            <Button :icon="IconAdjustmentsHorizontal"> Фильтры </Button>
-
-            <Button :icon="IconArrowsSort"> Сортировка </Button>
+            <Button disabled :icon="IconPlus"> Колонка </Button>
+            <Button disabled :icon="IconAdjustmentsHorizontal"> Фильтры </Button>
+            <Button disabled :icon="IconArrowsSort"> Сортировка </Button>
         </div>
     </div>
 </template>
