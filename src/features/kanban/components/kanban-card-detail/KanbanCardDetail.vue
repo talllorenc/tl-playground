@@ -168,7 +168,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
 
             <div class="card-detail-drawer__footer">
                 <Button type="submit" :loading="isPending" :disabled="!meta.dirty">
-                    Сохранить
+                    <span>Сохранить</span>
                 </Button>
             </div>
         </form>
@@ -181,7 +181,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
     top: var(--header-height);
     right: 0;
     z-index: var(--z-drawer);
-    width: calc((100vw - var(--sidebar-width)) * 0.5);
+    width: calc((100vw - var(--sidebar-width)) * 0.6);
     max-width: 800px;
     height: calc(100vh - var(--header-height));
     background-color: var(--color-bg-muted);

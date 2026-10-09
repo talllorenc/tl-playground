@@ -221,9 +221,11 @@ const characterPercentage = computed(() =>
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
         position: sticky;
+        overflow: scroll;
         top: 0;
-        gap: var(--space-1);
+        gap: var(--space-2);
         z-index: var(--z-sticky);
         width: 100%;
         padding: var(--space-2);
