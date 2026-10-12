@@ -6,6 +6,7 @@ import { createPinia } from "pinia";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import { initSentry } from "@/configs/sentry-config.ts";
 import { queryClient } from "@/configs/query-config.ts";
+import InstantSearch from "vue-instantsearch/vue3/es";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -17,5 +18,6 @@ app.use(router);
 app.use(VueQueryPlugin, {
     queryClient,
 });
+app.use(InstantSearch);
 
 app.mount("#app");

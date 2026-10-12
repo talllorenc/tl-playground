@@ -93,7 +93,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         display: flex;
         flex-direction: column;
         gap: var(--space-2);
-        padding: 8px;
+        padding: var(--space-1);
         flex-shrink: 0;
     }
 
@@ -104,7 +104,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         align-items: center;
         gap: var(--space-2);
         justify-content: start;
-        padding: 4px 8px;
+        padding: var(--space-2);
         border-radius: var(--radius-sm);
 
         &:hover:not(:disabled) {
