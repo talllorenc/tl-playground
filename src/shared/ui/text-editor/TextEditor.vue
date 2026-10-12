@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
-import { computed, watch } from "vue";
+import { computed, watch, ref } from "vue";
 import {
     IconBlockquote,
     IconBold,
@@ -13,6 +13,7 @@ import {
     IconCheckbox,
     IconSeparatorHorizontal,
     IconHighlight,
+    IconPhoto,
 } from "@tabler/icons-vue";
 import {
     CHARACTER_LIMIT,
@@ -25,6 +26,7 @@ const model = defineModel<string>({
 });
 
 let lastEmittedHtml = model.value;
+const imageInput = ref<HTMLInputElement | null>(null);
 
 const editor = useEditor({
     content: model.value,
@@ -48,6 +50,23 @@ function handleToggleLink() {
     if (!editor.value) return;
 
     toggleLink(editor.value);
+}
+
+function handleOpenImagePicker() {
+    imageInput.value?.click();
+}
+
+function handleImageChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file || !editor.value) return;
+
+    const src = URL.createObjectURL(file);
+
+    editor.value.chain().focus().setImage({ src, alt: file.name }).run();
+
+    input.value = "";
 }
 
 const characterCount = computed(() => editor.value?.storage.characterCount.characters() ?? 0);
@@ -132,6 +151,26 @@ const characterPercentage = computed(() =>
                 >
                     <IconCheckbox :size="18" />
                 </button>
+                <button
+                    disabled
+                    type="button"
+                    class="rich-editor__toolbar-button"
+                    :class="{ 'is-active': editor.isActive('image') }"
+                    aria-label="Вставить изображение"
+                    title="Вставить изображение"
+                    @click="handleOpenImagePicker"
+                >
+                    <IconPhoto :size="18" />
+                </button>
+
+                <input
+                    disabled
+                    ref="imageInput"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    @change="handleImageChange"
+                />
                 <button
                     type="button"
                     class="rich-editor__toolbar-button"
@@ -251,8 +290,13 @@ const characterPercentage = computed(() =>
         background: transparent;
         cursor: pointer;
 
-        &:hover {
+        &:hover:not(:disabled) {
             background-color: var(--color-bg-secondary);
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         &.is-active {
