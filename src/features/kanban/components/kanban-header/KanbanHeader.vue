@@ -15,7 +15,7 @@ import { IconPlus, IconAdjustmentsHorizontal, IconArrowsSort } from "@tabler/ico
 
 <style scoped lang="scss">
 .kanban-header {
-    background-color: var(--color-bg-muted);
+    background-color: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: var(--space-2);

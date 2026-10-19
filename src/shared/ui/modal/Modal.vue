@@ -43,20 +43,21 @@ const modal = useModalStore();
     align-items: center;
     justify-content: center;
     background-color: rgb(0 0 0 / 50%);
+    backdrop-filter: blur(4px);
 
     &__body {
         display: flex;
         flex-direction: column;
         gap: var(--space-2);
         width: 320px;
-        background-color: var(--color-bg-muted);
+        background-color: var(--color-bg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
-        padding: 16px;
+        padding: var(--space-3);
     }
     &__header {
         font-weight: var(--font-w-md);
-        color: var(--color-white);
+        color: var(--color-text);
     }
 
     &__content {

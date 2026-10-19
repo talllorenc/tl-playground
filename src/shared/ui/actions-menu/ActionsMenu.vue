@@ -87,7 +87,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         right: 0;
         z-index: var(--z-dropdown);
         width: fit-content;
-        background-color: var(--color-bg-muted);
+        background-color: var(--color-bg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-sm);
         display: flex;
@@ -137,6 +137,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        font-size: var(--font-sm);
     }
 
     @keyframes spin {

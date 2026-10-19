@@ -178,17 +178,17 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
 <style scoped lang="scss">
 .card-detail-drawer {
     position: fixed;
-    top: var(--header-height);
+    top: 0;
     right: 0;
     z-index: var(--z-drawer);
     width: calc((100vw - var(--sidebar-width)) * 0.6);
     max-width: 800px;
-    height: calc(100vh - var(--header-height));
-    background-color: var(--color-bg-muted);
+    height: 100vh;
+    background-color: var(--color-bg);
     border-left: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    padding: 12px;
+    padding: var(--space-3);
     pointer-events: auto;
 
     &__header {

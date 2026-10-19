@@ -103,10 +103,10 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         justify-content: space-between;
         gap: var(--space-2);
 
-        background-color: var(--color-bg-muted);
-        border-radius: var(--radius-md);
-        border-bottom: 1px solid var(--color-border);
-        padding: 12px;
+        background-color: var(--color-bg);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--color-border);
+        padding: var(--space-3);
     }
 
     &__info {
@@ -124,7 +124,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
     &__title {
         margin: 0;
         font-size: var(--font-sm);
-        color: var(--color-white);
+        color: var(--color-text);
     }
 
     &__count {

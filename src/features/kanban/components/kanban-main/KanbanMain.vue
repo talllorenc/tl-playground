@@ -72,6 +72,8 @@ function handleDragEnd(event: DragEndEvent) {
             <SkeletonItem height="500px" width="300px" />
             <SkeletonItem height="500px" width="300px" />
             <SkeletonItem height="500px" width="300px" />
+            <SkeletonItem height="500px" width="300px" />
+            <SkeletonItem height="500px" width="300px" />
         </Skeleton>
     </div>
 
