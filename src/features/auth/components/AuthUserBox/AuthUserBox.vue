@@ -2,13 +2,15 @@
 import { IconSelector, IconUser } from "@tabler/icons-vue";
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const actions = computed(() => [
     {
-        label: "Личный кабинет",
+        label: "Аккаунт",
         icon: IconUser,
-        onClick: () => alert("test"),
-        loading: false,
+        onClick: () => router.push("/account"),
     },
 ]);
 </script>

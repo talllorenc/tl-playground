@@ -1,9 +1,17 @@
-import type { RouteRecordRaw } from "vue-router";
+import type { RouteRecordInfo, RouteRecordRaw } from "vue-router";
 
 declare module "vue-router" {
     interface RouteMeta {
         title?: string;
         breadcrumb?: string;
+    }
+
+    interface TypesConfig {
+        RouteNamedMap: {
+            home: RouteRecordInfo<"home", "/">;
+            kanban: RouteRecordInfo<"kanban", "/kanban">;
+            account: RouteRecordInfo<"account", "/account">;
+        };
     }
 }
 
@@ -21,6 +29,12 @@ export const pageRoutes: RouteRecordRaw[] = [
         name: "kanban",
         component: () => import("@/views/KanbanView.vue"),
         meta: { title: "Канбан доска", breadcrumb: "Канбан" },
+    },
+    {
+        path: "/account",
+        name: "account",
+        component: () => import("@/views/AccountView.vue"),
+        meta: { title: "Аккаунт", breadcrumb: "Аккаунт" },
     },
 ];
 

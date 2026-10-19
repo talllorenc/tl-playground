@@ -5,13 +5,13 @@ export const SIDEBAR_LINKS: ISidebarLink[] = [
     {
         id: "home",
         label: "Главная",
-        to: "/",
+        to: { name: "home" },
         icon: IconHome,
     },
     {
         id: "kanban",
         label: "Канбан",
-        to: "/kanban",
+        to: { name: "kanban" },
         icon: IconLayoutColumns,
     },
 ];

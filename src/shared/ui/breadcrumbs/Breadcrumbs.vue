@@ -12,7 +12,7 @@ const breadcrumbs = computed(() =>
         .map((record) => ({
             key: record.path,
             title: record.meta.breadcrumb,
-            to: record.name ? { name: record.name } : record.path,
+            to: record.path,
         })),
 );
 </script>
