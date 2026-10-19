@@ -1,25 +1,31 @@
 <script setup lang="ts">
-import { pageRoutes } from "@/router/routes.ts";
-
-const sidebarLinks = pageRoutes
-    .filter((route) => route.name && route.meta?.breadcrumb)
-    .map((route) => ({
-        label: route.meta!.breadcrumb!,
-        to: { name: route.name! },
-    }));
+import { SIDEBAR_LINKS } from "@/layouts/components/sidebar/sidebar-links.ts";
 </script>
 
 <template>
     <aside class="sidebar">
-        <nav class="sidebar__nav">
-            <RouterLink
-                v-for="item in sidebarLinks"
-                :key="item.label"
-                :to="item.to"
-                class="sidebar__link"
-            >
-                {{ item.label }}
-            </RouterLink>
+        <nav class="sidebar__nav" aria-label="Основное меню">
+            <ul class="sidebar__list">
+                <li v-for="link in SIDEBAR_LINKS" :key="link.id">
+                    <span
+                        v-if="link.disabled"
+                        class="sidebar__link sidebar__link--disabled"
+                        aria-disabled="true"
+                    >
+                        <component :is="link.icon" size="18" aria-hidden="true" />
+                        {{ link.label }}
+                    </span>
+                    <RouterLink
+                        v-else
+                        :to="link.to"
+                        class="sidebar__link"
+                        exact-active-class="sidebar__link--active"
+                    >
+                        <component :is="link.icon" size="18" aria-hidden="true" />
+                        {{ link.label }}
+                    </RouterLink>
+                </li>
+            </ul>
         </nav>
     </aside>
 </template>
@@ -32,16 +38,17 @@ const sidebarLinks = pageRoutes
     padding: 24px 16px;
     background-color: var(--color-bg);
 
-    &__nav {
+    &__list {
         display: flex;
         flex-direction: column;
-        gap: var(--space-2);
     }
 
     &__link {
-        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
         border-radius: var(--radius-sm);
-        font-size: 14px;
+        padding: var(--space-2);
         color: var(--color-text);
         transition:
             background-color var(--transition-fast),
@@ -50,6 +57,21 @@ const sidebarLinks = pageRoutes
         &:hover {
             color: var(--color-text);
             background-color: var(--color-bg-secondary);
+        }
+
+        &--active,
+        &--active:hover {
+            background-color: var(--color-bg-surface);
+        }
+
+        &--disabled {
+            color: var(--color-text-secondary);
+            cursor: not-allowed;
+
+            &:hover {
+                color: var(--color-text-secondary);
+                background-color: transparent;
+            }
         }
     }
 }

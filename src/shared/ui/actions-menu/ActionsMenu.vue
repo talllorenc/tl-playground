@@ -104,7 +104,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         align-items: center;
         gap: var(--space-2);
         justify-content: start;
-        padding: var(--space-1) var(--space-2);
+        padding: var(--space-2);
         border-radius: var(--radius-sm);
 
         &:hover:not(:disabled) {
@@ -137,6 +137,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        font-size: var(--font-sm);
     }
 
     @keyframes spin {
