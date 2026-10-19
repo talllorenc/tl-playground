@@ -222,7 +222,7 @@ const characterPercentage = computed(() =>
                 }"
             >
                 <svg height="20" width="20" viewBox="0 0 20 20">
-                    <circle r="10" cx="10" cy="10" fill="#2b3236" />
+                    <circle r="10" cx="10" cy="10" fill="#eef1f4" />
 
                     <circle
                         r="5"
@@ -235,7 +235,7 @@ const characterPercentage = computed(() =>
                         transform="rotate(-90) translate(-20)"
                     />
 
-                    <circle r="6" cx="10" cy="10" fill="#b7cad4" />
+                    <circle r="6" cx="10" cy="10" fill="#eef1f4" />
                 </svg>
 
                 <span>
@@ -397,12 +397,12 @@ const characterPercentage = computed(() =>
             white-space: nowrap;
             padding: 2px 8px;
             border-radius: var(--radius-sm);
-            background-color: var(--color-bg-muted);
+            background-color: var(--color-bg);
             font-family: monospace;
         }
 
         pre {
-            background: var(--color-bg-muted);
+            background: var(--color-bg);
             border-radius: 0.5rem;
             font-family: "JetBrainsMono", monospace;
             padding: var(--space-2);

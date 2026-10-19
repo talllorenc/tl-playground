@@ -11,26 +11,26 @@ export const COLOR_CONFIG: Record<
     red: {
         label: "Красный",
         indicator: "#EF767A",
-        background: "#301B20",
+        background: "#FDECED",
     },
     yellow: {
         label: "Желтый",
         indicator: "#F6D365",
-        background: "#302A18",
+        background: "#FDF6DD",
     },
     blue: {
         label: "Синий",
         indicator: "#8FC7F5",
-        background: "#192936",
+        background: "#E8F3FD",
     },
     green: {
         label: "Зеленый",
         indicator: "#91D6A0",
-        background: "#1A2C22",
+        background: "#E9F7EC",
     },
     pink: {
         label: "Розовый",
         indicator: "#F2A9C0",
-        background: "#301D27",
+        background: "#FDEEF3",
     },
 };

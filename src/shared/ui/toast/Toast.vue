@@ -91,9 +91,9 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         row-gap: var(--space-1);
 
         max-width: 400px;
-        padding: 16px;
+        padding: var(--space-2);
 
-        background-color: var(--color-bg-muted);
+        background-color: var(--color-bg-surface);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
     }
@@ -110,14 +110,14 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         grid-row: 1;
 
         font-weight: var(--font-w-md);
-        color: var(--color-white);
+        color: var(--color-text);
     }
 
     &__message {
         grid-column: 2;
         grid-row: 2;
 
-        color: var(--color-text);
+        color: var(--color-text-secondary);
     }
 
     &__close {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Sidebar from "@/layouts/components/sidebar/Sidebar.vue";
-import Header from "@/layouts/components/header/Header.vue";
 import PageHeader from "@/shared/ui/page-header/PageHeader.vue";
 import Breadcrumbs from "@/shared/ui/breadcrumbs/Breadcrumbs.vue";
 import { useRoute } from "vue-router";
@@ -10,8 +9,6 @@ const route = useRoute();
 
 <template>
     <div class="layout">
-        <Header class="layout__header" />
-
         <div class="layout__body">
             <Sidebar class="layout__sidebar" />
 
@@ -35,10 +32,6 @@ const route = useRoute();
     height: 100vh;
 }
 
-.layout__header {
-    flex: 0 0 var(--header-height);
-}
-
 .layout__body {
     flex: 1;
     display: flex;
@@ -52,8 +45,11 @@ const route = useRoute();
 .layout__content {
     flex: 1;
     min-width: 0;
-    height: 100%;
+    margin: var(--space-4) var(--space-4) var(--space-4) 0;
     overflow-y: auto;
-    padding: 32px 40px;
+    padding: var(--space-8);
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
 }
 </style>

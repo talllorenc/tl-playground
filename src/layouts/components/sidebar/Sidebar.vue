@@ -31,7 +31,6 @@ const sidebarLinks = pageRoutes
     height: 100%;
     padding: 24px 16px;
     background-color: var(--color-bg);
-    border-right: 1px solid var(--color-border);
 
     &__nav {
         display: flex;

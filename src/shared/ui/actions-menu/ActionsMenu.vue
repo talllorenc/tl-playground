@@ -87,7 +87,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         right: 0;
         z-index: var(--z-dropdown);
         width: fit-content;
-        background-color: var(--color-bg-muted);
+        background-color: var(--color-bg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-sm);
         display: flex;
@@ -104,7 +104,7 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         align-items: center;
         gap: var(--space-2);
         justify-content: start;
-        padding: var(--space-2);
+        padding: var(--space-1) var(--space-2);
         border-radius: var(--radius-sm);
 
         &:hover:not(:disabled) {

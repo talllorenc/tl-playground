@@ -49,14 +49,14 @@ const modal = useModalStore();
         flex-direction: column;
         gap: var(--space-2);
         width: 320px;
-        background-color: var(--color-bg-muted);
+        background-color: var(--color-bg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
         padding: 16px;
     }
     &__header {
         font-weight: var(--font-w-md);
-        color: var(--color-white);
+        color: var(--color-text);
     }
 
     &__content {
