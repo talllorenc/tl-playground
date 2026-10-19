@@ -33,6 +33,7 @@
     --radius-sm: 8px;
     --radius-md: 16px;
     --radius-lg: 24px;
+    --radius-full: 50%;
 
     /* Font Weight */
     --font-w-sm: 400;

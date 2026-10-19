@@ -91,7 +91,7 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         row-gap: var(--space-1);
 
         max-width: 400px;
-        padding: var(--space-2);
+        padding: var(--space-3);
 
         background-color: var(--color-bg-surface);
         border: 1px solid var(--color-border);

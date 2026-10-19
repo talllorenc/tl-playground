@@ -68,7 +68,7 @@ function handleCardClick() {
     border-radius: var(--radius-md);
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
-    padding: 12px;
+    padding: var(--space-3);
     cursor: grab;
     display: flex;
     flex-direction: column;

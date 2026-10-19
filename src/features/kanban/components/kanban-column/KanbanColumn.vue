@@ -104,9 +104,9 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         gap: var(--space-2);
 
         background-color: var(--color-bg);
-        border-radius: var(--radius-md);
-        border-bottom: 1px solid var(--color-border);
-        padding: 12px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--color-border);
+        padding: var(--space-3);
     }
 
     &__info {

@@ -188,7 +188,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
     border-left: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    padding: 12px;
+    padding: var(--space-3);
     pointer-events: auto;
 
     &__header {

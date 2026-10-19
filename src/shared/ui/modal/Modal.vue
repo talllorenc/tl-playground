@@ -43,6 +43,7 @@ const modal = useModalStore();
     align-items: center;
     justify-content: center;
     background-color: rgb(0 0 0 / 50%);
+    backdrop-filter: blur(4px);
 
     &__body {
         display: flex;
@@ -52,7 +53,7 @@ const modal = useModalStore();
         background-color: var(--color-bg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
-        padding: 16px;
+        padding: var(--space-3);
     }
     &__header {
         font-weight: var(--font-w-md);

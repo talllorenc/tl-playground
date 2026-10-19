@@ -47,9 +47,9 @@ const route = useRoute();
     min-width: 0;
     margin: var(--space-4) var(--space-4) var(--space-4) 0;
     overflow-y: auto;
-    padding: var(--space-8);
+    padding: var(--space-6);
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
 }
 </style>
