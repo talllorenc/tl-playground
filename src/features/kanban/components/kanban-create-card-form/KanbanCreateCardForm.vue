@@ -64,7 +64,7 @@ const onSubmit = handleSubmit((values) => {
     gap: var(--space-2);
     background-color: var(--color-bg-surface);
     padding: 12px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     border: 1px solid var(--color-border);
 }
 </style>

@@ -26,7 +26,7 @@ withDefaults(
     flex-shrink: 0;
     background-color: var(--color-bg-secondary);
     animation: skeleton-pulse 1.5s ease-in-out infinite;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
 }
 
 @keyframes skeleton-pulse {

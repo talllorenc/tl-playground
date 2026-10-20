@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useToastStore } from "@/stores/toast-store.ts";
-import { useModalStore } from "@/stores/modal-store.ts";
+import Modal from "@/shared/ui/modal/Modal.vue";
+import { ref } from "vue";
 import Button from "@/shared/ui/button/Button.vue";
 
 const handleOpen = () => {
@@ -19,18 +20,16 @@ const handleOpen2 = () => {
     });
 };
 
-const handleOpen3 = () => {
-    useModalStore().openModal({
-        title: "Модальное окно",
-        body: "Детальное описание модального окна!",
-    });
-};
+const isModalOpen = ref<boolean>(false);
 </script>
 
 <template>
     <Button @click="handleOpen2"> success </Button>
     <Button @click="handleOpen"> error </Button>
-    <Button @click="handleOpen3"> modal </Button>
+    <Button @click="isModalOpen = true"> modal </Button>
+    <Modal v-model:open="isModalOpen" title="Модальное окно">
+        Детальное описание модального окна!
+    </Modal>
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur blanditiis cum deserunt
     expedita fugiat iure quod repellendus tempora ullam vero! Assumenda consectetur doloribus eius
     est nobis unde! Architecto maiores, pariatur! Lorem ipsum dolor sit amet, consectetur

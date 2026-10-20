@@ -65,7 +65,7 @@ function handleCardClick() {
 
 <style scoped lang="scss">
 .kanban-card {
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
     padding: var(--space-3);

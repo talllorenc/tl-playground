@@ -76,8 +76,9 @@ const props = withDefaults(
     }
 
     &--secondary {
-        background-color: var(--color-bg);
+        background-color: var(--color-bg-surface);
         color: var(--color-text);
+        border: 1px solid var(--color-border);
 
         &:hover:not(:disabled) {
             background-color: var(--color-bg-secondary);

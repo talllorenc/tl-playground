@@ -89,8 +89,8 @@ function handleColorSelect(color: KanbanColumnColor | null) {
     min-width: 350px;
     display: flex;
     flex-direction: column;
-    border-radius: var(--radius-md);
-    padding: 8px;
+    border-radius: var(--radius-sm);
+    padding: var(--space-1);
     transition: background-color 0.15s ease;
 
     &__header {

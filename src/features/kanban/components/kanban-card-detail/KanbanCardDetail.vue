@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
-import { onBeforeUnmount, onMounted, toRef, watch } from "vue";
+import { ref, toRef, watch } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
@@ -17,8 +17,9 @@ import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/Kanban
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
-import { useModalStore } from "@/stores/modal-store.ts";
+import Modal from "@/shared/ui/modal/Modal.vue";
 import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
+import { useEscapeKey } from "@/utils/handle-escape-key.ts";
 
 const props = defineProps<{
     cardId: number;
@@ -34,7 +35,7 @@ const { data: card, isLoading, isError, refetch } = useKanbanCard(cardId);
 
 const { mutate, isPending } = useKanbanCardUpdate();
 
-const modal = useModalStore();
+const isCloseConfirmOpen = ref<boolean>(false);
 
 const { errors, defineField, handleSubmit, resetForm, meta } = useForm<UpdateCardFormValues>({
     validationSchema: toTypedSchema(updateCardSchema),
@@ -88,35 +89,20 @@ function requestClose() {
         return;
     }
 
-    modal.openModal({
-        title: "Несохранённые изменения",
-        body: "Закрыть карточку без сохранения?",
-        actions: [
-            { label: "Остаться", variant: "secondary", onClick: modal.closeModal },
-            {
-                label: "Закрыть",
-                variant: "danger",
-                onClick: () => {
-                    modal.closeModal();
-                    emit("close");
-                },
-            },
-        ],
-    });
+    isCloseConfirmOpen.value = true;
+}
+
+function confirmClose() {
+    isCloseConfirmOpen.value = false;
+    emit("close");
 }
 
 function copyLink() {
     void copyToClipboard(window.location.href, "Ссылка на карточку скопирована");
 }
 
-function handleKeydown(event: KeyboardEvent) {
-    if (event.key === "Escape" && !modal.isModalOpen) {
-        requestClose();
-    }
-}
-
-onMounted(() => document.addEventListener("keydown", handleKeydown));
-onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
+// Esc while the confirm modal is open closes only the modal itself
+useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
 </script>
 
 <template>
@@ -172,6 +158,15 @@ onBeforeUnmount(() => document.removeEventListener("keydown", handleKeydown));
                 </Button>
             </div>
         </form>
+
+        <Modal v-model:open="isCloseConfirmOpen" title="Несохранённые изменения">
+            Закрыть карточку без сохранения?
+
+            <template #actions>
+                <Button variant="secondary" @click="isCloseConfirmOpen = false">Остаться</Button>
+                <Button variant="danger" @click="confirmClose">Закрыть</Button>
+            </template>
+        </Modal>
     </aside>
 </template>
 

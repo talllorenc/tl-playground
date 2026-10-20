@@ -1,8 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SearchButton from "@/shared/ui/search-button/SearchButton.vue";
+import Notifications from "@/shared/ui/notifications/Notifications.vue";
+</script>
 
 <template>
     <header class="header">
-        <div class="header__brand">TL Playground</div>
+        <div class="header__controls">
+            <SearchButton />
+            <Notifications />
+        </div>
     </header>
 </template>
 
@@ -10,15 +16,14 @@
 .header {
     display: flex;
     align-items: center;
+    justify-content: end;
     height: 100%;
-    padding: 0 24px;
-    background-color: var(--color-bg);
-    color: var(--color-text);
+    padding: 0 var(--space-4);
 
-    &__brand {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--color-text);
+    &__controls {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
     }
 }
 </style>
