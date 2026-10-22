@@ -234,8 +234,6 @@ const characterPercentage = computed(() =>
                         :stroke-dasharray="`${(characterPercentage * 31.4) / 100} 31.4`"
                         transform="rotate(-90) translate(-20)"
                     />
-
-                    <circle r="6" cx="10" cy="10" fill="#eef1f4" />
                 </svg>
 
                 <span>
@@ -395,69 +393,81 @@ const characterPercentage = computed(() =>
 
         code {
             white-space: nowrap;
-            padding: 2px 8px;
+            padding: var(--space-0) var(--space-1);
             border-radius: var(--radius-sm);
-            background-color: var(--color-bg);
+            background-color: var(--color-bg-secondary);
+            color: var(--color-accent);
             font-family: monospace;
         }
 
         pre {
             background: var(--color-bg);
-            border-radius: 0.5rem;
-            font-family: "JetBrainsMono", monospace;
-            padding: var(--space-2);
+            border-radius: 8px;
+            padding: 16px;
             overflow-x: auto;
 
             code {
+                background: transparent;
+                color: #24292f;
+                font-family: "JetBrainsMono", monospace;
+                font-size: 0.85rem;
+                line-height: 1.7;
                 white-space: pre;
-                background: none;
-                color: inherit;
-                font-size: 0.8rem;
                 padding: 0;
             }
 
             .hljs-comment,
             .hljs-quote {
-                color: #616161;
+                color: #596779;
+                font-style: italic;
             }
 
-            .hljs-variable,
-            .hljs-template-variable,
-            .hljs-attribute,
-            .hljs-tag,
-            .hljs-name,
-            .hljs-regexp,
-            .hljs-link,
-            .hljs-name,
-            .hljs-selector-id,
-            .hljs-selector-class {
-                color: #f98181;
-            }
-
-            .hljs-number,
-            .hljs-meta,
-            .hljs-built_in,
-            .hljs-builtin-name,
-            .hljs-literal,
-            .hljs-type,
-            .hljs-params {
-                color: #fbbc88;
+            .hljs-keyword,
+            .hljs-selector-tag,
+            .hljs-literal {
+                color: #0550ae;
             }
 
             .hljs-string,
             .hljs-symbol,
             .hljs-bullet {
-                color: #b9f18d;
+                color: #116329;
+            }
+
+            .hljs-number,
+            .hljs-built_in,
+            .hljs-builtin-name {
+                color: #953800;
             }
 
             .hljs-title,
             .hljs-section {
-                color: #faf594;
+                color: #8250df;
             }
 
-            .hljs-keyword,
-            .hljs-selector-tag {
-                color: #70cff8;
+            .hljs-type,
+            .hljs-params {
+                color: #0550ae;
+            }
+
+            .hljs-variable,
+            .hljs-template-variable {
+                color: #953800;
+            }
+
+            .hljs-attribute {
+                color: #0550ae;
+            }
+
+            .hljs-tag,
+            .hljs-name {
+                color: #116329;
+            }
+
+            .hljs-meta,
+            .hljs-regexp,
+            .hljs-link {
+                color: #cf222e;
             }
 
             .hljs-emphasis {

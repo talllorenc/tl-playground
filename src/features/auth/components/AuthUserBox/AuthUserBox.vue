@@ -2,13 +2,15 @@
 import { IconSelector, IconUser } from "@tabler/icons-vue";
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const actions = computed(() => [
     {
-        label: "Личный кабинет",
+        label: "Аккаунт",
         icon: IconUser,
-        onClick: () => alert("test"),
-        loading: false,
+        onClick: () => router.push("/account"),
     },
 ]);
 </script>
@@ -26,9 +28,14 @@ const actions = computed(() => [
         </div>
 
         <ActionsMenu :items="actions">
-            <template #trigger>
-                <button class="auth-box__actions" type="button">
-                    <IconSelector class="auth-box__icon" :size="18" />
+            <template #trigger="{ props: triggerProps }">
+                <button
+                    v-bind="triggerProps"
+                    class="auth-box__actions"
+                    type="button"
+                    aria-label="Меню аккаунта"
+                >
+                    <IconSelector class="auth-box__icon" :size="18" aria-hidden="true" />
                 </button>
             </template>
         </ActionsMenu>

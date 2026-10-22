@@ -26,6 +26,10 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
                     :key="item.id"
                     class="toast"
                     :class="TOAST_CONFIG[item.variant].class"
+                    @mouseenter="toast.pauseToast(item.id)"
+                    @mouseleave="toast.resumeToast(item.id)"
+                    @focusin="toast.pauseToast(item.id)"
+                    @focusout="toast.resumeToast(item.id)"
                 >
                     <div class="toast__body">
                         <component
@@ -95,7 +99,7 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
 
         background-color: var(--color-bg-surface);
         border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
     }
 
     &__icon {

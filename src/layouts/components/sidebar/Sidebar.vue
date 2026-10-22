@@ -71,8 +71,8 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
 
         &--active,
         &--active:hover {
-            background-color: var(--color-bg-surface);
-            border-color: var(--color-border);
+            background-color: var(--color-accent);
+            color: var(--color-white);
         }
 
         &--disabled {
