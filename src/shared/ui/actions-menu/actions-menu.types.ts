@@ -8,3 +8,10 @@ export interface IActionsMenuItem {
     disabled?: boolean;
     loading?: boolean;
 }
+
+export interface IActionsMenuTriggerProps {
+    id: string;
+    "aria-expanded": boolean;
+    "aria-controls": string | undefined;
+    onClick: (event: MouseEvent) => void;
+}

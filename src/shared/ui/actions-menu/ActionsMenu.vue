@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import type { IActionsMenuItem } from "@/shared/ui/actions-menu/actions-menu.types.ts";
+import { computed, ref, useId } from "vue";
+import type {
+    IActionsMenuItem,
+    IActionsMenuTriggerProps,
+} from "@/shared/ui/actions-menu/actions-menu.types.ts";
 import { useClickOutside } from "@/utils/handle-click-outside.ts";
 import { IconLoader2 } from "@tabler/icons-vue";
 
@@ -8,50 +11,77 @@ const props = defineProps<{
     items: IActionsMenuItem[];
 }>();
 
+defineSlots<{
+    trigger(slotProps: { props: IActionsMenuTriggerProps; isOpen: boolean }): unknown;
+}>();
+
 const isOpen = ref<boolean>(false);
 const actionsMenu = ref<HTMLElement | null>(null);
+const triggerId = useId();
+const menuId = useId();
+let triggerElement: HTMLElement | null = null;
 
-function toggleMenu() {
+const triggerProps = computed<IActionsMenuTriggerProps>(() => ({
+    id: triggerId,
+    "aria-expanded": isOpen.value,
+    "aria-controls": isOpen.value ? menuId : undefined,
+    onClick: handleTriggerClick,
+}));
+
+function closeMenu(returnFocus = false) {
+    isOpen.value = false;
+
+    if (returnFocus) {
+        triggerElement?.focus();
+    }
+}
+
+function handleTriggerClick(event: MouseEvent) {
+    triggerElement = event.currentTarget as HTMLElement;
     isOpen.value = !isOpen.value;
 }
 
-function closeMenu() {
-    isOpen.value = false;
+function handleFocusout(event: FocusEvent) {
+    const nextFocused = event.relatedTarget as Node | null;
+
+    if (isOpen.value && nextFocused && !actionsMenu.value?.contains(nextFocused)) {
+        closeMenu();
+    }
 }
 
 function handleItemClick(item: IActionsMenuItem) {
     item.onClick?.();
-    closeMenu();
+    closeMenu(true);
 }
 
-useClickOutside(actionsMenu, closeMenu, isOpen);
+useClickOutside(actionsMenu, () => closeMenu(), isOpen);
 </script>
 
 <template>
-    <div ref="actionsMenu" class="actions-menu" @click.stop>
-        <div
-            class="actions-menu__trigger"
-            aria-haspopup="menu"
-            :aria-expanded="isOpen"
-            @click="toggleMenu"
-        >
-            <slot name="trigger" />
-        </div>
+    <div ref="actionsMenu" class="actions-menu" @click.stop @focusout="handleFocusout">
+        <slot name="trigger" :props="triggerProps" :is-open="isOpen" />
 
-        <div v-if="isOpen" class="actions-menu__content" role="menu">
+        <div
+            v-if="isOpen"
+            :id="menuId"
+            class="actions-menu__content"
+            role="group"
+            :aria-labelledby="triggerId"
+        >
             <button
                 v-for="(item, index) in props.items"
                 :key="`${item.label}-${index}`"
                 class="actions-menu__action"
                 type="button"
                 :disabled="item.disabled || item.loading"
-                role="menuitem"
+                :aria-busy="item.loading || undefined"
                 @click="handleItemClick(item)"
             >
                 <IconLoader2
                     v-if="item.loading"
                     :size="18"
                     class="actions-menu__action-icon actions-menu__action-icon--loading"
+                    aria-hidden="true"
                 />
 
                 <component
@@ -59,12 +89,14 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
                     v-else-if="item.icon"
                     :size="18"
                     class="actions-menu__action-icon"
+                    aria-hidden="true"
                 />
 
                 <span
                     v-else-if="item.indicator"
                     class="actions-menu__action-indicator"
                     :style="{ backgroundColor: item.indicator }"
+                    aria-hidden="true"
                 />
                 <span>{{ item.label }}</span>
             </button>
@@ -76,10 +108,6 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
 .actions-menu {
     position: relative;
     display: inline-flex;
-
-    &__trigger {
-        cursor: pointer;
-    }
 
     &__content {
         position: absolute;
@@ -107,8 +135,10 @@ useClickOutside(actionsMenu, closeMenu, isOpen);
         padding: var(--space-2);
         border-radius: var(--radius-sm);
 
-        &:hover:not(:disabled) {
+        &:hover:not(:disabled),
+        &:focus-visible {
             background-color: var(--color-bg-secondary);
+            outline: none;
         }
 
         &:disabled {

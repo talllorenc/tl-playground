@@ -10,7 +10,7 @@ export const SIDEBAR_LINKS: ISidebarLink[] = [
     },
     {
         id: "kanban",
-        label: "Канбан",
+        label: "Доска",
         to: { name: "kanban" },
         icon: IconLayoutColumns,
     },

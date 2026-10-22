@@ -6,7 +6,7 @@
     --color-red: #ff0000;
     --color-green: #59e832;
     --color-gray-50: #f8fafb;
-    --color-gray-100: #e3e4ea;
+    --color-gray-100: #e9eaef;
     --color-gray-200: #e3e8ec;
     --color-gray-500: #6b7682;
 
@@ -59,6 +59,7 @@
     --transition-slow: 350ms ease;
 
     /* Spacing */
+    --space-0: 0.05rem;
     --space-1: 0.25rem;
     --space-2: 0.5rem;
     --space-3: 0.75rem;

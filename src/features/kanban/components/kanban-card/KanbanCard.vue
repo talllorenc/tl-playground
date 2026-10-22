@@ -50,9 +50,14 @@ function handleCardClick() {
         <div class="kanban-card__header">
             <KanbanTagBadge :tag="props.card.tag" />
             <ActionsMenu :items="actions">
-                <template #trigger>
-                    <button class="kanban-card__actions" type="button">
-                        <IconDotsVertical :size="18" />
+                <template #trigger="{ props: triggerProps }">
+                    <button
+                        v-bind="triggerProps"
+                        class="kanban-card__actions"
+                        type="button"
+                        aria-label="Действия с карточкой"
+                    >
+                        <IconDotsVertical :size="18" aria-hidden="true" />
                     </button>
                 </template>
             </ActionsMenu>

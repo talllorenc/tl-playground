@@ -28,7 +28,7 @@ export const pageRoutes: RouteRecordRaw[] = [
         path: "/kanban",
         name: "kanban",
         component: () => import("@/views/KanbanView.vue"),
-        meta: { title: "Канбан доска", breadcrumb: "Канбан" },
+        meta: { title: "Доска", breadcrumb: "Доска" },
     },
     {
         path: "/account",

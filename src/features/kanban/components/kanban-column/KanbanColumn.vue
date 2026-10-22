@@ -56,18 +56,28 @@ function handleColorSelect(color: KanbanColumnColor | null) {
             </div>
             <div class="kanban-column__actions">
                 <ActionsMenu :items="actions">
-                    <template #trigger>
-                        <KanbanColorBadge :color="props.column.color" />
+                    <template #trigger="{ props: triggerProps }">
+                        <button
+                            v-bind="triggerProps"
+                            class="kanban-column__colorBtn"
+                            type="button"
+                            aria-label="Цвет колонки"
+                        >
+                            <KanbanColorBadge :color="props.column.color" />
+                        </button>
                     </template>
                 </ActionsMenu>
                 <button
                     class="kanban-column__createBtn"
                     :class="{ 'kanban-column__createBtn--active': isCreatingCard }"
                     type="button"
+                    :aria-label="
+                        isCreatingCard ? 'Отменить создание карточки' : 'Добавить карточку'
+                    "
                     @click="handleToggleCardForm"
                 >
-                    <IconX v-if="isCreatingCard" size="18" />
-                    <IconPlus v-else size="18" />
+                    <IconX v-if="isCreatingCard" size="18" aria-hidden="true" />
+                    <IconPlus v-else size="18" aria-hidden="true" />
                 </button>
             </div>
         </div>
@@ -146,6 +156,19 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         flex-direction: column;
         gap: var(--space-2);
         margin-top: 24px;
+    }
+
+    &__colorBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: var(--radius-sm);
+
+        &:hover {
+            background-color: var(--color-bg-secondary);
+        }
     }
 
     &__createBtn {

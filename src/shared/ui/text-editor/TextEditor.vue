@@ -234,8 +234,6 @@ const characterPercentage = computed(() =>
                         :stroke-dasharray="`${(characterPercentage * 31.4) / 100} 31.4`"
                         transform="rotate(-90) translate(-20)"
                     />
-
-                    <circle r="6" cx="10" cy="10" fill="#eef1f4" />
                 </svg>
 
                 <span>
@@ -395,9 +393,10 @@ const characterPercentage = computed(() =>
 
         code {
             white-space: nowrap;
-            padding: 2px 8px;
+            padding: var(--space-0) var(--space-1);
             border-radius: var(--radius-sm);
             background-color: var(--color-bg-secondary);
+            color: var(--color-accent);
             font-family: monospace;
         }
 

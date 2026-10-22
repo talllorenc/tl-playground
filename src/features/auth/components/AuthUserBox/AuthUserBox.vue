@@ -28,9 +28,14 @@ const actions = computed(() => [
         </div>
 
         <ActionsMenu :items="actions">
-            <template #trigger>
-                <button class="auth-box__actions" type="button">
-                    <IconSelector class="auth-box__icon" :size="18" />
+            <template #trigger="{ props: triggerProps }">
+                <button
+                    v-bind="triggerProps"
+                    class="auth-box__actions"
+                    type="button"
+                    aria-label="Меню аккаунта"
+                >
+                    <IconSelector class="auth-box__icon" :size="18" aria-hidden="true" />
                 </button>
             </template>
         </ActionsMenu>

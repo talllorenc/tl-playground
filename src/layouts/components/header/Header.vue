@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SearchButton from "@/shared/ui/search-button/SearchButton.vue";
-import Notifications from "@/shared/ui/notifications/Notifications.vue";
+import Notifications from "@/features/notifications/components/notification-button/NotificationButton.vue";
 </script>
 
 <template>
