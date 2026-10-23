@@ -58,7 +58,7 @@ onMounted(() => {
         width: 100%;
         padding: 8px 12px;
         border: 1px solid var(--color-border);
-        background-color: var(--color-bg-input);
+        background-color: var(--color-bg-elevated);
         border-radius: var(--radius-sm);
         font-family: inherit;
         color: var(--color-text);

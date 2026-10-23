@@ -3,6 +3,7 @@ import { useToastStore } from "@/stores/toast-store.ts";
 import Modal from "@/shared/ui/modal/Modal.vue";
 import { ref } from "vue";
 import Button from "@/shared/ui/button/Button.vue";
+import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
 
 const handleOpen = () => {
     useToastStore().openToast({
@@ -24,6 +25,12 @@ const isModalOpen = ref<boolean>(false);
 </script>
 
 <template>
+    <Tooltip>
+        <Button> tooltip </Button>
+        <template #content>
+            <span>Tooltip</span>
+        </template>
+    </Tooltip>
     <Button @click="handleOpen2"> success </Button>
     <Button @click="handleOpen"> error </Button>
     <Button @click="isModalOpen = true"> modal </Button>

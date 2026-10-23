@@ -91,9 +91,10 @@ const actions = computed(() => [
         border-radius: var(--radius-sm);
         color: var(--color-text);
         cursor: pointer;
+        transition: background-color var(--transition-fast);
 
         &:hover {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
     }
 }
