@@ -14,6 +14,9 @@ importers:
       '@dnd-kit/vue':
         specifier: ^0.5.0
         version: 0.5.0(vue@3.5.42(typescript@6.0.3))
+      '@floating-ui/vue':
+        specifier: ^2.0.1
+        version: 2.0.1(vue@3.5.42(typescript@6.0.3))
       '@imagekit/vue':
         specifier: ^4.0.2
         version: 4.0.2(vue@3.5.42(typescript@6.0.3))
@@ -380,6 +383,11 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@floating-ui/vue@2.0.1':
+    resolution: {integrity: sha512-043dyEKD9TDSfz080YH2vobubgg+NIo/9Fw4RAl7sEMpD8Am1DNrrSTl/GpMBjyGHoD/FbJY2QLawY+HSQsEIA==}
+    peerDependencies:
+      vue: '>=3.3.0'
 
   '@imagekit/javascript@5.5.1':
     resolution: {integrity: sha512-eGEbZGKCqX/rC1iwceb1pLg5oHJhGkH68+i6JhFFSDktrdCMC/475a5R0Obtnk6IbIc4eV+1vynkK4WZFeLWEQ==}
@@ -2839,6 +2847,12 @@ snapshots:
       '@floating-ui/utils': 0.2.12
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@floating-ui/vue@2.0.1(vue@3.5.42(typescript@6.0.3))':
+    dependencies:
+      '@floating-ui/dom': 1.8.0
+      '@floating-ui/utils': 0.2.12
+      vue: 3.5.42(typescript@6.0.3)
 
   '@imagekit/javascript@5.5.1': {}
 
