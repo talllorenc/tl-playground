@@ -24,7 +24,7 @@ withDefaults(
 <style scoped lang="scss">
 .skeleton-item {
     flex-shrink: 0;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-elevated);
     animation: skeleton-pulse 1.5s ease-in-out infinite;
     border-radius: var(--radius-sm);
 }

@@ -66,13 +66,13 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
 
         &:hover {
             color: var(--color-text);
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
 
         &--active,
         &--active:hover {
             background-color: var(--color-accent);
-            color: var(--color-white);
+            color: var(--color-gray-50);
         }
 
         &--disabled {

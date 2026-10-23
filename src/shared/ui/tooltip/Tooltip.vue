@@ -92,7 +92,7 @@ onBeforeUnmount(stopAutoUpdate);
     max-width: 120px;
     padding: var(--space-1);
     border-radius: var(--radius-sm);
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-elevated);
 
     &__content {
         max-height: 60px;

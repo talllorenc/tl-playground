@@ -179,7 +179,7 @@ useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
     width: calc((100vw - var(--sidebar-width)) * 0.6);
     max-width: 800px;
     height: 100vh;
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-surface);
     border-left: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
@@ -218,9 +218,10 @@ useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
         height: 28px;
         padding: 0;
         border: 0;
+        transition: background-color var(--transition-fast);
 
         &:hover {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
     }
 

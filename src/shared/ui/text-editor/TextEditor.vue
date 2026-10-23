@@ -260,13 +260,13 @@ const characterPercentage = computed(() =>
         justify-content: space-between;
         flex-wrap: wrap;
         position: sticky;
-        overflow: scroll;
+        overflow: auto;
         top: 0;
         gap: var(--space-2);
         z-index: var(--z-sticky);
         width: 100%;
         padding: var(--space-2);
-        background-color: var(--color-bg-input);
+        background-color: var(--color-bg-elevated);
         border: 1px solid var(--color-border);
 
         &__control {
@@ -287,9 +287,12 @@ const characterPercentage = computed(() =>
         border-radius: var(--radius-sm);
         background: transparent;
         cursor: pointer;
+        transition:
+            background-color var(--transition-fast),
+            border-color var(--transition-fast);
 
         &:hover:not(:disabled) {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
 
         &:disabled {
@@ -306,7 +309,7 @@ const characterPercentage = computed(() =>
         border-left: 1px solid var(--color-border);
         border-right: 1px solid var(--color-border);
         border-bottom: 1px solid var(--color-border);
-        background-color: var(--color-bg-input);
+        background-color: var(--color-bg-elevated);
     }
 
     :deep(.tiptap) {
@@ -331,7 +334,7 @@ const characterPercentage = computed(() =>
             padding: 1px 3px;
             border-radius: var(--radius-sm);
             background-color: var(--color-accent);
-            color: var(--color-white);
+            color: var(--color-gray-50);
         }
 
         ul[data-type="taskList"] {
@@ -393,22 +396,23 @@ const characterPercentage = computed(() =>
 
         code {
             white-space: nowrap;
-            padding: var(--space-0) var(--space-1);
+            padding: var(--space-0) var(--space-2);
             border-radius: var(--radius-sm);
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg);
             color: var(--color-accent);
             font-family: monospace;
         }
 
         pre {
             background: var(--color-bg);
-            border-radius: 8px;
-            padding: 16px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: var(--space-4);
             overflow-x: auto;
 
             code {
                 background: transparent;
-                color: #24292f;
+                color: var(--color-text);
                 font-family: "JetBrainsMono", monospace;
                 font-size: 0.85rem;
                 line-height: 1.7;
@@ -418,56 +422,56 @@ const characterPercentage = computed(() =>
 
             .hljs-comment,
             .hljs-quote {
-                color: #596779;
+                color: #8b949e;
                 font-style: italic;
             }
 
             .hljs-keyword,
             .hljs-selector-tag,
             .hljs-literal {
-                color: #0550ae;
+                color: #ff7b72;
             }
 
             .hljs-string,
             .hljs-symbol,
             .hljs-bullet {
-                color: #116329;
+                color: #a5d6ff;
             }
 
             .hljs-number,
             .hljs-built_in,
             .hljs-builtin-name {
-                color: #953800;
+                color: #ffa657;
             }
 
             .hljs-title,
             .hljs-section {
-                color: #8250df;
+                color: #d2a8ff;
             }
 
             .hljs-type,
             .hljs-params {
-                color: #0550ae;
+                color: #79c0ff;
             }
 
             .hljs-variable,
             .hljs-template-variable {
-                color: #953800;
+                color: #ffa657;
             }
 
             .hljs-attribute {
-                color: #0550ae;
+                color: #79c0ff;
             }
 
             .hljs-tag,
             .hljs-name {
-                color: #116329;
+                color: #7ee787;
             }
 
             .hljs-meta,
             .hljs-regexp,
             .hljs-link {
-                color: #cf222e;
+                color: #a5d6ff;
             }
 
             .hljs-emphasis {

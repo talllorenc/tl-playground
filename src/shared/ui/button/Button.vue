@@ -48,6 +48,9 @@ const props = withDefaults(
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-weight: var(--font-w-md);
+    transition:
+        background-color var(--transition-fast),
+        opacity var(--transition-fast);
 
     &:disabled {
         cursor: not-allowed;
@@ -68,7 +71,7 @@ const props = withDefaults(
 
     &--primary {
         background-color: var(--color-accent);
-        color: var(--color-white);
+        color: var(--color-gray-50);
 
         &:hover:not(:disabled) {
             opacity: 0.9;
@@ -76,18 +79,18 @@ const props = withDefaults(
     }
 
     &--secondary {
-        background-color: var(--color-bg-surface);
+        background-color: var(--color-bg-elevated);
         color: var(--color-text);
         border: 1px solid var(--color-border);
 
         &:hover:not(:disabled) {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
     }
 
     &--danger {
         background-color: var(--color-red);
-        color: var(--color-white);
+        color: var(--color-gray-50);
 
         &:hover:not(:disabled) {
             opacity: 0.9;

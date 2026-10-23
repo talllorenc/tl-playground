@@ -60,6 +60,7 @@ const breadcrumbs = computed(() =>
             gap: var(--space-1);
 
             color: var(--color-text);
+            transition: color var(--transition-fast);
 
             &:hover,
             &[aria-current="page"] {

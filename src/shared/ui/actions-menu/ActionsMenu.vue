@@ -115,7 +115,7 @@ useClickOutside(actionsMenu, () => closeMenu(), isOpen);
         right: 0;
         z-index: var(--z-dropdown);
         width: fit-content;
-        background-color: var(--color-bg);
+        background-color: var(--color-bg-elevated);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-sm);
         display: flex;
@@ -134,10 +134,11 @@ useClickOutside(actionsMenu, () => closeMenu(), isOpen);
         justify-content: start;
         padding: var(--space-2);
         border-radius: var(--radius-sm);
+        transition: background-color var(--transition-fast);
 
         &:hover:not(:disabled),
         &:focus-visible {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
             outline: none;
         }
 

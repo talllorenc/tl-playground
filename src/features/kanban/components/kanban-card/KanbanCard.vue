@@ -71,13 +71,14 @@ function handleCardClick() {
 <style scoped lang="scss">
 .kanban-card {
     border-radius: var(--radius-sm);
-    background-color: var(--color-white);
+    background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     padding: var(--space-3);
     cursor: grab;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    transition: border-color var(--transition-fast);
 
     &:hover {
         border-color: var(--color-accent);
@@ -104,9 +105,10 @@ function handleCardClick() {
         color: var(--color-text);
         cursor: pointer;
         rotate: 90deg;
+        transition: background-color var(--transition-fast);
 
         &:hover {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
     }
 

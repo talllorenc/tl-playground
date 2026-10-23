@@ -113,7 +113,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         justify-content: space-between;
         gap: var(--space-2);
 
-        background-color: var(--color-bg);
+        background-color: var(--color-bg-elevated);
         border-radius: var(--radius-sm);
         border: 1px solid var(--color-border);
         padding: var(--space-3);
@@ -144,7 +144,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         align-items: center;
         justify-content: center;
         background-color: var(--color-accent);
-        color: var(--color-white);
+        color: var(--color-gray-50);
         border-radius: 50%;
         font-size: var(--font-sm);
         font-weight: var(--font-w-md);
@@ -165,9 +165,10 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         width: 28px;
         height: 28px;
         border-radius: var(--radius-sm);
+        transition: background-color var(--transition-fast);
 
         &:hover {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
     }
 
@@ -182,9 +183,10 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         height: 28px;
         padding: 0;
         border: 0;
+        transition: background-color var(--transition-fast);
 
         &:hover {
-            background-color: var(--color-bg-secondary);
+            background-color: var(--color-bg-hover);
         }
     }
 }

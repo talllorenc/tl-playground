@@ -80,7 +80,7 @@ watch(isOpen, (open) => {
         min-width: 320px;
         max-width: calc(100vw - var(--space-8));
         padding: var(--space-3);
-        background-color: var(--color-bg);
+        background-color: var(--color-bg-surface);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-sm);
         color: var(--color-text);

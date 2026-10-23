@@ -11,7 +11,7 @@ const props = defineProps<{
     <span
         class="kanban-color"
         :style="{
-            backgroundColor: props.color ? COLOR_CONFIG[props.color].background : undefined,
+            backgroundColor: props.color ? COLOR_CONFIG[props.color].indicator : undefined,
         }"
     />
 </template>
@@ -26,6 +26,7 @@ const props = defineProps<{
     flex-shrink: 0;
     border-radius: 50%;
     border: 1px solid var(--color-border);
+    transition: opacity var(--transition-fast);
 
     &:hover {
         opacity: 0.7;
