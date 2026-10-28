@@ -48,7 +48,8 @@ const actions = computed(() => [
     align-items: center;
     gap: var(--space-3);
     width: fit-content;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border-inverse);
+    color: var(--color-text-inverse);
     padding-bottom: var(--space-2);
 
     &__image {
@@ -56,7 +57,7 @@ const actions = computed(() => [
         height: 40px;
         border-radius: var(--radius-full);
         object-fit: cover;
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--color-border-inverse);
     }
 
     &__personal-info {
@@ -77,7 +78,7 @@ const actions = computed(() => [
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
         font-size: var(--font-sm);
-        color: var(--color-text-secondary);
+        color: var(--color-text-inverse-secondary);
     }
 
     &__actions {
@@ -89,12 +90,12 @@ const actions = computed(() => [
         padding: 0;
         border: 0;
         border-radius: var(--radius-sm);
-        color: var(--color-text);
+        color: var(--color-text-inverse);
         cursor: pointer;
         transition: background-color var(--transition-fast);
 
         &:hover {
-            background-color: var(--color-bg-hover);
+            background-color: var(--color-bg-hover-inverse);
         }
     }
 }
