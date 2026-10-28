@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEditor, EditorContent } from "@tiptap/vue-3";
+import { useEditor, EditorContent, type FocusPosition } from "@tiptap/vue-3";
 import { computed, watch, ref } from "vue";
 import {
     IconBlockquote,
@@ -21,6 +21,15 @@ import {
 } from "@/shared/ui/text-editor/text-editor-extensions.ts";
 import { normalizeEditorHtml, toggleLink } from "@/shared/ui/text-editor/text-editor-utils.ts";
 
+const props = withDefaults(
+    defineProps<{
+        readonly?: boolean;
+    }>(),
+    {
+        readonly: false,
+    },
+);
+
 const model = defineModel<string>({
     default: "",
 });
@@ -30,6 +39,8 @@ const imageInput = ref<HTMLInputElement | null>(null);
 
 const editor = useEditor({
     content: model.value,
+
+    editable: !props.readonly,
 
     extensions: textEditorExtensions,
 
@@ -45,6 +56,25 @@ watch(model, (value) => {
     lastEmittedHtml = value;
     editor.value.commands.setContent(value, { emitUpdate: false });
 });
+
+watch(
+    () => props.readonly,
+    (readonly) => {
+        if (!editor.value) return;
+
+        editor.value.setEditable(!readonly, false);
+    },
+);
+
+function getPositionAtCoords(left: number, top: number) {
+    return editor.value?.view.posAtCoords({ left, top })?.pos;
+}
+
+function focus(position: FocusPosition = "end") {
+    editor.value?.commands.focus(position);
+}
+
+defineExpose({ getPositionAtCoords, focus });
 
 function handleToggleLink() {
     if (!editor.value) return;
@@ -77,8 +107,8 @@ const characterPercentage = computed(() =>
 </script>
 
 <template>
-    <div v-if="editor" class="rich-editor">
-        <div class="rich-editor__toolbar">
+    <div v-if="editor" class="rich-editor" :class="{ 'rich-editor--readonly': props.readonly }">
+        <div v-if="!props.readonly" class="rich-editor__toolbar" @mousedown.prevent>
             <div class="rich-editor__toolbar__control">
                 <button
                     type="button"
@@ -312,9 +342,14 @@ const characterPercentage = computed(() =>
         background-color: var(--color-bg-elevated);
     }
 
+    &--readonly &__content {
+        border: none;
+        background-color: transparent;
+    }
+
     :deep(.tiptap) {
         min-height: 160px;
-        padding: 16px;
+        padding: var(--space-4);
         outline: none;
 
         ul,
@@ -334,7 +369,7 @@ const characterPercentage = computed(() =>
             padding: 1px 3px;
             border-radius: var(--radius-sm);
             background-color: var(--color-accent);
-            color: var(--color-gray-50);
+            color: var(--color-bg-surface);
         }
 
         ul[data-type="taskList"] {
@@ -422,56 +457,66 @@ const characterPercentage = computed(() =>
 
             .hljs-comment,
             .hljs-quote {
-                color: #8b949e;
+                color: #6e7781;
                 font-style: italic;
             }
 
             .hljs-keyword,
             .hljs-selector-tag,
-            .hljs-literal {
-                color: #ff7b72;
+            .hljs-meta .hljs-keyword {
+                color: #cf222e;
             }
 
             .hljs-string,
-            .hljs-symbol,
-            .hljs-bullet {
-                color: #a5d6ff;
+            .hljs-regexp,
+            .hljs-meta .hljs-string {
+                color: #0a3069;
             }
 
             .hljs-number,
-            .hljs-built_in,
-            .hljs-builtin-name {
-                color: #ffa657;
+            .hljs-literal,
+            .hljs-attr,
+            .hljs-attribute,
+            .hljs-variable,
+            .hljs-template-variable,
+            .hljs-operator,
+            .hljs-meta,
+            .hljs-selector-attr,
+            .hljs-selector-class,
+            .hljs-selector-id {
+                color: #0550ae;
             }
 
             .hljs-title,
-            .hljs-section {
-                color: #d2a8ff;
+            .hljs-title.class_,
+            .hljs-title.function_ {
+                color: #8250df;
             }
 
             .hljs-type,
+            .hljs-bullet,
             .hljs-params {
-                color: #79c0ff;
+                color: #953800;
             }
 
-            .hljs-variable,
-            .hljs-template-variable {
-                color: #ffa657;
+            .hljs-built_in,
+            .hljs-symbol {
+                color: #e36209;
             }
 
-            .hljs-attribute {
-                color: #79c0ff;
+            .hljs-name,
+            .hljs-selector-pseudo {
+                color: #116329;
             }
 
-            .hljs-tag,
-            .hljs-name {
-                color: #7ee787;
+            .hljs-section {
+                color: #0550ae;
+                font-weight: 700;
             }
 
-            .hljs-meta,
-            .hljs-regexp,
             .hljs-link {
-                color: #a5d6ff;
+                color: #0a3069;
+                text-decoration: underline;
             }
 
             .hljs-emphasis {
@@ -489,6 +534,11 @@ const characterPercentage = computed(() =>
             cursor: pointer;
             margin: var(--space-4) 0;
         }
+    }
+
+    &--readonly :deep(.tiptap) {
+        min-height: 0;
+        padding: 0;
     }
 
     .character-count {

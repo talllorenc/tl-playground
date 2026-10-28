@@ -8,9 +8,11 @@ const props = withDefaults(
         modelValue: string;
         error?: string;
         autofocus?: boolean;
+        type?: "default" | "borderless";
     }>(),
     {
         autofocus: false,
+        type: "default",
     },
 );
 
@@ -36,7 +38,10 @@ onMounted(() => {
         <input
             ref="input"
             class="input__field"
-            :class="{ 'input__field--error': props.error }"
+            :class="{
+                'input__field--error': props.error,
+                'input__field--borderless': props.type === 'borderless',
+            }"
             v-bind="$attrs"
             :value="props.modelValue"
             @input="handleInput"
@@ -75,6 +80,12 @@ onMounted(() => {
         &:disabled {
             cursor: not-allowed;
             opacity: 0.5;
+        }
+
+        &--borderless {
+            border-width: 0 0 1px;
+            border-radius: 0;
+            background-color: transparent;
         }
 
         &--error {

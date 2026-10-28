@@ -29,7 +29,9 @@ async function updatePosition() {
     };
 }
 
-async function handleMouseEnter() {
+async function show() {
+    if (isVisible.value) return;
+
     isVisible.value = true;
 
     await nextTick();
@@ -44,23 +46,31 @@ async function handleMouseEnter() {
     cleanupAutoUpdate = autoUpdate(reference, floating, updatePosition);
 }
 
-function handleMouseLeave() {
+function hide() {
     isVisible.value = false;
     stopAutoUpdate();
+}
+
+function handleFocusOut(event: FocusEvent) {
+    const nextTarget = event.relatedTarget as Node | null;
+
+    if (triggerRef.value && nextTarget && triggerRef.value.contains(nextTarget)) return;
+
+    hide();
 }
 
 onBeforeUnmount(stopAutoUpdate);
 </script>
 
 <template>
-    <div
+    <span
         ref="triggerRef"
-        aria-live="polite"
-        :aria-hidden="isVisible ? 'false' : 'true'"
-        :aria-describedby="isVisible ? tooltipId : undefined"
         class="tooltip-trigger"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
+        :aria-describedby="isVisible ? tooltipId : undefined"
+        @mouseenter="show"
+        @mouseleave="hide"
+        @focusin="show"
+        @focusout="handleFocusOut"
     >
         <slot />
         <Teleport to="body">
@@ -70,34 +80,37 @@ onBeforeUnmount(stopAutoUpdate);
                 :id="tooltipId"
                 class="tooltip"
                 :style="tooltipStyle"
+                role="tooltip"
             >
-                <div class="tooltip__content" role="tooltip" @click.stop>
+                <div class="tooltip__content" @click.stop>
                     <slot name="content" />
                 </div>
             </div>
         </Teleport>
-    </div>
+    </span>
 </template>
 
 <style scoped lang="scss">
 .tooltip-trigger {
     display: inline-block;
     width: fit-content;
-    cursor: pointer;
 }
 
 .tooltip {
     position: fixed;
     z-index: var(--z-tooltip);
     max-width: 120px;
-    padding: var(--space-1);
+    padding: 0 var(--space-2);
     border-radius: var(--radius-sm);
     background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
 
     &__content {
         max-height: 60px;
         overflow-y: auto;
         word-wrap: break-word;
+        font-size: var(--font-sm);
+        color: var(--color-text-secondary);
     }
 }
 </style>

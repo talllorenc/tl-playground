@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IconChevronsRight, IconLink } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
-import { ref, toRef, watch } from "vue";
+import { computed, nextTick, ref, toRef, watch } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
@@ -37,12 +37,20 @@ const { mutate, isPending } = useKanbanCardUpdate();
 
 const isCloseConfirmOpen = ref<boolean>(false);
 
-const { errors, defineField, handleSubmit, resetForm, meta } = useForm<UpdateCardFormValues>({
-    validationSchema: toTypedSchema(updateCardSchema),
-});
+const isTitleEditing = ref<boolean>(false);
+const isDescriptionEditing = ref<boolean>(false);
+const descriptionEditor = ref<InstanceType<typeof TextEditor> | null>(null);
+
+const { errors, defineField, handleSubmit, resetForm, resetField, meta } =
+    useForm<UpdateCardFormValues>({
+        validationSchema: toTypedSchema(updateCardSchema),
+    });
 
 const [title, titleAttrs] = defineField("title");
 const [description, descriptionAttrs] = defineField("description");
+
+// An empty description has nothing to show, so the editor is open right away
+const isDescriptionEditorShown = computed(() => isDescriptionEditing.value || !description.value);
 
 let formCardId: number | null = null;
 
@@ -82,6 +90,57 @@ const onSubmit = handleSubmit((values) => {
         },
     );
 });
+
+function startTitleEditing() {
+    isTitleEditing.value = true;
+}
+
+function finishTitleEditing(event: KeyboardEvent) {
+    (event.target as HTMLInputElement).blur();
+}
+
+function cancelTitleEditing(event: KeyboardEvent) {
+    resetField("title");
+    (event.target as HTMLInputElement).blur();
+}
+
+async function startDescriptionEditing(position?: number) {
+    isDescriptionEditing.value = true;
+
+    await nextTick();
+    descriptionEditor.value?.focus(position ?? "end");
+}
+
+function handleDescriptionClick(event: MouseEvent) {
+    if (isDescriptionEditing.value || (event.target as HTMLElement).closest("a")) return;
+
+    void startDescriptionEditing(
+        descriptionEditor.value?.getPositionAtCoords(event.clientX, event.clientY),
+    );
+}
+
+function handleDescriptionFocusIn() {
+    // Keeps the editor open once the first character makes the description non-empty
+    if (!description.value) {
+        isDescriptionEditing.value = true;
+    }
+}
+
+function handleDescriptionFocusOut(event: FocusEvent) {
+    const wrapper = event.currentTarget as HTMLElement;
+    const nextTarget = event.relatedTarget as Node | null;
+
+    if (!document.hasFocus() || (nextTarget && wrapper.contains(nextTarget))) return;
+
+    isDescriptionEditing.value = false;
+}
+
+function handleDescriptionEscape(event: KeyboardEvent) {
+    if (!isDescriptionEditing.value) return;
+
+    event.stopPropagation();
+    isDescriptionEditing.value = false;
+}
 
 function requestClose() {
     if (!meta.value.dirty) {
@@ -147,9 +206,57 @@ useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
                     <DateBadge :date="card.created_at" />
                 </div>
 
-                <BaseInput v-model="title" v-bind="titleAttrs" :error="errors.title" />
+                <BaseInput
+                    v-if="isTitleEditing || errors.title"
+                    v-model="title"
+                    v-bind="titleAttrs"
+                    type="borderless"
+                    class="card-detail-drawer__title-input"
+                    aria-label="Название карточки"
+                    :error="errors.title"
+                    autofocus
+                    @blur="isTitleEditing = false"
+                    @keydown.enter.prevent="finishTitleEditing"
+                    @keydown.esc.stop="cancelTitleEditing"
+                />
 
-                <TextEditor v-model="description" v-bind="descriptionAttrs" />
+                <h2 v-else class="card-detail-drawer__title">
+                    <button
+                        class="card-detail-drawer__title-trigger"
+                        type="button"
+                        :aria-label="`Изменить название: ${title || 'Без названия'}`"
+                        @click="startTitleEditing"
+                    >
+                        {{ title || "Без названия" }}
+                    </button>
+                </h2>
+
+                <div
+                    class="card-detail-drawer__description"
+                    :class="{
+                        'card-detail-drawer__description--editing': isDescriptionEditorShown,
+                    }"
+                    @focusin="handleDescriptionFocusIn"
+                    @focusout="handleDescriptionFocusOut"
+                    @keydown.esc="handleDescriptionEscape"
+                >
+                    <div
+                        class="card-detail-drawer__description-view"
+                        :role="isDescriptionEditorShown ? undefined : 'button'"
+                        :tabindex="isDescriptionEditorShown ? -1 : 0"
+                        :aria-label="isDescriptionEditorShown ? undefined : 'Изменить описание'"
+                        @click="handleDescriptionClick"
+                        @keydown.enter.self.prevent="startDescriptionEditing()"
+                        @keydown.space.self.prevent="startDescriptionEditing()"
+                    >
+                        <TextEditor
+                            ref="descriptionEditor"
+                            v-model="description"
+                            v-bind="descriptionAttrs"
+                            :readonly="!isDescriptionEditorShown"
+                        />
+                    </div>
+                </div>
             </div>
 
             <div class="card-detail-drawer__footer">
@@ -223,6 +330,41 @@ useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
         &:hover {
             background-color: var(--color-bg-hover);
         }
+    }
+
+    &__title {
+        margin: 0;
+        font-size: var(--font-h2);
+        font-weight: var(--font-w-lg);
+    }
+
+    &__title-trigger {
+        max-width: 100%;
+        // Same box as the borderless input, so the title does not jump when editing starts
+        padding: 4px 0;
+        border: 0;
+        border-bottom: 1px solid transparent;
+        background: none;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: text;
+        outline: none;
+    }
+
+    &__description:not(&__description--editing) {
+        cursor: text;
+    }
+
+    &__description-view:focus-visible {
+        border-radius: var(--radius-sm);
+        outline: 2px solid var(--color-accent);
+    }
+
+    &__title-input :deep(.input__field) {
+        padding: var(--space-1) 0;
+        font-size: var(--font-h2);
+        font-weight: var(--font-w-lg);
     }
 
     &__form {

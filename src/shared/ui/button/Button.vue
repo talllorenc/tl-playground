@@ -71,7 +71,7 @@ const props = withDefaults(
 
     &--primary {
         background-color: var(--color-accent);
-        color: var(--color-gray-50);
+        color: var(--color-bg-surface);
 
         &:hover:not(:disabled) {
             opacity: 0.9;
@@ -90,7 +90,7 @@ const props = withDefaults(
 
     &--danger {
         background-color: var(--color-red);
-        color: var(--color-gray-50);
+        color: var(--color-bg-surface);
 
         &:hover:not(:disabled) {
             opacity: 0.9;

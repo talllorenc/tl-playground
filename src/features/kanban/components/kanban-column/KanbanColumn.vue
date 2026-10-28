@@ -144,7 +144,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         align-items: center;
         justify-content: center;
         background-color: var(--color-accent);
-        color: var(--color-gray-50);
+        color: var(--color-bg-surface);
         border-radius: 50%;
         font-size: var(--font-sm);
         font-weight: var(--font-w-md);
