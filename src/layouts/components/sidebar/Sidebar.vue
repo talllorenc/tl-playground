@@ -57,7 +57,7 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
         gap: var(--space-2);
         border-radius: var(--radius-sm);
         padding: var(--space-2);
-        color: var(--color-text);
+        color: var(--color-text-inverse-secondary);
         border: 1px solid transparent;
 
         transition:
@@ -65,14 +65,14 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
             color var(--transition-fast);
 
         &:hover {
-            color: var(--color-text);
-            background-color: var(--color-bg-hover);
+            color: var(--color-text-inverse);
+            background-color: var(--color-bg-hover-inverse);
         }
 
         &--active,
         &--active:hover {
             background-color: var(--color-accent);
-            color: var(--color-bg-surface);
+            color: var(--color-text-inverse);
         }
 
         &--disabled {

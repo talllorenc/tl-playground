@@ -433,13 +433,13 @@ const characterPercentage = computed(() =>
             white-space: nowrap;
             padding: var(--space-0) var(--space-2);
             border-radius: var(--radius-sm);
-            background-color: var(--color-bg);
+            background-color: var(--color-bg-elevated);
             color: var(--color-accent);
             font-family: monospace;
         }
 
         pre {
-            background: var(--color-bg);
+            background: var(--color-bg-elevated);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-sm);
             padding: var(--space-4);
