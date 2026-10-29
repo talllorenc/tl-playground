@@ -113,7 +113,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         justify-content: space-between;
         gap: var(--space-2);
 
-        background-color: var(--color-bg-elevated);
+        background-color: var(--color-bg-surface);
         border-radius: var(--radius-sm);
         border: 1px solid var(--color-border);
         padding: var(--space-3);

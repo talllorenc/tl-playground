@@ -5,3 +5,19 @@
     font-style: normal;
     font-display: swap;
 }
+
+@font-face {
+    font-family: "Medeo Sans";
+    src: url("../../assets/fonts/medeo-sans/MedeoSansVariable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Medeo Sans";
+    src: url("../../assets/fonts/medeo-sans/MedeoSansVariable-Italic.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}

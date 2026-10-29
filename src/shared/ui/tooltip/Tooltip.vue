@@ -100,9 +100,9 @@ onBeforeUnmount(stopAutoUpdate);
     position: fixed;
     z-index: var(--z-tooltip);
     max-width: 120px;
-    padding: 0 var(--space-2);
+    padding: var(--space-1);
     border-radius: var(--radius-sm);
-    background-color: var(--color-bg-surface);
+    background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
 
     &__content {

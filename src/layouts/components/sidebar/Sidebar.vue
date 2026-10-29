@@ -24,7 +24,7 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
                                 aria-disabled="true"
                             >
                                 <component :is="link.icon" size="18" aria-hidden="true" />
-                                {{ link.label }}
+                                <span>{{ link.label }}</span>
                             </a>
                             <RouterLink
                                 v-else
@@ -33,7 +33,7 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
                                 exact-active-class="sidebar__link--active"
                             >
                                 <component :is="link.icon" size="18" aria-hidden="true" />
-                                {{ link.label }}
+                                <span>{{ link.label }}</span>
                             </RouterLink>
                         </li>
                     </ul>
@@ -81,7 +81,7 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
         align-items: center;
         gap: var(--space-2);
         border-radius: var(--radius-sm);
-        padding: var(--space-2);
+        padding: var(--space-1);
         color: var(--color-text-inverse-secondary);
         border: 1px solid transparent;
 
