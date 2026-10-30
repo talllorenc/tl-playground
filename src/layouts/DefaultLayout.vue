@@ -50,6 +50,6 @@ const route = useRoute();
     padding: var(--space-6);
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-lg);
 }
 </style>

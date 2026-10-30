@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { SIDEBAR_LINKS } from "@/layouts/components/sidebar/sidebar-links.ts";
+import { SIDEBAR_SECTIONS } from "@/layouts/components/sidebar/sidebar-links.ts";
 import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue";
+
+const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.length > 0);
 </script>
 
 <template>
@@ -8,25 +10,33 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
         <AuthUserBox />
 
         <nav class="sidebar__nav" aria-label="Основное меню">
-            <ul class="sidebar__list">
-                <li v-for="link in SIDEBAR_LINKS" :key="link.id">
-                    <span
-                        v-if="link.disabled"
-                        class="sidebar__link sidebar__link--disabled"
-                        aria-disabled="true"
-                    >
-                        <component :is="link.icon" size="18" aria-hidden="true" />
-                        {{ link.label }}
+            <ul class="sidebar__sections">
+                <li v-for="section in visibleSections" :key="section.id">
+                    <span :id="`sidebar-section-${section.id}`" class="sidebar__section-title">
+                        {{ section.title }}
                     </span>
-                    <RouterLink
-                        v-else
-                        :to="link.to"
-                        class="sidebar__link"
-                        exact-active-class="sidebar__link--active"
-                    >
-                        <component :is="link.icon" size="18" aria-hidden="true" />
-                        {{ link.label }}
-                    </RouterLink>
+                    <ul class="sidebar__list" :aria-labelledby="`sidebar-section-${section.id}`">
+                        <li v-for="link in section.links" :key="link.id">
+                            <a
+                                v-if="link.disabled"
+                                class="sidebar__link sidebar__link--disabled"
+                                role="link"
+                                aria-disabled="true"
+                            >
+                                <component :is="link.icon" size="18" aria-hidden="true" />
+                                <span>{{ link.label }}</span>
+                            </a>
+                            <RouterLink
+                                v-else
+                                :to="link.to"
+                                class="sidebar__link"
+                                exact-active-class="sidebar__link--active"
+                            >
+                                <component :is="link.icon" size="18" aria-hidden="true" />
+                                <span>{{ link.label }}</span>
+                            </RouterLink>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>
@@ -45,10 +55,25 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
         margin-top: var(--space-8);
     }
 
+    &__sections {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+
+    &__section-title {
+        display: block;
+        font-size: var(--font-xs);
+        font-weight: var(--font-w-md);
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+    }
+
     &__list {
         display: flex;
         gap: var(--space-1);
         flex-direction: column;
+        margin-top: var(--space-2);
     }
 
     &__link {
@@ -56,8 +81,8 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
         align-items: center;
         gap: var(--space-2);
         border-radius: var(--radius-sm);
-        padding: var(--space-2);
-        color: var(--color-text-inverse-secondary);
+        padding: var(--space-1);
+        color: var(--color-text);
         border: 1px solid transparent;
 
         transition:
@@ -65,14 +90,13 @@ import AuthUserBox from "@/features/auth/components/AuthUserBox/AuthUserBox.vue"
             color var(--transition-fast);
 
         &:hover {
-            color: var(--color-text-inverse);
-            background-color: var(--color-bg-hover-inverse);
+            background-color: var(--color-bg-hover);
         }
 
         &--active,
         &--active:hover {
             background-color: var(--color-accent);
-            color: var(--color-text-inverse);
+            color: var(--color-text-white);
         }
 
         &--disabled {
