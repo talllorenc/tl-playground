@@ -82,7 +82,7 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
         gap: var(--space-2);
         border-radius: var(--radius-sm);
         padding: var(--space-1);
-        color: var(--color-text-inverse-secondary);
+        color: var(--color-text);
         border: 1px solid transparent;
 
         transition:
@@ -90,14 +90,13 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
             color var(--transition-fast);
 
         &:hover {
-            color: var(--color-text-inverse);
-            background-color: var(--color-bg-hover-inverse);
+            background-color: var(--color-bg-hover);
         }
 
         &--active,
         &--active:hover {
             background-color: var(--color-accent);
-            color: var(--color-text-inverse);
+            color: var(--color-text-white);
         }
 
         &--disabled {

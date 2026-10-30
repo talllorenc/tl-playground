@@ -4,12 +4,12 @@
     --color-gray-50: #18181b;
     --color-gray-300: #a1a1aa;
     --color-gray-400: #71717a;
-    --color-gray-700: #d4d4d8;
-    --color-gray-800: #f8f9f8;
-    --color-gray-850: #ffffff;
+    --color-gray-700: #d7d7dc;
+    --color-gray-800: #f0f0f0;
+    --color-gray-850: #fcfbfc;
     --color-gray-900: #f2f2f3;
-    --color-gray-950: #131215;
-    --color-velvet: #6366f1;
+    --color-gray-950: #f4f0f1;
+    --color-velvet: #d82e5a;
     --color-red: #dc2626;
     --color-green: #16a34a;
 
@@ -27,12 +27,7 @@
 
     --color-text: var(--color-gray-50);
     --color-text-secondary: var(--color-gray-400);
-
-    /* On the dark app background */
-    --color-text-inverse: var(--color-gray-850);
-    --color-text-inverse-secondary: var(--color-gray-300);
-    --color-bg-hover-inverse: rgb(255 255 255 / 0.08);
-    --color-border-inverse: rgb(255 255 255 / 0.12);
+    --color-text-white: var(--color-gray-950);
 
     --color-error: var(--color-red);
     --color-success: var(--color-green);
