@@ -41,3 +41,7 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
+.tabler-icon {
+    color: var(--color-text);
+}

@@ -23,7 +23,12 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
                                 role="link"
                                 aria-disabled="true"
                             >
-                                <component :is="link.icon" size="18" aria-hidden="true" />
+                                <component
+                                    :is="link.icon"
+                                    class="sidebar__link-icon"
+                                    size="18"
+                                    aria-hidden="true"
+                                />
                                 <span>{{ link.label }}</span>
                             </a>
                             <RouterLink
@@ -32,7 +37,12 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
                                 class="sidebar__link"
                                 exact-active-class="sidebar__link--active"
                             >
-                                <component :is="link.icon" size="18" aria-hidden="true" />
+                                <component
+                                    :is="link.icon"
+                                    class="sidebar__link-icon"
+                                    size="18"
+                                    aria-hidden="true"
+                                />
                                 <span>{{ link.label }}</span>
                             </RouterLink>
                         </li>
@@ -97,6 +107,10 @@ const visibleSections = SIDEBAR_SECTIONS.filter((section) => section.links.lengt
         &--active:hover {
             background-color: var(--color-accent);
             color: var(--color-text-white);
+
+            .sidebar__link-icon {
+                color: var(--color-text-white);
+            }
         }
 
         &--disabled {

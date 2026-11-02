@@ -97,6 +97,11 @@ const props = withDefaults(
         }
     }
 
+    &__icon,
+    &__iconLoader {
+        color: inherit;
+    }
+
     &__iconLoader {
         width: 18px;
         height: 18px;

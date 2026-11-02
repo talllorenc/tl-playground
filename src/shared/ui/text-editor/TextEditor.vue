@@ -252,14 +252,14 @@ const characterPercentage = computed(() =>
                 }"
             >
                 <svg height="20" width="20" viewBox="0 0 20 20">
-                    <circle r="10" cx="10" cy="10" fill="#eef1f4" />
+                    <circle r="10" cx="10" cy="10" fill="#f4bfc9" />
 
                     <circle
                         r="5"
                         cx="10"
                         cy="10"
                         fill="transparent"
-                        stroke="#6366f1"
+                        stroke="#d82e5a"
                         stroke-width="10"
                         :stroke-dasharray="`${(characterPercentage * 31.4) / 100} 31.4`"
                         transform="rotate(-90) translate(-20)"
@@ -339,7 +339,7 @@ const characterPercentage = computed(() =>
         border-left: 1px solid var(--color-border);
         border-right: 1px solid var(--color-border);
         border-bottom: 1px solid var(--color-border);
-        background-color: var(--color-bg-elevated);
+        background-color: var(--color-bg-surface);
     }
 
     &--readonly &__content {
@@ -430,12 +430,11 @@ const characterPercentage = computed(() =>
         }
 
         code {
-            white-space: nowrap;
+            white-space: break-spaces;
             padding: var(--space-0) var(--space-2);
             border-radius: var(--radius-sm);
             background-color: var(--color-bg-elevated);
-            color: var(--color-accent);
-            font-family: monospace;
+            color: var(--color-text-secondary);
         }
 
         pre {

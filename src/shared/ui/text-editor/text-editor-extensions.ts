@@ -7,6 +7,8 @@ import { createLowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Highlight from "@tiptap/extension-highlight";
 import { CharacterCount } from "@tiptap/extensions";
+import { VueNodeViewRenderer } from "@tiptap/vue-3";
+import TextEditorCodeBlock from "@/shared/ui/text-editor/TextEditorCodeBlock.vue";
 
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
@@ -32,7 +34,11 @@ export const textEditorExtensions = [
         codeBlock: false,
     }),
 
-    CodeBlockLowlight.configure({
+    CodeBlockLowlight.extend({
+        addNodeView() {
+            return VueNodeViewRenderer(TextEditorCodeBlock);
+        },
+    }).configure({
         lowlight,
     }),
 
