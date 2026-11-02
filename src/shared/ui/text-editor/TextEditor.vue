@@ -430,12 +430,11 @@ const characterPercentage = computed(() =>
         }
 
         code {
-            white-space: nowrap;
+            white-space: break-spaces;
             padding: var(--space-0) var(--space-2);
             border-radius: var(--radius-sm);
             background-color: var(--color-bg-elevated);
-            color: var(--color-accent);
-            font-family: monospace;
+            color: var(--color-text-secondary);
         }
 
         pre {
