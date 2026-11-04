@@ -14,6 +14,14 @@ import {
     IconSeparatorHorizontal,
     IconHighlight,
     IconPhoto,
+    IconTablePlus,
+    IconTableMinus,
+    IconRowInsertBottom,
+    IconRowRemove,
+    IconColumnInsertRight,
+    IconColumnRemove,
+    IconArrowMergeBoth,
+    IconArrowsSplit2,
 } from "@tabler/icons-vue";
 import {
     CHARACTER_LIMIT,
@@ -80,6 +88,10 @@ function handleToggleLink() {
     if (!editor.value) return;
 
     toggleLink(editor.value);
+}
+
+function handleInsertTable() {
+    editor.value?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
 }
 
 function handleOpenImagePicker() {
@@ -243,6 +255,91 @@ const characterPercentage = computed(() =>
                 >
                     <IconSeparatorHorizontal :size="18" />
                 </button>
+
+                <button
+                    type="button"
+                    class="rich-editor__toolbar-button"
+                    :class="{ 'is-active': editor.isActive('table') }"
+                    aria-label="Вставить таблицу"
+                    title="Вставить таблицу"
+                    :disabled="editor.isActive('table')"
+                    @click="handleInsertTable"
+                >
+                    <IconTablePlus :size="18" />
+                </button>
+
+                <div
+                    v-if="editor.isActive('table')"
+                    class="rich-editor__toolbar-group"
+                    role="group"
+                    aria-label="Работа с таблицей"
+                >
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Добавить строку"
+                        title="Добавить строку"
+                        @click="editor.chain().focus().addRowAfter().run()"
+                    >
+                        <IconRowInsertBottom :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Удалить строку"
+                        title="Удалить строку"
+                        @click="editor.chain().focus().deleteRow().run()"
+                    >
+                        <IconRowRemove :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Добавить столбец"
+                        title="Добавить столбец"
+                        @click="editor.chain().focus().addColumnAfter().run()"
+                    >
+                        <IconColumnInsertRight :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Удалить столбец"
+                        title="Удалить столбец"
+                        @click="editor.chain().focus().deleteColumn().run()"
+                    >
+                        <IconColumnRemove :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Объединить ячейки"
+                        title="Объединить ячейки"
+                        :disabled="!editor.can().mergeCells()"
+                        @click="editor.chain().focus().mergeCells().run()"
+                    >
+                        <IconArrowMergeBoth :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Разделить ячейку"
+                        title="Разделить ячейку"
+                        :disabled="!editor.can().splitCell()"
+                        @click="editor.chain().focus().splitCell().run()"
+                    >
+                        <IconArrowsSplit2 :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Удалить таблицу"
+                        title="Удалить таблицу"
+                        @click="editor.chain().focus().deleteTable().run()"
+                    >
+                        <IconTableMinus :size="18" />
+                    </button>
+                </div>
             </div>
 
             <div
@@ -333,6 +430,16 @@ const characterPercentage = computed(() =>
         &.is-active {
             border-color: var(--color-accent);
         }
+    }
+
+    &__toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
+        padding: 2px var(--space-1);
+        border: 1px solid var(--color-border-accent);
+        border-radius: var(--radius-sm);
+        background-color: var(--color-bg-accent-subtle);
     }
 
     &__content {
@@ -525,6 +632,40 @@ const characterPercentage = computed(() =>
             .hljs-strong {
                 font-weight: 700;
             }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            position: relative;
+            min-width: 80px;
+            padding: var(--space-2);
+            border: 1px solid var(--color-border);
+            vertical-align: top;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        th {
+            background-color: var(--color-bg-elevated);
+            font-weight: var(--font-w-md);
+            text-align: left;
+        }
+
+        .selectedCell::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: var(--color-accent);
+            opacity: 0.15;
+            pointer-events: none;
         }
 
         hr {
