@@ -20,6 +20,8 @@ import {
     IconRowRemove,
     IconColumnInsertRight,
     IconColumnRemove,
+    IconArrowMergeBoth,
+    IconArrowsSplit2,
 } from "@tabler/icons-vue";
 import {
     CHARACTER_LIMIT,
@@ -266,9 +268,12 @@ const characterPercentage = computed(() =>
                     <IconTablePlus :size="18" />
                 </button>
 
-                <template v-if="editor.isActive('table')">
-                    <span class="rich-editor__toolbar-divider" aria-hidden="true" />
-
+                <div
+                    v-if="editor.isActive('table')"
+                    class="rich-editor__toolbar-group"
+                    role="group"
+                    aria-label="Работа с таблицей"
+                >
                     <button
                         type="button"
                         class="rich-editor__toolbar-button"
@@ -308,13 +313,33 @@ const characterPercentage = computed(() =>
                     <button
                         type="button"
                         class="rich-editor__toolbar-button"
+                        aria-label="Объединить ячейки"
+                        title="Объединить ячейки"
+                        :disabled="!editor.can().mergeCells()"
+                        @click="editor.chain().focus().mergeCells().run()"
+                    >
+                        <IconArrowMergeBoth :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Разделить ячейку"
+                        title="Разделить ячейку"
+                        :disabled="!editor.can().splitCell()"
+                        @click="editor.chain().focus().splitCell().run()"
+                    >
+                        <IconArrowsSplit2 :size="18" />
+                    </button>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
                         aria-label="Удалить таблицу"
                         title="Удалить таблицу"
                         @click="editor.chain().focus().deleteTable().run()"
                     >
                         <IconTableMinus :size="18" />
                     </button>
-                </template>
+                </div>
             </div>
 
             <div
@@ -407,10 +432,14 @@ const characterPercentage = computed(() =>
         }
     }
 
-    &__toolbar-divider {
-        width: 1px;
-        height: 20px;
-        background-color: var(--color-border);
+    &__toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
+        padding: 2px var(--space-1);
+        border: 1px solid var(--color-border-accent);
+        border-radius: var(--radius-sm);
+        background-color: var(--color-bg-accent-subtle);
     }
 
     &__content {

@@ -18,12 +18,14 @@
     --color-bg-surface: var(--color-gray-850);
     --color-bg-elevated: var(--color-gray-800);
     --color-bg-hover: rgb(0 0 0 / 0.06);
+    --color-bg-accent-subtle: color-mix(in srgb, var(--color-accent) 12%, transparent);
 
     --color-scrollbar-thumb: var(--color-gray-700);
     --color-scrollbar-thumb-hover: var(--color-gray-400);
     --color-accent: var(--color-velvet);
 
     --color-border: var(--color-gray-700);
+    --color-border-accent: color-mix(in srgb, var(--color-accent) 35%, transparent);
 
     --color-text: var(--color-gray-50);
     --color-text-secondary: var(--color-gray-400);
