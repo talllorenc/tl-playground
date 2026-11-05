@@ -18,6 +18,7 @@ import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Modal from "@/shared/ui/modal/Modal.vue";
+import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
 import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
 import { useEscapeKey } from "@/utils/handle-escape-key.ts";
 
@@ -130,36 +131,45 @@ useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
 <template>
     <aside class="card-detail-drawer">
         <div class="card-detail-drawer__header">
-            <button
-                class="card-detail-drawer__action"
-                type="button"
-                aria-label="Закрыть"
-                @click="requestClose"
-            >
-                <IconChevronsRight size="18" />
-            </button>
+            <Tooltip>
+                <button
+                    class="card-detail-drawer__action"
+                    type="button"
+                    aria-label="Закрыть"
+                    @click="requestClose"
+                >
+                    <IconChevronsRight size="18" />
+                </button>
+                <template #content>Закрыть</template>
+            </Tooltip>
 
             <div class="card-detail-drawer__header-actions">
-                <button
-                    class="card-detail-drawer__action"
-                    :class="{ 'card-detail-drawer__action--active': isEditing }"
-                    type="button"
-                    aria-label="Редактировать карточку"
-                    :aria-pressed="isEditing"
-                    :disabled="!card"
-                    @click="toggleEditing"
-                >
-                    <IconPencil size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        class="card-detail-drawer__action"
+                        :class="{ 'card-detail-drawer__action--active': isEditing }"
+                        type="button"
+                        aria-label="Редактировать карточку"
+                        :aria-pressed="isEditing"
+                        :disabled="!card"
+                        @click="toggleEditing"
+                    >
+                        <IconPencil size="18" />
+                    </button>
+                    <template #content>Редактировать</template>
+                </Tooltip>
 
-                <button
-                    class="card-detail-drawer__action"
-                    type="button"
-                    aria-label="Скопировать ссылку"
-                    @click="copyLink"
-                >
-                    <IconLink size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        class="card-detail-drawer__action"
+                        type="button"
+                        aria-label="Скопировать ссылку"
+                        @click="copyLink"
+                    >
+                        <IconLink size="18" />
+                    </button>
+                    <template #content>Скопировать ссылку</template>
+                </Tooltip>
             </div>
         </div>
 

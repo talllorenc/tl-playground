@@ -132,7 +132,7 @@ function handleDragEnd(event: DragEndEvent) {
 
 .drawer-enter-active,
 .drawer-leave-active {
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform var(--transition-slow);
 }
 
 .drawer-enter-from,

@@ -101,7 +101,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
     flex-direction: column;
     border-radius: var(--radius-sm);
     padding: var(--space-1);
-    transition: background-color 0.15s ease;
+    transition: background-color var(--transition-fast);
 
     &__header {
         position: sticky;

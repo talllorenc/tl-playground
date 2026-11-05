@@ -27,6 +27,7 @@ import {
     CHARACTER_LIMIT,
     textEditorExtensions,
 } from "@/shared/ui/text-editor/text-editor-extensions.ts";
+import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
 import { normalizeEditorHtml, toggleLink } from "@/shared/ui/text-editor/text-editor-utils.ts";
 
 const props = withDefaults(
@@ -122,88 +123,104 @@ const characterPercentage = computed(() =>
     <div v-if="editor" class="rich-editor" :class="{ 'rich-editor--readonly': props.readonly }">
         <div v-if="!props.readonly" class="rich-editor__toolbar" @mousedown.prevent>
             <div class="rich-editor__toolbar__control">
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('bold') }"
-                    aria-label="Жирный текст"
-                    title="Жирный"
-                    @click="editor.chain().focus().toggleBold().run()"
-                >
-                    <IconBold :size="18" />
-                </button>
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('italic') }"
-                    aria-label="Курсивный текст"
-                    title="Курсив"
-                    @click="editor.chain().focus().toggleItalic().run()"
-                >
-                    <IconItalic :size="18" />
-                </button>
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('link') }"
-                    aria-label="Ссылка"
-                    title="Ссылка"
-                    @click="handleToggleLink"
-                >
-                    <IconLink :size="18" />
-                </button>
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('highlight') }"
-                    aria-label="Выделение текста"
-                    title="Выделение текста"
-                    @click="editor.chain().focus().toggleHighlight().run()"
-                >
-                    <IconHighlight :size="18" />
-                </button>
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('bulletList') }"
-                    aria-label="Маркированный список"
-                    title="Маркированный список"
-                    @click="editor.chain().focus().toggleBulletList().run()"
-                >
-                    <IconList :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('bold') }"
+                        aria-label="Жирный текст"
+                        @click="editor.chain().focus().toggleBold().run()"
+                    >
+                        <IconBold :size="18" />
+                    </button>
+                    <template #content>Жирный</template>
+                </Tooltip>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('italic') }"
+                        aria-label="Курсивный текст"
+                        @click="editor.chain().focus().toggleItalic().run()"
+                    >
+                        <IconItalic :size="18" />
+                    </button>
+                    <template #content>Курсив</template>
+                </Tooltip>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('link') }"
+                        aria-label="Ссылка"
+                        @click="handleToggleLink"
+                    >
+                        <IconLink :size="18" />
+                    </button>
+                    <template #content>Ссылка</template>
+                </Tooltip>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('highlight') }"
+                        aria-label="Выделение текста"
+                        @click="editor.chain().focus().toggleHighlight().run()"
+                    >
+                        <IconHighlight :size="18" />
+                    </button>
+                    <template #content>Выделение текста</template>
+                </Tooltip>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('bulletList') }"
+                        aria-label="Маркированный список"
+                        @click="editor.chain().focus().toggleBulletList().run()"
+                    >
+                        <IconList :size="18" />
+                    </button>
+                    <template #content>Маркированный список</template>
+                </Tooltip>
 
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('orderedList') }"
-                    aria-label="Нумерованный список"
-                    title="Нумерованный список"
-                    @click="editor.chain().focus().toggleOrderedList().run()"
-                >
-                    <IconListNumbers :size="18" />
-                </button>
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor?.isActive('taskList') }"
-                    aria-label="Чек-лист"
-                    title="Чек-лист"
-                    @click="editor?.chain().focus().toggleTaskList().run()"
-                >
-                    <IconCheckbox :size="18" />
-                </button>
-                <button
-                    disabled
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('image') }"
-                    aria-label="Вставить изображение"
-                    title="Вставить изображение"
-                    @click="handleOpenImagePicker"
-                >
-                    <IconPhoto :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('orderedList') }"
+                        aria-label="Нумерованный список"
+                        @click="editor.chain().focus().toggleOrderedList().run()"
+                    >
+                        <IconListNumbers :size="18" />
+                    </button>
+                    <template #content>Нумерованный список</template>
+                </Tooltip>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor?.isActive('taskList') }"
+                        aria-label="Чек-лист"
+                        @click="editor?.chain().focus().toggleTaskList().run()"
+                    >
+                        <IconCheckbox :size="18" />
+                    </button>
+                    <template #content>Чек-лист</template>
+                </Tooltip>
+                <Tooltip>
+                    <button
+                        disabled
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('image') }"
+                        aria-label="Вставить изображение"
+                        @click="handleOpenImagePicker"
+                    >
+                        <IconPhoto :size="18" />
+                    </button>
+                    <template #content>Вставить изображение</template>
+                </Tooltip>
 
                 <input
                     disabled
@@ -213,60 +230,70 @@ const characterPercentage = computed(() =>
                     hidden
                     @change="handleImageChange"
                 />
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('blockquote') }"
-                    aria-label="Цитата"
-                    title="Цитата"
-                    @click="editor.chain().focus().toggleBlockquote().run()"
-                >
-                    <IconBlockquote :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('blockquote') }"
+                        aria-label="Цитата"
+                        @click="editor.chain().focus().toggleBlockquote().run()"
+                    >
+                        <IconBlockquote :size="18" />
+                    </button>
+                    <template #content>Цитата</template>
+                </Tooltip>
 
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('code') }"
-                    aria-label="Код"
-                    title="Код"
-                    @click="editor.chain().focus().toggleCode().run()"
-                >
-                    <IconCode :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('code') }"
+                        aria-label="Код"
+                        @click="editor.chain().focus().toggleCode().run()"
+                    >
+                        <IconCode :size="18" />
+                    </button>
+                    <template #content>Код</template>
+                </Tooltip>
 
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('codeBlock') }"
-                    aria-label="Блок кода"
-                    title="Блок кода"
-                    @click="editor.chain().focus().toggleCodeBlock().run()"
-                >
-                    <IconCodeDots :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('codeBlock') }"
+                        aria-label="Блок кода"
+                        @click="editor.chain().focus().toggleCodeBlock().run()"
+                    >
+                        <IconCodeDots :size="18" />
+                    </button>
+                    <template #content>Блок кода</template>
+                </Tooltip>
 
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    aria-label="Горизонтальная линия"
-                    title="Горизонтальная линия"
-                    @click="editor.chain().focus().setHorizontalRule().run()"
-                >
-                    <IconSeparatorHorizontal :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        aria-label="Горизонтальная линия"
+                        @click="editor.chain().focus().setHorizontalRule().run()"
+                    >
+                        <IconSeparatorHorizontal :size="18" />
+                    </button>
+                    <template #content>Горизонтальная линия</template>
+                </Tooltip>
 
-                <button
-                    type="button"
-                    class="rich-editor__toolbar-button"
-                    :class="{ 'is-active': editor.isActive('table') }"
-                    aria-label="Вставить таблицу"
-                    title="Вставить таблицу"
-                    :disabled="editor.isActive('table')"
-                    @click="handleInsertTable"
-                >
-                    <IconTablePlus :size="18" />
-                </button>
+                <Tooltip>
+                    <button
+                        type="button"
+                        class="rich-editor__toolbar-button"
+                        :class="{ 'is-active': editor.isActive('table') }"
+                        aria-label="Вставить таблицу"
+                        :disabled="editor.isActive('table')"
+                        @click="handleInsertTable"
+                    >
+                        <IconTablePlus :size="18" />
+                    </button>
+                    <template #content>Вставить таблицу</template>
+                </Tooltip>
 
                 <div
                     v-if="editor.isActive('table')"
@@ -274,71 +301,85 @@ const characterPercentage = computed(() =>
                     role="group"
                     aria-label="Работа с таблицей"
                 >
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Добавить строку"
-                        title="Добавить строку"
-                        @click="editor.chain().focus().addRowAfter().run()"
-                    >
-                        <IconRowInsertBottom :size="18" />
-                    </button>
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Удалить строку"
-                        title="Удалить строку"
-                        @click="editor.chain().focus().deleteRow().run()"
-                    >
-                        <IconRowRemove :size="18" />
-                    </button>
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Добавить столбец"
-                        title="Добавить столбец"
-                        @click="editor.chain().focus().addColumnAfter().run()"
-                    >
-                        <IconColumnInsertRight :size="18" />
-                    </button>
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Удалить столбец"
-                        title="Удалить столбец"
-                        @click="editor.chain().focus().deleteColumn().run()"
-                    >
-                        <IconColumnRemove :size="18" />
-                    </button>
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Объединить ячейки"
-                        title="Объединить ячейки"
-                        :disabled="!editor.can().mergeCells()"
-                        @click="editor.chain().focus().mergeCells().run()"
-                    >
-                        <IconArrowMergeBoth :size="18" />
-                    </button>
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Разделить ячейку"
-                        title="Разделить ячейку"
-                        :disabled="!editor.can().splitCell()"
-                        @click="editor.chain().focus().splitCell().run()"
-                    >
-                        <IconArrowsSplit2 :size="18" />
-                    </button>
-                    <button
-                        type="button"
-                        class="rich-editor__toolbar-button"
-                        aria-label="Удалить таблицу"
-                        title="Удалить таблицу"
-                        @click="editor.chain().focus().deleteTable().run()"
-                    >
-                        <IconTableMinus :size="18" />
-                    </button>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Добавить строку"
+                            @click="editor.chain().focus().addRowAfter().run()"
+                        >
+                            <IconRowInsertBottom :size="18" />
+                        </button>
+                        <template #content>Добавить строку</template>
+                    </Tooltip>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Удалить строку"
+                            @click="editor.chain().focus().deleteRow().run()"
+                        >
+                            <IconRowRemove :size="18" />
+                        </button>
+                        <template #content>Удалить строку</template>
+                    </Tooltip>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Добавить столбец"
+                            @click="editor.chain().focus().addColumnAfter().run()"
+                        >
+                            <IconColumnInsertRight :size="18" />
+                        </button>
+                        <template #content>Добавить столбец</template>
+                    </Tooltip>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Удалить столбец"
+                            @click="editor.chain().focus().deleteColumn().run()"
+                        >
+                            <IconColumnRemove :size="18" />
+                        </button>
+                        <template #content>Удалить столбец</template>
+                    </Tooltip>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Объединить ячейки"
+                            :disabled="!editor.can().mergeCells()"
+                            @click="editor.chain().focus().mergeCells().run()"
+                        >
+                            <IconArrowMergeBoth :size="18" />
+                        </button>
+                        <template #content>Объединить ячейки</template>
+                    </Tooltip>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Разделить ячейку"
+                            :disabled="!editor.can().splitCell()"
+                            @click="editor.chain().focus().splitCell().run()"
+                        >
+                            <IconArrowsSplit2 :size="18" />
+                        </button>
+                        <template #content>Разделить ячейку</template>
+                    </Tooltip>
+                    <Tooltip>
+                        <button
+                            type="button"
+                            class="rich-editor__toolbar-button"
+                            aria-label="Удалить таблицу"
+                            @click="editor.chain().focus().deleteTable().run()"
+                        >
+                            <IconTableMinus :size="18" />
+                        </button>
+                        <template #content>Удалить таблицу</template>
+                    </Tooltip>
                 </div>
             </div>
 
