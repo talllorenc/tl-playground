@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IconChevronsRight, IconLink, IconPencil } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
-import { ref, toRef, watch } from "vue";
+import { computed, ref, toRef, watch } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import BaseInput from "@/shared/ui/input/BaseInput.vue";
@@ -20,7 +20,7 @@ import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Modal from "@/shared/ui/modal/Modal.vue";
 import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
 import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
-import { useEscapeKey } from "@/utils/handle-escape-key.ts";
+import { handleKey } from "@/utils/handle-key.ts";
 
 const props = defineProps<{
     cardId: number;
@@ -98,6 +98,9 @@ function toggleEditing() {
     isEditing.value = !isEditing.value;
 }
 
+const canToggleEditing = computed(() => !!card.value && !isCloseConfirmOpen.value);
+const canClose = computed(() => !isCloseConfirmOpen.value);
+
 function finishTitleEditing(event: KeyboardEvent) {
     (event.target as HTMLInputElement).blur();
 }
@@ -125,7 +128,15 @@ function copyLink() {
     void copyToClipboard(window.location.href, "Ссылка на карточку скопирована");
 }
 
-useEscapeKey(requestClose, () => !isCloseConfirmOpen.value);
+handleKey("$mod+KeyE", toggleEditing, {
+    allowInInputs: true,
+    enabled: canToggleEditing,
+});
+handleKey("Escape", requestClose, {
+    allowInInputs: true,
+    preventDefault: false,
+    enabled: canClose,
+});
 </script>
 
 <template>
