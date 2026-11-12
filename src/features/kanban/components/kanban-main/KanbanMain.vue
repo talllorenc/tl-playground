@@ -99,7 +99,7 @@ function handleDragEnd(event: DragEndEvent) {
     </template>
 
     <Teleport to="body">
-        <Transition name="drawer">
+        <Transition name="card-detail">
             <KanbanCardDetail
                 v-if="selectedCardId !== null"
                 :card-id="selectedCardId"
@@ -128,15 +128,5 @@ function handleDragEnd(event: DragEndEvent) {
     gap: var(--space-4);
     padding: 48px 24px;
     color: var(--color-text-secondary);
-}
-
-.drawer-enter-active,
-.drawer-leave-active {
-    transition: transform var(--transition-slow);
-}
-
-.drawer-enter-from,
-.drawer-leave-to {
-    transform: translateX(100%);
 }
 </style>
