@@ -10,6 +10,7 @@
     --color-gray-900: #f2f2f3;
     --color-gray-950: #f4f0f1;
     --color-velvet: #d82e5a;
+    --color-velvet-muted: #d56480;
     --color-red: #dc2626;
     --color-green: #16a34a;
 
@@ -23,6 +24,7 @@
     --color-scrollbar-thumb: var(--color-gray-700);
     --color-scrollbar-thumb-hover: var(--color-gray-400);
     --color-accent: var(--color-velvet);
+    --color-accent-muted: var(--color-velvet-muted);
 
     --color-border: var(--color-gray-700);
     --color-border-accent: color-mix(in srgb, var(--color-accent) 35%, transparent);

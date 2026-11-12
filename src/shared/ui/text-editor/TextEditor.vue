@@ -582,7 +582,7 @@ const characterPercentage = computed(() =>
             padding: var(--space-0) var(--space-2);
             border-radius: var(--radius-sm);
             background-color: var(--color-bg-elevated);
-            color: var(--color-text-secondary);
+            color: var(--color-accent-muted);
         }
 
         pre {

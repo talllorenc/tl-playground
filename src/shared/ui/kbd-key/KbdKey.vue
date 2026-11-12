@@ -15,7 +15,8 @@ defineProps<{
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     font-size: var(--font-sm);
-    padding: var(--space-0) var(--space-1);
+    width: 24px;
+    height: 24px;
     font-weight: var(--font-w-lg);
     white-space: nowrap;
     display: inline-flex;
