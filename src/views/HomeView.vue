@@ -4,6 +4,7 @@ import Modal from "@/shared/ui/modal/Modal.vue";
 import { ref } from "vue";
 import Button from "@/shared/ui/button/Button.vue";
 import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
+import KbdKey from "@/shared/ui/kbd-key/KbdKey.vue";
 
 const handleOpen = () => {
     useToastStore().openToast({
@@ -31,6 +32,7 @@ const isModalOpen = ref<boolean>(false);
             <span>Tooltip</span>
         </template>
     </Tooltip>
+    <KbdKey shortcut="ctrl+b" />
     <Button @click="handleOpen2"> success </Button>
     <Button @click="handleOpen"> error </Button>
     <Button @click="isModalOpen = true"> modal </Button>

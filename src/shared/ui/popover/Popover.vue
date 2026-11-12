@@ -107,8 +107,8 @@ useClickOutside(popover, () => closePopover(), isOpen);
 .popover-enter-active,
 .popover-leave-active {
     transition:
-        opacity 150ms ease,
-        translate 150ms ease;
+        opacity var(--transition-fast),
+        translate var(--transition-fast);
 }
 
 .popover-enter-from,

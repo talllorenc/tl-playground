@@ -41,6 +41,7 @@
     --radius-sm: 8px;
     --radius-md: 16px;
     --radius-lg: 24px;
+    --radius-xl: 40px;
     --radius-full: 50%;
 
     /* Font Weight */
@@ -80,7 +81,7 @@
     --z-base: 0;
     --z-dropdown: 100;
     --z-sticky: 200;
-    --z-drawer: 250;
+    --z-dialog: 250;
     --z-tooltip: 300;
     --z-modal: 400;
     --z-toast: 500;

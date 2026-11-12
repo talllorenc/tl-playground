@@ -2,6 +2,7 @@
 import { NodeViewContent, NodeViewWrapper, type NodeViewProps } from "@tiptap/vue-3";
 import { IconCopy } from "@tabler/icons-vue";
 import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
+import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
 
 const props = defineProps<NodeViewProps>();
 
@@ -12,16 +13,20 @@ function handleCopy() {
 
 <template>
     <NodeViewWrapper class="code-block">
-        <button
-            class="code-block__copy"
-            type="button"
-            contenteditable="false"
-            aria-label="Скопировать код"
-            @mousedown.prevent
-            @click="handleCopy"
-        >
-            <IconCopy :size="16" aria-hidden="true" />
-        </button>
+        <div class="code-block__actions" contenteditable="false">
+            <Tooltip>
+                <button
+                    class="code-block__copy"
+                    type="button"
+                    aria-label="Скопировать код"
+                    @mousedown.prevent
+                    @click="handleCopy"
+                >
+                    <IconCopy :size="16" aria-hidden="true" />
+                </button>
+                <template #content>Скопировать код</template>
+            </Tooltip>
+        </div>
 
         <pre><NodeViewContent as="code" /></pre>
     </NodeViewWrapper>
@@ -31,10 +36,14 @@ function handleCopy() {
 .code-block {
     position: relative;
 
-    &__copy {
+    &__actions {
         position: absolute;
         top: var(--space-2);
         right: var(--space-2);
+        display: flex;
+    }
+
+    &__copy {
         display: flex;
         align-items: center;
         justify-content: center;

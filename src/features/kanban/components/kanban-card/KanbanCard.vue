@@ -91,7 +91,7 @@ function handleCardClick() {
     }
 
     &__animation {
-        animation: showCard 0.3s ease-in-out;
+        animation: showCard var(--transition-normal);
     }
     &__actions {
         display: flex;

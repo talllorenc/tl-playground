@@ -2,12 +2,27 @@
 import { nextTick, onBeforeUnmount, ref, useId, useTemplateRef } from "vue";
 import { computePosition, flip, offset, shift, autoUpdate } from "@floating-ui/vue";
 
+const props = withDefaults(
+    defineProps<{
+        hoverDelay?: number;
+    }>(),
+    {
+        hoverDelay: 700,
+    },
+);
+
 const isVisible = ref<boolean>(false);
 const triggerRef = useTemplateRef<HTMLElement>("triggerRef");
 const tooltipRef = useTemplateRef<HTMLElement>("tooltipRef");
 const tooltipStyle = ref<Record<string, string>>({});
 const tooltipId = `tooltip-${useId()}`;
 let cleanupAutoUpdate: (() => void) | undefined;
+let showTimer: ReturnType<typeof setTimeout> | undefined;
+
+function clearShowTimer() {
+    clearTimeout(showTimer);
+    showTimer = undefined;
+}
 
 function stopAutoUpdate() {
     cleanupAutoUpdate?.();
@@ -30,6 +45,8 @@ async function updatePosition() {
 }
 
 async function show() {
+    clearShowTimer();
+
     if (isVisible.value) return;
 
     isVisible.value = true;
@@ -46,7 +63,21 @@ async function show() {
     cleanupAutoUpdate = autoUpdate(reference, floating, updatePosition);
 }
 
+function handleMouseEnter() {
+    clearShowTimer();
+    showTimer = setTimeout(() => void show(), props.hoverDelay);
+}
+
+function handleFocusIn(event: FocusEvent) {
+    const target = event.target as HTMLElement | null;
+
+    if (!target?.matches(":focus-visible")) return;
+
+    void show();
+}
+
 function hide() {
+    clearShowTimer();
     isVisible.value = false;
     stopAutoUpdate();
 }
@@ -59,7 +90,10 @@ function handleFocusOut(event: FocusEvent) {
     hide();
 }
 
-onBeforeUnmount(stopAutoUpdate);
+onBeforeUnmount(() => {
+    clearShowTimer();
+    stopAutoUpdate();
+});
 </script>
 
 <template>
@@ -67,25 +101,27 @@ onBeforeUnmount(stopAutoUpdate);
         ref="triggerRef"
         class="tooltip-trigger"
         :aria-describedby="isVisible ? tooltipId : undefined"
-        @mouseenter="show"
+        @mouseenter="handleMouseEnter"
         @mouseleave="hide"
-        @focusin="show"
+        @focusin="handleFocusIn"
         @focusout="handleFocusOut"
     >
         <slot />
         <Teleport to="body">
-            <div
-                ref="tooltipRef"
-                v-if="isVisible"
-                :id="tooltipId"
-                class="tooltip"
-                :style="tooltipStyle"
-                role="tooltip"
-            >
-                <div class="tooltip__content" @click.stop>
-                    <slot name="content" />
+            <Transition name="tooltip">
+                <div
+                    ref="tooltipRef"
+                    v-if="isVisible"
+                    :id="tooltipId"
+                    class="tooltip"
+                    :style="tooltipStyle"
+                    role="tooltip"
+                >
+                    <div class="tooltip__content" @click.stop>
+                        <slot name="content" />
+                    </div>
                 </div>
-            </div>
+            </Transition>
         </Teleport>
     </span>
 </template>
@@ -100,7 +136,7 @@ onBeforeUnmount(stopAutoUpdate);
     position: fixed;
     z-index: var(--z-tooltip);
     max-width: 120px;
-    padding: var(--space-1);
+    padding: var(--space-0) var(--space-1);
     border-radius: var(--radius-sm);
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
@@ -111,6 +147,20 @@ onBeforeUnmount(stopAutoUpdate);
         word-wrap: break-word;
         font-size: var(--font-sm);
         color: var(--color-text-secondary);
+        text-align: center;
     }
+}
+
+.tooltip-enter-active,
+.tooltip-leave-active {
+    transition:
+        opacity var(--transition-fast),
+        translate var(--transition-fast);
+}
+
+.tooltip-enter-from,
+.tooltip-leave-to {
+    opacity: 0;
+    translate: 0 2px;
 }
 </style>

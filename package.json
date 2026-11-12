@@ -45,6 +45,7 @@
         "highlight.js": "^11.12.0",
         "lowlight": "^3.3.0",
         "pinia": "^4.0.3",
+        "tinykeys": "^4.0.1",
         "vee-validate": "^4.15.1",
         "vue": "^3.5.40",
         "vue-instantsearch": "^4.30.0",

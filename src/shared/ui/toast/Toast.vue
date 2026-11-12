@@ -152,8 +152,8 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
 .toast-enter-active,
 .toast-leave-active {
     transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
+        opacity var(--transition-normal),
+        transform var(--transition-normal);
 }
 
 .toast-enter-from,
@@ -163,6 +163,6 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
 }
 
 .toast-move {
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
 }
 </style>
