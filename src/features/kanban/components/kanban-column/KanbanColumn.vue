@@ -5,7 +5,7 @@ import type {
     IKanbanColumn,
     KanbanColumnColor,
 } from "@/features/kanban/types/kanban.types.ts";
-import { computed, ref } from "vue";
+import { computed, ref, useId } from "vue";
 import { useDroppable } from "@dnd-kit/vue";
 import { IconPlus, IconX } from "@tabler/icons-vue";
 import KanbanCreateCardForm from "../kanban-create-card-form/KanbanCreateCardForm.vue";
@@ -21,6 +21,7 @@ const props = defineProps<{
 }>();
 
 const element = ref<HTMLElement | null>(null);
+const titleId = useId();
 const isCreatingCard = ref(false);
 const { mutate } = useKanbanColumnColorUpdate();
 const actions = getKanbanColumnActions(handleColorSelect);
@@ -51,7 +52,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
     <div ref="element" class="kanban-column" :style="{ backgroundColor: columnBackgroundColor }">
         <div class="kanban-column__header">
             <div class="kanban-column__info">
-                <h3 class="kanban-column__title">{{ props.column.title }}</h3>
+                <h3 :id="titleId" class="kanban-column__title">{{ props.column.title }}</h3>
                 <span class="kanban-column__count">{{ props.cards.length }}</span>
             </div>
             <div class="kanban-column__actions">
@@ -88,7 +89,11 @@ function handleColorSelect(color: KanbanColumnColor | null) {
                 :columnId="props.column.id"
                 @card-created="isCreatingCard = false"
             />
-            <KanbanCard v-for="card in props.cards" :key="card.id" :card="card" />
+            <ul v-if="props.cards.length" class="kanban-column__list" :aria-labelledby="titleId">
+                <li v-for="card in props.cards" :key="card.id">
+                    <KanbanCard :card="card" />
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -156,6 +161,12 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         flex-direction: column;
         gap: var(--space-2);
         margin-top: 24px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
     }
 
     &__colorBtn {
