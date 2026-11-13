@@ -24,6 +24,10 @@ import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
 import KbdKey from "@/shared/ui/kbd-key/KbdKey.vue";
 import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
 import { handleKey } from "@/utils/handle-key.ts";
+import { getAriaKeyshortcuts } from "@/utils/keyboard-shortcut.ts";
+
+const EDIT_SHORTCUT = "$mod+KeyE";
+const FULLSCREEN_SHORTCUT = "KeyF";
 
 const props = defineProps<{
     cardId: number;
@@ -157,11 +161,11 @@ function copyLink() {
     void copyToClipboard(window.location.href, "Ссылка на карточку скопирована");
 }
 
-handleKey("KeyE", toggleEditing, {
+handleKey(EDIT_SHORTCUT, toggleEditing, {
     allowInInputs: true,
     enabled: canToggleEditing,
 });
-handleKey("KeyF", toggleFullScreen, {
+handleKey(FULLSCREEN_SHORTCUT, toggleFullScreen, {
     enabled: canClose,
 });
 handleKey("Escape", requestClose, {
@@ -207,7 +211,7 @@ handleKey("Escape", requestClose, {
                             :class="{ 'card-detail__action--active': isEditing }"
                             type="button"
                             aria-label="Редактировать карточку"
-                            aria-keyshortcuts="E"
+                            :aria-keyshortcuts="getAriaKeyshortcuts(EDIT_SHORTCUT)"
                             :aria-pressed="isEditing"
                             :disabled="!card"
                             @click="toggleEditing"
@@ -216,7 +220,7 @@ handleKey("Escape", requestClose, {
                         </button>
                         <template #content
                             >Редактировать
-                            <KbdKey shortcut="E" />
+                            <KbdKey :shortcut="EDIT_SHORTCUT" />
                         </template>
                     </Tooltip>
 
@@ -225,7 +229,7 @@ handleKey("Escape", requestClose, {
                             class="card-detail__action"
                             type="button"
                             aria-label="Полноэкранный режим"
-                            aria-keyshortcuts="F"
+                            :aria-keyshortcuts="getAriaKeyshortcuts(FULLSCREEN_SHORTCUT)"
                             :aria-pressed="isFullScreen"
                             @click="toggleFullScreen"
                         >
@@ -235,7 +239,7 @@ handleKey("Escape", requestClose, {
                         <template #content>
                             <span class="card-detail__tooltip">
                                 {{ isFullScreen ? "Свернуть" : "Развернуть" }}
-                                <KbdKey shortcut="F" />
+                                <KbdKey :shortcut="FULLSCREEN_SHORTCUT" />
                             </span>
                         </template>
                     </Tooltip>
@@ -457,7 +461,6 @@ handleKey("Escape", requestClose, {
     }
 }
 
-/* Transition classes are applied to the root by <Transition name="card-detail"> in the parent */
 .card-detail-enter-active,
 .card-detail-leave-active {
     transition: opacity var(--transition-normal);
