@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
 .tooltip {
     position: fixed;
     z-index: var(--z-tooltip);
-    max-width: 120px;
+    max-width: 140px;
     padding: var(--space-0) var(--space-1);
     border-radius: var(--radius-sm);
     background-color: var(--color-bg-elevated);

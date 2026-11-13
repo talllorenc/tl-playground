@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IconDotsVertical } from "@tabler/icons-vue";
+import { IconDotsVertical, IconGripVertical } from "@tabler/icons-vue";
 import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 import DateBadge from "@/shared/ui/date-badge/DateBadge.vue";
 import KanbanTagBadge from "@/features/kanban/components/kanban-tag-badge/KanbanTagBadge.vue";
@@ -16,7 +16,9 @@ const props = defineProps<{
 
 const { mutate, isPending } = useKanbanCardDelete();
 const element = ref<HTMLElement | null>(null);
-const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element });
+const handle = ref<HTMLElement | null>(null);
+
+const { isDragging, isDragSource } = useDraggable({ id: props.card.id, element, handle });
 
 const { openCard, selectedCardId } = useKanbanCardDetail();
 const isCardOpen = computed(() => selectedCardId.value === props.card.id);
@@ -31,50 +33,69 @@ function handleDelete() {
     mutate(props.card.id);
 }
 
-function handleCardClick() {
-    if (!isDragging.value) {
-        openCard(props.card.id);
-    }
+function handleOpen() {
+    openCard(props.card.id);
 }
 </script>
 
 <template>
-    <div
+    <article
         ref="element"
         :data-dragging="isDragging"
         :data-is-dragsource="isDragSource"
         :class="{ 'kanban-card--open': isCardOpen, 'kanban-card--pending': isPending }"
         class="kanban-card kanban-card__animation"
-        @click="handleCardClick"
+        :aria-busy="isPending || undefined"
     >
         <div class="kanban-card__header">
+            <button
+                ref="handle"
+                class="kanban-card__control kanban-card__handle"
+                type="button"
+                :aria-label="`Переместить карточку «${props.card.title}»`"
+            >
+                <IconGripVertical :size="18" aria-hidden="true" />
+            </button>
+
             <KanbanTagBadge :tag="props.card.tag" />
-            <ActionsMenu :items="actions">
+
+            <ActionsMenu :items="actions" class="kanban-card__menu">
                 <template #trigger="{ props: triggerProps }">
                     <button
                         v-bind="triggerProps"
-                        class="kanban-card__actions"
+                        class="kanban-card__control kanban-card__actions"
                         type="button"
-                        aria-label="Действия с карточкой"
+                        :aria-label="`Действия с карточкой «${props.card.title}»`"
                     >
                         <IconDotsVertical :size="18" aria-hidden="true" />
                     </button>
                 </template>
             </ActionsMenu>
         </div>
-        <span class="kanban-card__title">{{ props.card.title }}</span>
+
+        <h4 class="kanban-card__title">
+            <button
+                class="kanban-card__open"
+                type="button"
+                :aria-current="isCardOpen || undefined"
+                @click="handleOpen"
+            >
+                <span class="kanban-card__open-text">{{ props.card.title }}</span>
+            </button>
+        </h4>
 
         <DateBadge :date="props.card.created_at" />
-    </div>
+    </article>
 </template>
 
 <style scoped lang="scss">
 .kanban-card {
+    position: relative;
     border-radius: var(--radius-sm);
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
     padding: var(--space-3);
-    cursor: grab;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -87,13 +108,16 @@ function handleCardClick() {
     &__header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        gap: var(--space-1);
     }
 
     &__animation {
         animation: showCard var(--transition-normal);
     }
-    &__actions {
+
+    &__control {
+        position: relative;
+        z-index: 1;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -104,7 +128,6 @@ function handleCardClick() {
         border-radius: var(--radius-sm);
         color: var(--color-text);
         cursor: pointer;
-        rotate: 90deg;
         transition: background-color var(--transition-fast);
 
         &:hover {
@@ -112,14 +135,58 @@ function handleCardClick() {
         }
     }
 
+    &__handle {
+        margin-left: calc(-1 * var(--space-1));
+        color: var(--color-text-secondary);
+        cursor: grab;
+        touch-action: none;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    &__menu {
+        position: relative;
+        z-index: 1;
+        margin-left: auto;
+    }
+
+    &__actions {
+        rotate: 90deg;
+    }
+
     &__title {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        color: var(--color-text);
-        font-weight: var(--font-w-md);
+        margin: 0;
         font-size: var(--font-sm);
+        font-weight: var(--font-w-md);
+    }
+
+    &__open {
+        display: block;
+        width: 100%;
+        padding: 0;
+        color: var(--color-text);
+        font-weight: inherit;
+        text-align: left;
+
+        &:focus-visible {
+            outline: none;
+        }
+
+        &-text {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+        }
     }
 
     &--open {

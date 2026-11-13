@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IconLink, IconPencil, IconX } from "@tabler/icons-vue";
+import { IconLink, IconPencil, IconX, IconMaximize, IconMinimize } from "@tabler/icons-vue";
 import TextEditor from "@/shared/ui/text-editor/TextEditor.vue";
 import { computed, ref, toRef, useId, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -9,6 +9,7 @@ import BaseInput from "@/shared/ui/input/BaseInput.vue";
 import Button from "@/shared/ui/button/Button.vue";
 import { useKanbanCard } from "@/features/kanban/hooks/useKanbanCard.ts";
 import { useKanbanCardUpdate } from "@/features/kanban/hooks/useKanbanCardUpdate.ts";
+import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
 import {
     updateCardSchema,
     type UpdateCardFormValues,
@@ -20,8 +21,13 @@ import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Modal from "@/shared/ui/modal/Modal.vue";
 import Tooltip from "@/shared/ui/tooltip/Tooltip.vue";
+import KbdKey from "@/shared/ui/kbd-key/KbdKey.vue";
 import { copyToClipboard } from "@/utils/copy-to-clipboard.ts";
 import { handleKey } from "@/utils/handle-key.ts";
+import { getAriaKeyshortcuts } from "@/utils/keyboard-shortcut.ts";
+
+const EDIT_SHORTCUT = "$mod+KeyE";
+const FULLSCREEN_SHORTCUT = "KeyF";
 
 const props = defineProps<{
     cardId: number;
@@ -40,6 +46,8 @@ const { mutate, isPending } = useKanbanCardUpdate();
 const isCloseConfirmOpen = ref<boolean>(false);
 
 const isEditing = ref<boolean>(false);
+
+const { isFullScreen, toggleFullScreen } = useKanbanCardDetail();
 
 const titleId = useId();
 const panel = ref<HTMLElement | null>(null);
@@ -153,9 +161,12 @@ function copyLink() {
     void copyToClipboard(window.location.href, "Ссылка на карточку скопирована");
 }
 
-handleKey("$mod+KeyE", toggleEditing, {
+handleKey(EDIT_SHORTCUT, toggleEditing, {
     allowInInputs: true,
     enabled: canToggleEditing,
+});
+handleKey(FULLSCREEN_SHORTCUT, toggleFullScreen, {
+    enabled: canClose,
 });
 handleKey("Escape", requestClose, {
     allowInInputs: true,
@@ -165,7 +176,12 @@ handleKey("Escape", requestClose, {
 </script>
 
 <template>
-    <div class="card-detail" @pointerdown="handleOverlayPointerDown" @click="handleOverlayClick">
+    <div
+        class="card-detail"
+        :class="{ 'card-detail--fullscreen': isFullScreen }"
+        @pointerdown="handleOverlayPointerDown"
+        @click="handleOverlayClick"
+    >
         <section
             ref="panel"
             class="card-detail__panel"
@@ -195,13 +211,37 @@ handleKey("Escape", requestClose, {
                             :class="{ 'card-detail__action--active': isEditing }"
                             type="button"
                             aria-label="Редактировать карточку"
+                            :aria-keyshortcuts="getAriaKeyshortcuts(EDIT_SHORTCUT)"
                             :aria-pressed="isEditing"
                             :disabled="!card"
                             @click="toggleEditing"
                         >
                             <IconPencil size="18" />
                         </button>
-                        <template #content>Редактировать</template>
+                        <template #content
+                            >Редактировать
+                            <KbdKey :shortcut="EDIT_SHORTCUT" />
+                        </template>
+                    </Tooltip>
+
+                    <Tooltip>
+                        <button
+                            class="card-detail__action"
+                            type="button"
+                            aria-label="Полноэкранный режим"
+                            :aria-keyshortcuts="getAriaKeyshortcuts(FULLSCREEN_SHORTCUT)"
+                            :aria-pressed="isFullScreen"
+                            @click="toggleFullScreen"
+                        >
+                            <IconMinimize v-if="isFullScreen" size="18" />
+                            <IconMaximize v-else size="18" />
+                        </button>
+                        <template #content>
+                            <span class="card-detail__tooltip">
+                                {{ isFullScreen ? "Свернуть" : "Развернуть" }}
+                                <KbdKey :shortcut="FULLSCREEN_SHORTCUT" />
+                            </span>
+                        </template>
                     </Tooltip>
 
                     <Tooltip>
@@ -296,6 +336,11 @@ handleKey("Escape", requestClose, {
     padding: var(--space-6) var(--space-4);
     background-color: rgb(0 0 0 / 50%);
     backdrop-filter: blur(2px);
+    transition: padding var(--transition-normal);
+
+    &--fullscreen {
+        padding: 0;
+    }
 
     &__panel {
         display: flex;
@@ -307,10 +352,19 @@ handleKey("Escape", requestClose, {
         background-color: var(--color-bg-surface);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-sm);
+        transition:
+            width var(--transition-normal),
+            border-radius var(--transition-normal);
 
         &:focus {
             outline: none;
         }
+    }
+
+    &--fullscreen &__panel {
+        width: 100%;
+        border-color: transparent;
+        border-radius: 0;
     }
 
     &__header {
@@ -407,7 +461,6 @@ handleKey("Escape", requestClose, {
     }
 }
 
-/* Transition classes are applied to the root by <Transition name="card-detail"> in the parent */
 .card-detail-enter-active,
 .card-detail-leave-active {
     transition: opacity var(--transition-normal);

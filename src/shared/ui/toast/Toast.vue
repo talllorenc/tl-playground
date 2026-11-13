@@ -19,9 +19,9 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
 
 <template>
     <Teleport to="body">
-        <div class="toast-container">
-            <TransitionGroup name="toast">
-                <div
+        <section class="toast-container" aria-label="Уведомления">
+            <TransitionGroup tag="ul" name="toast" class="toast-list">
+                <li
                     v-for="item in toast.toasts"
                     :key="item.id"
                     class="toast"
@@ -36,6 +36,7 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
                             :is="TOAST_CONFIG[item.variant].icon"
                             class="toast__icon"
                             :size="18"
+                            aria-hidden="true"
                         />
 
                         <span class="toast__title">
@@ -45,19 +46,19 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
                         <button
                             class="toast__close"
                             type="button"
-                            aria-label="Закрыть"
+                            :aria-label="`Закрыть уведомление «${item.title}»`"
                             @click="toast.closeToast(item.id)"
                         >
-                            <IconX :size="18" />
+                            <IconX :size="18" aria-hidden="true" />
                         </button>
 
                         <span class="toast__message">
                             {{ item.message }}
                         </span>
                     </div>
-                </div>
+                </li>
             </TransitionGroup>
-        </div>
+        </section>
     </Teleport>
 </template>
 
@@ -67,7 +68,9 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
     right: 24px;
     bottom: 24px;
     z-index: var(--z-toast);
+}
 
+.toast-list {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
