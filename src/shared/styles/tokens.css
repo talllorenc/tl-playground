@@ -46,6 +46,11 @@
     --radius-xl: 40px;
     --radius-full: 50%;
 
+    /* Focus */
+    --focus-ring-color: var(--color-accent);
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+
     /* Font Weight */
     --font-w-sm: 400;
     --font-w-md: 600;

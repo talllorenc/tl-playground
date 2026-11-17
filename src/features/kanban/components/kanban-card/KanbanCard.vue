@@ -189,6 +189,11 @@ function handleOpen() {
         }
     }
 
+    &:has(.kanban-card__open:focus-visible) {
+        outline: var(--focus-ring-width) solid var(--focus-ring-color);
+        outline-offset: var(--focus-ring-offset);
+    }
+
     &--open {
         border-color: var(--color-accent);
     }

@@ -67,7 +67,6 @@ onMounted(() => {
         border-radius: var(--radius-sm);
         font-family: inherit;
         color: var(--color-text);
-        outline: none;
 
         &::placeholder {
             color: var(--color-text);
@@ -75,6 +74,10 @@ onMounted(() => {
 
         &:focus {
             border-color: var(--color-accent);
+        }
+
+        &:focus-visible {
+            outline-offset: 0;
         }
 
         &:disabled {

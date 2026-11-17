@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, useId, useTemplateRef } from "vue";
+import { nextTick, onBeforeUnmount, ref, useTemplateRef } from "vue";
 import { computePosition, flip, offset, shift, autoUpdate } from "@floating-ui/vue";
 
 const props = withDefaults(
@@ -11,17 +11,24 @@ const props = withDefaults(
     },
 );
 
+const HIDE_DELAY = 100;
+
 const isVisible = ref<boolean>(false);
 const triggerRef = useTemplateRef<HTMLElement>("triggerRef");
 const tooltipRef = useTemplateRef<HTMLElement>("tooltipRef");
 const tooltipStyle = ref<Record<string, string>>({});
-const tooltipId = `tooltip-${useId()}`;
 let cleanupAutoUpdate: (() => void) | undefined;
 let showTimer: ReturnType<typeof setTimeout> | undefined;
+let hideTimer: ReturnType<typeof setTimeout> | undefined;
 
 function clearShowTimer() {
     clearTimeout(showTimer);
     showTimer = undefined;
+}
+
+function clearHideTimer() {
+    clearTimeout(hideTimer);
+    hideTimer = undefined;
 }
 
 function stopAutoUpdate() {
@@ -64,8 +71,18 @@ async function show() {
 }
 
 function handleMouseEnter() {
+    clearHideTimer();
+
+    if (isVisible.value) return;
+
     clearShowTimer();
     showTimer = setTimeout(() => void show(), props.hoverDelay);
+}
+
+function scheduleHide() {
+    clearShowTimer();
+    clearHideTimer();
+    hideTimer = setTimeout(hide, HIDE_DELAY);
 }
 
 function handleFocusIn(event: FocusEvent) {
@@ -78,6 +95,7 @@ function handleFocusIn(event: FocusEvent) {
 
 function hide() {
     clearShowTimer();
+    clearHideTimer();
     isVisible.value = false;
     stopAutoUpdate();
 }
@@ -92,6 +110,7 @@ function handleFocusOut(event: FocusEvent) {
 
 onBeforeUnmount(() => {
     clearShowTimer();
+    clearHideTimer();
     stopAutoUpdate();
 });
 </script>
@@ -100,9 +119,8 @@ onBeforeUnmount(() => {
     <span
         ref="triggerRef"
         class="tooltip-trigger"
-        :aria-describedby="isVisible ? tooltipId : undefined"
         @mouseenter="handleMouseEnter"
-        @mouseleave="hide"
+        @mouseleave="scheduleHide"
         @focusin="handleFocusIn"
         @focusout="handleFocusOut"
     >
@@ -112,10 +130,11 @@ onBeforeUnmount(() => {
                 <div
                     ref="tooltipRef"
                     v-if="isVisible"
-                    :id="tooltipId"
                     class="tooltip"
                     :style="tooltipStyle"
-                    role="tooltip"
+                    aria-hidden="true"
+                    @mouseenter="clearHideTimer"
+                    @mouseleave="scheduleHide"
                 >
                     <div class="tooltip__content" @click.stop>
                         <slot name="content" />

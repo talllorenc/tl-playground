@@ -140,7 +140,10 @@ useClickOutside(actionsMenu, () => closeMenu(), isOpen);
         &:hover:not(:disabled),
         &:focus-visible {
             background-color: var(--color-bg-hover);
-            outline: none;
+        }
+
+        &:focus-visible {
+            outline-offset: calc(-1 * var(--focus-ring-width));
         }
 
         &:disabled {

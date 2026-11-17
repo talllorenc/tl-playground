@@ -498,7 +498,10 @@ const characterPercentage = computed(() =>
     :deep(.tiptap) {
         min-height: 160px;
         padding: var(--space-4);
-        outline: none;
+
+        &:focus-visible {
+            outline-offset: calc(-1 * var(--focus-ring-width));
+        }
 
         ul,
         ol {
