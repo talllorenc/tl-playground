@@ -9,12 +9,15 @@ import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { getKanbanCardActions } from "@/features/kanban/components/kanban-card/kanban-card-action.ts";
 import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete.ts";
+import Modal from "@/shared/ui/modal/Modal.vue";
+import Button from "@/shared/ui/button/Button.vue";
 
 const props = defineProps<{
     card: IKanbanCardPreview;
 }>();
 
 const { mutate, isPending } = useKanbanCardDelete();
+const isDeleteConfirmOpen = ref<boolean>(false);
 const element = ref<HTMLElement | null>(null);
 const handle = ref<HTMLElement | null>(null);
 
@@ -24,13 +27,21 @@ const { openCard, selectedCardId } = useKanbanCardDetail();
 const isCardOpen = computed(() => selectedCardId.value === props.card.id);
 const actions = computed(() =>
     getKanbanCardActions({
-        onDelete: handleDelete,
+        onDelete: requestDelete,
         isDeletePending: isPending.value,
     }),
 );
 
-function handleDelete() {
-    mutate(props.card.id);
+function requestDelete() {
+    isDeleteConfirmOpen.value = true;
+}
+
+function confirmDelete() {
+    mutate(props.card.id, {
+        onSettled: () => {
+            isDeleteConfirmOpen.value = false;
+        },
+    });
 }
 
 function handleOpen() {
@@ -85,6 +96,21 @@ function handleOpen() {
         </h4>
 
         <DateBadge :date="props.card.created_at" />
+
+        <Modal
+            v-if="isDeleteConfirmOpen"
+            v-model:open="isDeleteConfirmOpen"
+            title="Удалить карточку?"
+        >
+            Карточка «{{ props.card.title }}» будет удалена без возможности восстановления.
+
+            <template #actions>
+                <Button variant="secondary" @click="isDeleteConfirmOpen = false">Отмена</Button>
+                <Button variant="danger" :loading="isPending" @click="confirmDelete">
+                    Удалить
+                </Button>
+            </template>
+        </Modal>
     </article>
 </template>
 
