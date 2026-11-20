@@ -136,7 +136,7 @@ function handleDragEnd(event: DragEndEvent) {
     flex-direction: column;
     align-items: center;
     gap: var(--space-4);
-    padding: 48px 24px;
+    padding: var(--space-12) var(--space-6);
     color: var(--color-text-secondary);
 }
 </style>

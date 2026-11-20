@@ -63,7 +63,7 @@ const onSubmit = handleSubmit((values) => {
     flex-direction: column;
     gap: var(--space-2);
     background-color: var(--color-bg-elevated);
-    padding: 12px;
+    padding: var(--space-3);
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border);
 }

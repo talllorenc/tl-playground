@@ -150,8 +150,8 @@ function handleOpen() {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
         border: 0;
         border-radius: var(--radius-sm);

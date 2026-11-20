@@ -65,8 +65,8 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
 <style scoped lang="scss">
 .toast-container {
     position: fixed;
-    right: 24px;
-    bottom: 24px;
+    right: var(--space-6);
+    bottom: var(--space-6);
     z-index: var(--z-toast);
 }
 
@@ -97,7 +97,7 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         column-gap: var(--space-2);
         row-gap: var(--space-1);
 
-        max-width: 400px;
+        max-width: var(--toast-max-width);
         padding: var(--space-3);
 
         background-color: var(--color-bg-surface);
@@ -135,8 +135,8 @@ const TOAST_CONFIG: Record<ToastActionVariant, { icon: Component; class: string 
         align-items: center;
         justify-content: center;
 
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
 
         border: 0;

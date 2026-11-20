@@ -111,7 +111,7 @@ useClickOutside(actionsMenu, () => closeMenu(), isOpen);
 
     &__content {
         position: absolute;
-        top: calc(100% + 6px);
+        top: calc(100% + var(--space-2));
         right: 0;
         z-index: var(--z-dropdown);
         width: fit-content;
@@ -160,10 +160,10 @@ useClickOutside(actionsMenu, () => closeMenu(), isOpen);
     }
 
     &__action-indicator {
-        width: 16px;
-        height: 16px;
+        width: var(--size-indicator);
+        height: var(--size-indicator);
         flex-shrink: 0;
-        border-radius: 50%;
+        border-radius: var(--radius-full);
         border: 1px solid var(--color-border);
     }
 

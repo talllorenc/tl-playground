@@ -47,8 +47,8 @@ function handleCopy() {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         border-radius: var(--radius-sm);
         border: 1px solid var(--color-border);
         background-color: var(--color-bg-elevated);

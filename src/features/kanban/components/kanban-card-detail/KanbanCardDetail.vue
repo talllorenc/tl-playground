@@ -334,7 +334,7 @@ handleKey("Escape", requestClose, {
     align-items: center;
     justify-content: center;
     padding: var(--space-6) var(--space-4);
-    background-color: rgb(0 0 0 / 50%);
+    background-color: var(--color-overlay);
     backdrop-filter: blur(2px);
     transition: padding var(--transition-normal);
 
@@ -345,7 +345,7 @@ handleKey("Escape", requestClose, {
     &__panel {
         display: flex;
         flex-direction: column;
-        width: 600px;
+        width: var(--dialog-width-md);
         max-width: 100%;
         height: 100%;
         padding: var(--space-3);
@@ -371,7 +371,7 @@ handleKey("Escape", requestClose, {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 16px;
+        margin-bottom: var(--space-4);
     }
 
     &__header-actions {
@@ -406,8 +406,8 @@ handleKey("Escape", requestClose, {
         border-radius: var(--radius-sm);
         color: var(--color-text);
         cursor: pointer;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
         border: 0;
         transition: background-color var(--transition-fast);
@@ -425,7 +425,7 @@ handleKey("Escape", requestClose, {
 
     &__title {
         margin: 0;
-        padding: 4px 0;
+        padding: var(--space-1) 0;
         border-bottom: 1px solid transparent;
         font-size: var(--font-h2);
         font-weight: var(--font-w-lg);
@@ -451,12 +451,12 @@ handleKey("Escape", requestClose, {
         flex: 1;
         min-height: 0;
         overflow-y: auto;
-        padding-bottom: 12px;
+        padding-bottom: var(--space-3);
     }
 
     &__footer {
         flex-shrink: 0;
-        padding-top: 12px;
+        padding-top: var(--space-3);
         border-top: 1px solid var(--color-border);
     }
 }
