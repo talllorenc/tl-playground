@@ -59,13 +59,13 @@ const props = withDefaults(
 
     &--sm {
         min-height: 32px;
-        padding: 6px 12px;
+        padding: var(--space-1) var(--space-3);
         font-size: var(--font-sm);
     }
 
     &--md {
         min-height: 40px;
-        padding: 8px 16px;
+        padding: var(--space-2) var(--space-4);
         font-size: var(--font-md);
     }
 
@@ -89,7 +89,7 @@ const props = withDefaults(
     }
 
     &--danger {
-        background-color: var(--color-red);
+        background-color: var(--color-error);
         color: var(--color-bg-surface);
 
         &:hover:not(:disabled) {

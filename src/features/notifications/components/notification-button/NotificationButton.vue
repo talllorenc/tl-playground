@@ -2,25 +2,13 @@
 import Button from "@/shared/ui/button/Button.vue";
 import { IconBell } from "@tabler/icons-vue";
 import Popover from "@/shared/ui/popover/Popover.vue";
-import { ref } from "vue";
-
-const isShaking = ref<boolean>(false);
-
-const handleShakeBell = () => {
-    console.log("handleShakeBell");
-};
 </script>
 
 <template>
     <Popover label="Уведомления">
         <template #trigger="{ props: triggerProps }">
-            <Button
-                v-bind="triggerProps"
-                variant="secondary"
-                aria-label="Уведомления"
-                @click="handleShakeBell"
-            >
-                <IconBell :size="18" aria-hidden="true" :class="{ 'bell--shaking': isShaking }" />
+            <Button v-bind="triggerProps" variant="secondary" aria-label="Уведомления">
+                <IconBell :size="18" aria-hidden="true" />
             </Button>
         </template>
 

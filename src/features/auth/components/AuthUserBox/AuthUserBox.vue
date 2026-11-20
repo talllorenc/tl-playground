@@ -3,8 +3,11 @@ import { IconSelector, IconUser } from "@tabler/icons-vue";
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user-store.ts";
 
 const router = useRouter();
+const { user } = storeToRefs(useUserStore());
 
 const actions = computed(() => [
     {
@@ -17,14 +20,10 @@ const actions = computed(() => [
 
 <template>
     <div class="auth-box">
-        <img
-            class="auth-box__image"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEJhoas0OgqBfmHKHYCZ-r0l_ZQzVJiUZeqTzhwUFnW_gBGAKohBG-C7w&s=10"
-            alt="mock user image"
-        />
+        <img class="auth-box__image" :src="user.avatarUrl" alt="" />
         <div class="auth-box__personal-info">
-            <span class="auth-box__fullname">Alexandr Boyarchuk</span>
-            <span class="auth-box__account">Личный аккаунт</span>
+            <span class="auth-box__fullname">{{ user.fullName }}</span>
+            <span class="auth-box__account">{{ user.accountType }}</span>
         </div>
 
         <ActionsMenu :items="actions">
@@ -85,8 +84,8 @@ const actions = computed(() => [
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
         border: 0;
         border-radius: var(--radius-sm);

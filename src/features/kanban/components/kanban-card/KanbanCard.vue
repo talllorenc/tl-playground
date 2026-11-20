@@ -8,13 +8,24 @@ import { computed, ref } from "vue";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { getKanbanCardActions } from "@/features/kanban/components/kanban-card/kanban-card-action.ts";
-import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete.ts";
+import Modal from "@/shared/ui/modal/Modal.vue";
+import Button from "@/shared/ui/button/Button.vue";
 
-const props = defineProps<{
-    card: IKanbanCardPreview;
+const props = withDefaults(
+    defineProps<{
+        card: IKanbanCardPreview;
+        isDeleting?: boolean;
+    }>(),
+    {
+        isDeleting: false,
+    },
+);
+
+const emit = defineEmits<{
+    (e: "delete", cardId: number): void;
 }>();
 
-const { mutate, isPending } = useKanbanCardDelete();
+const isDeleteConfirmOpen = ref<boolean>(false);
 const element = ref<HTMLElement | null>(null);
 const handle = ref<HTMLElement | null>(null);
 
@@ -24,13 +35,18 @@ const { openCard, selectedCardId } = useKanbanCardDetail();
 const isCardOpen = computed(() => selectedCardId.value === props.card.id);
 const actions = computed(() =>
     getKanbanCardActions({
-        onDelete: handleDelete,
-        isDeletePending: isPending.value,
+        onDelete: requestDelete,
+        isDeletePending: props.isDeleting,
     }),
 );
 
-function handleDelete() {
-    mutate(props.card.id);
+function requestDelete() {
+    isDeleteConfirmOpen.value = true;
+}
+
+function confirmDelete() {
+    isDeleteConfirmOpen.value = false;
+    emit("delete", props.card.id);
 }
 
 function handleOpen() {
@@ -43,9 +59,9 @@ function handleOpen() {
         ref="element"
         :data-dragging="isDragging"
         :data-is-dragsource="isDragSource"
-        :class="{ 'kanban-card--open': isCardOpen, 'kanban-card--pending': isPending }"
+        :class="{ 'kanban-card--open': isCardOpen, 'kanban-card--pending': props.isDeleting }"
         class="kanban-card kanban-card__animation"
-        :aria-busy="isPending || undefined"
+        :aria-busy="props.isDeleting || undefined"
     >
         <div class="kanban-card__header">
             <button
@@ -85,6 +101,19 @@ function handleOpen() {
         </h4>
 
         <DateBadge :date="props.card.created_at" />
+
+        <Modal
+            v-if="isDeleteConfirmOpen"
+            v-model:open="isDeleteConfirmOpen"
+            title="Удалить карточку?"
+        >
+            Карточка «{{ props.card.title }}» будет удалена без возможности восстановления.
+
+            <template #actions>
+                <Button variant="secondary" @click="isDeleteConfirmOpen = false">Отмена</Button>
+                <Button variant="danger" @click="confirmDelete">Удалить</Button>
+            </template>
+        </Modal>
     </article>
 </template>
 
@@ -121,8 +150,8 @@ function handleOpen() {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
         border: 0;
         border-radius: var(--radius-sm);
@@ -187,6 +216,11 @@ function handleOpen() {
             inset: 0;
             border-radius: inherit;
         }
+    }
+
+    &:has(.kanban-card__open:focus-visible) {
+        outline: var(--focus-ring-width) solid var(--focus-ring-color);
+        outline-offset: var(--focus-ring-offset);
     }
 
     &--open {

@@ -6,6 +6,8 @@ import { useKanbanColumns } from "@/features/kanban/hooks/useKanbanColumns.ts";
 import { useKanbanCards } from "@/features/kanban/hooks/useKanbanCards.ts";
 import { useKanbanCardColumnUpdate } from "@/features/kanban/hooks/useKanbanCardColumnUpdate.ts";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
+import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete.ts";
+import { useKanbanCardDeletingIds } from "@/features/kanban/hooks/useKanbanCardDeletingIds.ts";
 import type { IKanbanCardPreview } from "@/features/kanban/types/kanban.types.ts";
 import SkeletonItem from "@/shared/ui/skeleton/SkeletonItem.vue";
 import Skeleton from "@/shared/ui/skeleton/Skeleton.vue";
@@ -21,6 +23,8 @@ const EMPTY_CARDS: IKanbanCardPreview[] = [];
 const columnsQuery = useKanbanColumns();
 const cardsQuery = useKanbanCards();
 const { mutate: moveCard } = useKanbanCardColumnUpdate();
+const { mutate: deleteCard } = useKanbanCardDelete();
+const deletingCardIds = useKanbanCardDeletingIds();
 
 const columns = computed(() => columnsQuery.data.value ?? []);
 const cards = computed(() => cardsQuery.data.value ?? []);
@@ -51,6 +55,10 @@ function handleRetry() {
     if (cardsQuery.isError.value) void cardsQuery.refetch();
 }
 
+function handleDeleteCard(cardId: number) {
+    deleteCard(cardId);
+}
+
 function handleDragEnd(event: DragEndEvent) {
     const { source, target } = event.operation;
 
@@ -58,7 +66,7 @@ function handleDragEnd(event: DragEndEvent) {
 
     const cardId = Number(source.id);
     const columnId = Number(target.id);
-    const card = cards.value.find((card) => card.id === cardId);
+    const card = cards.value.find((item) => item.id === cardId);
 
     if (!card || card.columnId === columnId) return;
 
@@ -92,6 +100,8 @@ function handleDragEnd(event: DragEndEvent) {
                         :key="column.id"
                         :column="column"
                         :cards="cardsByColumn.get(column.id) ?? EMPTY_CARDS"
+                        :deleting-card-ids="deletingCardIds"
+                        @delete-card="handleDeleteCard"
                     />
                 </div>
             </div>
@@ -126,7 +136,7 @@ function handleDragEnd(event: DragEndEvent) {
     flex-direction: column;
     align-items: center;
     gap: var(--space-4);
-    padding: 48px 24px;
+    padding: var(--space-12) var(--space-6);
     color: var(--color-text-secondary);
 }
 </style>

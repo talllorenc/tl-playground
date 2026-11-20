@@ -18,29 +18,29 @@ const props = defineProps<{
     display: inline-flex;
     align-items: center;
     width: fit-content;
-    padding: 4px 8px;
+    padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
     font-size: var(--font-sm);
-    font-weight: 500;
+    font-weight: var(--font-w-md);
 
     &--personal {
-        color: #6d28d9;
-        background-color: #f3e8ff;
+        color: var(--color-tag-personal);
+        background-color: var(--color-tag-personal-bg);
     }
 
     &--work {
-        color: #1d4ed8;
-        background-color: #dbeafe;
+        color: var(--color-tag-work);
+        background-color: var(--color-tag-work-bg);
     }
 
     &--urgent {
-        color: #b91c1c;
-        background-color: #fee2e2;
+        color: var(--color-tag-urgent);
+        background-color: var(--color-tag-urgent-bg);
     }
 
     &--debt {
-        color: #b45309;
-        background-color: #fef3c7;
+        color: var(--color-tag-debt);
+        background-color: var(--color-tag-debt-bg);
     }
 }
 </style>

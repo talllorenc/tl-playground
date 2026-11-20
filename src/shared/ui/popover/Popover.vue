@@ -89,10 +89,10 @@ useClickOutside(popover, () => closePopover(), isOpen);
 
     &__content {
         position: absolute;
-        top: calc(100% + 8px);
+        top: calc(100% + var(--space-2));
         right: 0;
         z-index: var(--z-dropdown);
-        min-width: 450px;
+        min-width: min(var(--popover-min-width), calc(100vw - 2 * var(--space-4)));
         background-color: var(--color-bg-elevated);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-sm);

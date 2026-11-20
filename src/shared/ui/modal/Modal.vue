@@ -70,7 +70,7 @@ watch(isOpen, (open) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(0 0 0 / 50%);
+    background-color: var(--color-overlay);
     backdrop-filter: blur(2px);
 
     &__body {

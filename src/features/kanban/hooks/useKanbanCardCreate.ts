@@ -15,6 +15,7 @@ export function useKanbanCardCreate() {
         },
         onSuccess: (createdCard) => {
             queryClient.setQueryData<IKanbanCardPreview[]>(kanbanKeys.cards(), (cards) =>
+                // oxlint-disable-next-line unicorn/no-array-sort -- sorts a fresh copy; toSorted is not in the ES2022 lib
                 cards ? [...cards, createdCard].sort((a, b) => a.position - b.position) : cards,
             );
         },

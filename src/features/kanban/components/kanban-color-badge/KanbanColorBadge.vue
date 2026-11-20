@@ -19,12 +19,12 @@ const props = defineProps<{
 <style scoped lang="scss">
 .kanban-color {
     display: block;
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    min-height: 16px;
+    width: var(--size-indicator);
+    height: var(--size-indicator);
+    min-width: var(--size-indicator);
+    min-height: var(--size-indicator);
     flex-shrink: 0;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     border: 1px solid var(--color-border);
     transition: opacity var(--transition-fast);
 

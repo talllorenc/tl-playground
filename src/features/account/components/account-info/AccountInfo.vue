@@ -1,17 +1,19 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user-store.ts";
+
+const { user } = storeToRefs(useUserStore());
+</script>
 
 <template>
     <section class="account-info" aria-label="Информация об аккаунте">
         <figure class="account-info__header">
-            <img
-                class="account-info__image"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEJhoas0OgqBfmHKHYCZ-r0l_ZQzVJiUZeqTzhwUFnW_gBGAKohBG-C7w&s=10"
-                alt="mock user image"
-            />
-            <div>
-                <p class="account-info__username">Test User</p>
-                <p>Личный аккаунт</p>
-            </div>
+            <!-- alt="": the caption with the name describes the avatar -->
+            <img class="account-info__image" :src="user.avatarUrl" alt="" />
+            <figcaption>
+                <p class="account-info__username">{{ user.fullName }}</p>
+                <p>{{ user.accountType }}</p>
+            </figcaption>
         </figure>
     </section>
 </template>

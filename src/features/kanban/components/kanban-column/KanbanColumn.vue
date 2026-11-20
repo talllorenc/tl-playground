@@ -18,6 +18,11 @@ import { useKanbanColumnColorUpdate } from "@/features/kanban/hooks/useKanbanCol
 const props = defineProps<{
     column: IKanbanColumn;
     cards: IKanbanCardPreview[];
+    deletingCardIds: ReadonlySet<number>;
+}>();
+
+const emit = defineEmits<{
+    (e: "delete-card", cardId: number): void;
 }>();
 
 const element = ref<HTMLElement | null>(null);
@@ -91,7 +96,11 @@ function handleColorSelect(color: KanbanColumnColor | null) {
             />
             <ul v-if="props.cards.length" class="kanban-column__list" :aria-labelledby="titleId">
                 <li v-for="card in props.cards" :key="card.id">
-                    <KanbanCard :card="card" />
+                    <KanbanCard
+                        :card="card"
+                        :is-deleting="props.deletingCardIds.has(card.id)"
+                        @delete="emit('delete-card', $event)"
+                    />
                 </li>
             </ul>
         </div>
@@ -100,8 +109,8 @@ function handleColorSelect(color: KanbanColumnColor | null) {
 
 <style scoped lang="scss">
 .kanban-column {
-    width: 350px;
-    min-width: 350px;
+    width: var(--kanban-column-width);
+    min-width: var(--kanban-column-width);
     display: flex;
     flex-direction: column;
     border-radius: var(--radius-sm);
@@ -150,7 +159,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         justify-content: center;
         background-color: var(--color-accent);
         color: var(--color-bg-surface);
-        border-radius: 50%;
+        border-radius: var(--radius-full);
         font-size: var(--font-sm);
         font-weight: var(--font-w-md);
         line-height: 1;
@@ -160,7 +169,7 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         display: flex;
         flex-direction: column;
         gap: var(--space-2);
-        margin-top: 24px;
+        margin-top: var(--space-6);
     }
 
     &__list {
@@ -173,8 +182,8 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         border-radius: var(--radius-sm);
         transition: background-color var(--transition-fast);
 
@@ -190,8 +199,8 @@ function handleColorSelect(color: KanbanColumnColor | null) {
         border-radius: var(--radius-sm);
         color: var(--color-text);
         cursor: pointer;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
         border: 0;
         transition: background-color var(--transition-fast);

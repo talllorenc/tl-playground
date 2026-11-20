@@ -61,13 +61,12 @@ onMounted(() => {
 
     &__field {
         width: 100%;
-        padding: 8px 12px;
+        padding: var(--space-2) var(--space-3);
         border: 1px solid var(--color-border);
         background-color: var(--color-bg-elevated);
         border-radius: var(--radius-sm);
         font-family: inherit;
         color: var(--color-text);
-        outline: none;
 
         &::placeholder {
             color: var(--color-text);
@@ -75,6 +74,10 @@ onMounted(() => {
 
         &:focus {
             border-color: var(--color-accent);
+        }
+
+        &:focus-visible {
+            outline-offset: 0;
         }
 
         &:disabled {

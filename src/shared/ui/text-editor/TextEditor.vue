@@ -53,8 +53,8 @@ const editor = useEditor({
 
     extensions: textEditorExtensions,
 
-    onUpdate: ({ editor }) => {
-        lastEmittedHtml = normalizeEditorHtml(editor.getHTML());
+    onUpdate: ({ editor: instance }) => {
+        lastEmittedHtml = normalizeEditorHtml(instance.getHTML());
         model.value = lastEmittedHtml;
     },
 });
@@ -389,15 +389,15 @@ const characterPercentage = computed(() =>
                     'character-count--warning': characterCount >= CHARACTER_LIMIT,
                 }"
             >
-                <svg height="20" width="20" viewBox="0 0 20 20">
-                    <circle r="10" cx="10" cy="10" fill="#f4bfc9" />
+                <svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true">
+                    <circle class="character-count__track" r="10" cx="10" cy="10" />
 
                     <circle
+                        class="character-count__progress"
                         r="5"
                         cx="10"
                         cy="10"
                         fill="transparent"
-                        stroke="#d82e5a"
                         stroke-width="10"
                         :stroke-dasharray="`${(characterPercentage * 31.4) / 100} 31.4`"
                         transform="rotate(-90) translate(-20)"
@@ -448,8 +448,8 @@ const characterPercentage = computed(() =>
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: var(--size-icon-button);
+        height: var(--size-icon-button);
         padding: 0;
         border: 1px solid transparent;
         border-radius: var(--radius-sm);
@@ -498,7 +498,10 @@ const characterPercentage = computed(() =>
     :deep(.tiptap) {
         min-height: 160px;
         padding: var(--space-4);
-        outline: none;
+
+        &:focus-visible {
+            outline-offset: calc(-1 * var(--focus-ring-width));
+        }
 
         ul,
         ol {
@@ -527,7 +530,7 @@ const characterPercentage = computed(() =>
             li {
                 display: flex;
                 align-items: flex-start;
-                gap: 8px;
+                gap: var(--space-2);
 
                 > label {
                     display: flex;
@@ -595,7 +598,7 @@ const characterPercentage = computed(() =>
             code {
                 background: transparent;
                 color: var(--color-text);
-                font-family: "JetBrainsMono", monospace;
+                font-family: var(--font-mono);
                 font-size: 0.85rem;
                 line-height: 1.7;
                 white-space: pre;
@@ -604,20 +607,20 @@ const characterPercentage = computed(() =>
 
             .hljs-comment,
             .hljs-quote {
-                color: #6e7781;
+                color: var(--color-code-comment);
                 font-style: italic;
             }
 
             .hljs-keyword,
             .hljs-selector-tag,
             .hljs-meta .hljs-keyword {
-                color: #cf222e;
+                color: var(--color-code-keyword);
             }
 
             .hljs-string,
             .hljs-regexp,
             .hljs-meta .hljs-string {
-                color: #0a3069;
+                color: var(--color-code-string);
             }
 
             .hljs-number,
@@ -631,38 +634,38 @@ const characterPercentage = computed(() =>
             .hljs-selector-attr,
             .hljs-selector-class,
             .hljs-selector-id {
-                color: #0550ae;
+                color: var(--color-code-number);
             }
 
             .hljs-title,
             .hljs-title.class_,
             .hljs-title.function_ {
-                color: #8250df;
+                color: var(--color-code-title);
             }
 
             .hljs-type,
             .hljs-bullet,
             .hljs-params {
-                color: #953800;
+                color: var(--color-code-type);
             }
 
             .hljs-built_in,
             .hljs-symbol {
-                color: #e36209;
+                color: var(--color-code-builtin);
             }
 
             .hljs-name,
             .hljs-selector-pseudo {
-                color: #116329;
+                color: var(--color-code-name);
             }
 
             .hljs-section {
-                color: #0550ae;
-                font-weight: 700;
+                color: var(--color-code-number);
+                font-weight: var(--font-w-lg);
             }
 
             .hljs-link {
-                color: #0a3069;
+                color: var(--color-code-string);
                 text-decoration: underline;
             }
 
@@ -671,7 +674,7 @@ const characterPercentage = computed(() =>
             }
 
             .hljs-strong {
-                font-weight: 700;
+                font-weight: var(--font-w-lg);
             }
         }
 
@@ -727,15 +730,23 @@ const characterPercentage = computed(() =>
         color: var(--color-text);
         display: flex;
         font-size: var(--font-xs);
-        gap: 0.5rem;
+        gap: var(--space-2);
 
         svg {
             color: var(--color-accent);
         }
 
+        &__track {
+            fill: var(--color-border-accent);
+        }
+
+        &__progress {
+            stroke: currentColor;
+        }
+
         &--warning,
         &--warning svg {
-            color: var(--color-red);
+            color: var(--color-error);
         }
     }
 }
