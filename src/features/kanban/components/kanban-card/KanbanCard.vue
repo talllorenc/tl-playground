@@ -8,15 +8,23 @@ import { computed, ref } from "vue";
 import { useKanbanCardDetail } from "@/features/kanban/hooks/useKanbanCardDetail.ts";
 import ActionsMenu from "@/shared/ui/actions-menu/ActionsMenu.vue";
 import { getKanbanCardActions } from "@/features/kanban/components/kanban-card/kanban-card-action.ts";
-import { useKanbanCardDelete } from "@/features/kanban/hooks/useKanbanCardDelete.ts";
 import Modal from "@/shared/ui/modal/Modal.vue";
 import Button from "@/shared/ui/button/Button.vue";
 
-const props = defineProps<{
-    card: IKanbanCardPreview;
+const props = withDefaults(
+    defineProps<{
+        card: IKanbanCardPreview;
+        isDeleting?: boolean;
+    }>(),
+    {
+        isDeleting: false,
+    },
+);
+
+const emit = defineEmits<{
+    (e: "delete", cardId: number): void;
 }>();
 
-const { mutate, isPending } = useKanbanCardDelete();
 const isDeleteConfirmOpen = ref<boolean>(false);
 const element = ref<HTMLElement | null>(null);
 const handle = ref<HTMLElement | null>(null);
@@ -28,7 +36,7 @@ const isCardOpen = computed(() => selectedCardId.value === props.card.id);
 const actions = computed(() =>
     getKanbanCardActions({
         onDelete: requestDelete,
-        isDeletePending: isPending.value,
+        isDeletePending: props.isDeleting,
     }),
 );
 
@@ -37,11 +45,8 @@ function requestDelete() {
 }
 
 function confirmDelete() {
-    mutate(props.card.id, {
-        onSettled: () => {
-            isDeleteConfirmOpen.value = false;
-        },
-    });
+    isDeleteConfirmOpen.value = false;
+    emit("delete", props.card.id);
 }
 
 function handleOpen() {
@@ -54,9 +59,9 @@ function handleOpen() {
         ref="element"
         :data-dragging="isDragging"
         :data-is-dragsource="isDragSource"
-        :class="{ 'kanban-card--open': isCardOpen, 'kanban-card--pending': isPending }"
+        :class="{ 'kanban-card--open': isCardOpen, 'kanban-card--pending': props.isDeleting }"
         class="kanban-card kanban-card__animation"
-        :aria-busy="isPending || undefined"
+        :aria-busy="props.isDeleting || undefined"
     >
         <div class="kanban-card__header">
             <button
@@ -106,9 +111,7 @@ function handleOpen() {
 
             <template #actions>
                 <Button variant="secondary" @click="isDeleteConfirmOpen = false">Отмена</Button>
-                <Button variant="danger" :loading="isPending" @click="confirmDelete">
-                    Удалить
-                </Button>
+                <Button variant="danger" @click="confirmDelete">Удалить</Button>
             </template>
         </Modal>
     </article>

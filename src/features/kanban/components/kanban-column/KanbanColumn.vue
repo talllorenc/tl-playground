@@ -18,6 +18,11 @@ import { useKanbanColumnColorUpdate } from "@/features/kanban/hooks/useKanbanCol
 const props = defineProps<{
     column: IKanbanColumn;
     cards: IKanbanCardPreview[];
+    deletingCardIds: ReadonlySet<number>;
+}>();
+
+const emit = defineEmits<{
+    (e: "delete-card", cardId: number): void;
 }>();
 
 const element = ref<HTMLElement | null>(null);
@@ -91,7 +96,11 @@ function handleColorSelect(color: KanbanColumnColor | null) {
             />
             <ul v-if="props.cards.length" class="kanban-column__list" :aria-labelledby="titleId">
                 <li v-for="card in props.cards" :key="card.id">
-                    <KanbanCard :card="card" />
+                    <KanbanCard
+                        :card="card"
+                        :is-deleting="props.deletingCardIds.has(card.id)"
+                        @delete="emit('delete-card', $event)"
+                    />
                 </li>
             </ul>
         </div>

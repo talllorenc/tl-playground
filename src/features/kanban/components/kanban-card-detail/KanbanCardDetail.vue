@@ -71,23 +71,23 @@ const [description, descriptionAttrs] = defineField("description");
 
 let formCardId: number | null = null;
 
-function resetFormFromCard(card: IKanbanCard) {
-    formCardId = card.id;
+function resetFormFromCard(source: IKanbanCard) {
+    formCardId = source.id;
 
     resetForm({
         values: {
-            title: card.title,
-            description: card.description ?? "",
-            tag: card.tag,
+            title: source.title,
+            description: source.description ?? "",
+            tag: source.tag,
         },
     });
 }
 
 watch(
     card,
-    (card) => {
-        if (card && (card.id !== formCardId || !meta.value.dirty)) {
-            resetFormFromCard(card);
+    (loadedCard) => {
+        if (loadedCard && (loadedCard.id !== formCardId || !meta.value.dirty)) {
+            resetFormFromCard(loadedCard);
         }
     },
     { immediate: true },

@@ -53,8 +53,8 @@ const editor = useEditor({
 
     extensions: textEditorExtensions,
 
-    onUpdate: ({ editor }) => {
-        lastEmittedHtml = normalizeEditorHtml(editor.getHTML());
+    onUpdate: ({ editor: instance }) => {
+        lastEmittedHtml = normalizeEditorHtml(instance.getHTML());
         model.value = lastEmittedHtml;
     },
 });
